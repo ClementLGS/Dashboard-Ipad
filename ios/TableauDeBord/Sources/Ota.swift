@@ -5,7 +5,7 @@ import Foundation
 /// (pas à prouver l'origine du fichier : n'importe qui qui contrôle l'adresse de mise à jour peut donc changer l'interface).
 enum Ota {
     /// Niveau du pont iPad : une interface qui exige plus (marqueur TDBA) est refusée plutôt que d'être cassée.
-    static let bridgeLevel = 212
+    static let bridgeLevel = 213
 
     private static let defaults = UserDefaults.standard
     private static let buildKey = "tdb.ota.build"

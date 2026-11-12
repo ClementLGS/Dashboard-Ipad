@@ -1,12 +1,14 @@
 import Foundation
 import MediaPlayer
+import AVFoundation
 import UIKit
 
 /// Apple Music via le lecteur système de l'iPad (appli Musique) : aucun compte développeur payant nécessaire.
-/// Actions : state (état + titre en cours), pp (lecture/pause), next, prev, playlists, play (id de playlist).
+/// Actions : state (arg = clé de pochette déjà connue), pp, next, prev, playlists, play (arg = id de playlist).
 /// Réponse : JSON (texte) ou erreur (texte). Tout s'exécute sur le fil principal.
 final class MusicBridge {
     private var artCache: [UInt64: String] = [:]
+    private var notifying = false
 
     private var player: MPMusicPlayerController { MPMusicPlayerController.systemMusicPlayer }
 
@@ -47,18 +49,31 @@ final class MusicBridge {
             done(MusicBridge.json(["auth": MusicBridge.statusName(auth)]), "")
             return
         }
+        // Sans cet appel, l'état du lecteur système peut rester figé (ancien état renvoyé après une commande).
+        if !notifying { player.beginGeneratingPlaybackNotifications(); notifying = true }
         switch action {
         case "state":
-            done(stateJson(), "")
+            done(MusicBridge.json(stateDict(knownArt: arg)), "")
         case "pp":
-            if player.playbackState == .playing { player.pause() } else { player.play() }
-            done(stateJson(), "")
+            let was = player.playbackState == .playing
+            if was { player.pause() } else { player.play() }
+            settle(after: 0.7, done: done) { [weak self] o in
+                guard let self = self else { return }
+                o["changed"] = (self.player.playbackState == .playing) != was
+            }
         case "next":
+            let before = player.nowPlayingItem?.persistentID
             player.skipToNextItem()
-            done(stateJson(), "")
+            settle(after: 0.9, done: done) { [weak self] o in
+                o["changed"] = self?.player.nowPlayingItem?.persistentID != before
+            }
         case "prev":
+            let before = player.nowPlayingItem?.persistentID
             if player.currentPlaybackTime > 3 { player.skipToBeginning() } else { player.skipToPreviousItem() }
-            done(stateJson(), "")
+            settle(after: 0.9, done: done) { [weak self] o in
+                // Retour au début du même morceau : compte comme un effet.
+                o["changed"] = (self?.player.nowPlayingItem?.persistentID != before) || ((self?.player.currentPlaybackTime ?? 99) < 2)
+            }
         case "playlists":
             done(playlistsJson(), "")
         case "play":
@@ -68,27 +83,44 @@ final class MusicBridge {
         }
     }
 
-    private func stateJson() -> String {
+    /// Laisse au lecteur le temps de changer d'état, puis renvoie l'état réel et si la commande a eu un effet.
+    private func settle(after delay: Double, done: @escaping (String, String) -> Void, extra: @escaping (inout [String: Any]) -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            guard let self = self else { return }
+            var o = self.stateDict(knownArt: "")
+            extra(&o)
+            done(MusicBridge.json(o), "")
+        }
+    }
+
+    private func stateDict(knownArt: String) -> [String: Any] {
         var o: [String: Any] = ["auth": "authorized", "playing": player.playbackState == .playing]
         if let item = player.nowPlayingItem {
             o["title"] = item.title ?? ""
             o["artist"] = item.artist ?? ""
             o["album"] = item.albumTitle ?? ""
-            o["art"] = artwork(item)
+            let key = String(item.persistentID)
+            o["artKey"] = key
+            if key != knownArt { o["art"] = artwork(item) }
         }
-        return MusicBridge.json(o)
+        let outs = AVAudioSession.sharedInstance().currentRoute.outputs
+        if let out = outs.first {
+            o["route"] = out.portName
+            o["routeType"] = out.portType.rawValue
+        }
+        return o
     }
 
-    /// Pochette réduite (JPEG en base64), gardée en mémoire par morceau.
+    /// Pochette (JPEG en base64), gardée en mémoire par morceau.
     private func artwork(_ item: MPMediaItem) -> String {
         let key = item.persistentID
         if let c = artCache[key] { return c }
         var s = ""
-        if let img = item.artwork?.image(at: CGSize(width: 120, height: 120)),
-           let data = img.jpegData(compressionQuality: 0.6) {
+        if let img = item.artwork?.image(at: CGSize(width: 300, height: 300)),
+           let data = img.jpegData(compressionQuality: 0.7) {
             s = "data:image/jpeg;base64," + data.base64EncodedString()
         }
-        if artCache.count > 30 { artCache.removeAll() }
+        if artCache.count > 20 { artCache.removeAll() }
         artCache[key] = s
         return s
     }
@@ -121,7 +153,9 @@ final class MusicBridge {
                     return
                 }
                 self.player.play()
-                done(self.stateJson(), "")
+                self.settle(after: 0.9, done: done) { [weak self] o in
+                    o["changed"] = self?.player.playbackState == .playing
+                }
             }
         }
     }
