@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:3220 TDBA:213-->
+<!--TDBV:3230 TDBA:214-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -260,12 +260,18 @@ button:focus { outline: none; }
   .amOut { margin-top: 14px; font-size: 14px; color: #8f98a5; }
   .amNote { margin: -4px 0 12px; padding: 10px 14px; border-radius: 12px; background: #3a2226; color: #ffb3ab; font-size: 15px; }
   .amH { font-size: 15px; font-weight: bold; color: #8f98a5; margin: 6px 0 8px; }
-  .amGrid { display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; margin: 0 -6px; }
-  .amPl { width: 33.333%; padding: 6px; box-sizing: border-box; }
-  .amPb { width: 100%; min-height: 84px; border-radius: 16px; border: 0; color: #fff; text-align: left; padding: 12px 14px; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-justify-content: space-between; justify-content: space-between; box-sizing: border-box; }
-  .amPb:active { opacity: 0.75; }
-  .amPn { font-size: 17px; font-weight: bold; line-height: 1.2; max-height: 42px; overflow: hidden; }
-  .amPc { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 8px; }
+  .amGrid { display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; }
+  .amPb { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; min-height: 44px; margin: 0 10px 10px 0; padding: 0 16px; border-radius: 22px; border: 2px solid #2f353e; background: #1a1e24; color: #d8dde6; font-size: 16px; font-weight: bold; }
+  .amPb:active { opacity: 0.7; }
+  .amPn { max-width: 260px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .amPc { margin-left: 10px; font-size: 13px; color: #8f98a5; font-weight: normal; }
+  .amVol { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; margin-top: 16px; max-width: 420px; }
+  .amVb { width: 44px; height: 44px; border-radius: 50%; border: 0; background: #262b33; color: #d8dde6; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; padding: 0; -webkit-flex: none; flex: none; }
+  .amVb:active { opacity: 0.7; }
+  .amVb * { pointer-events: none; }
+  .amVbar { -webkit-flex: 1; flex: 1; height: 8px; margin: 0 14px; border-radius: 4px; background: #262b33; overflow: hidden; }
+  .amVbar i { display: block; height: 100%; background: #fa2d48; }
+  .amVp { margin-left: 12px; min-width: 52px; font-size: 16px; color: #b9c2d0; }
   .mBt svg { padding: 12px; box-sizing: content-box; margin-left: 0; }
   .spB { display: inline-block; margin: 0 8px 8px 0; padding: 10px 16px; border-radius: 12px; border: 1px solid #262b33; background: #1a1e24; color: #d8dde6; font-size: 15px; }
   .spB.on { border-color: #fa2d48; color: #fa2d48; }
@@ -1390,7 +1396,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("3220", 10) || 0, UI_NAME = "3.22 iPad (beta)".charAt(0) === "_" ? "?" : "3.22 iPad (beta)";
+  var UI_CODE = parseInt("3230", 10) || 0, UI_NAME = "3.23 iPad (beta)".charAt(0) === "_" ? "?" : "3.23 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2305,13 +2311,16 @@ button:focus { outline: none; }
       + '<button type="button" class="amB big" data-sp="pp" aria-label="Lecture / pause">' + amIc(st && st.playing ? "M6 4h4v16H6zM14 4h4v16h-4z" : "M7 4v16l13-8z", 38) + '</button>'
       + '<button type="button" class="amB" data-sp="next" aria-label="Suivant">' + amIc("M16 5h2v14h-2zM4 5l11 7L4 19z", 30) + '</button>'
       + '</div>';
+    if (SP.vol !== null) {
+      h += '<div class="amVol"><button type="button" class="amVb" data-sp="vd" aria-label="Baisser le volume">' + amIc("M5 10v4h3l4 4V6L8 10H5z", 22) + '</button><div class="amVbar"><i style="width:' + Math.round(SP.vol * 100) + '%"></i></div><button type="button" class="amVb" data-sp="vu" aria-label="Monter le volume">' + amIc("M5 10v4h3l4 4V6L8 10H5zM15 8a5 5 0 0 1 0 8M17.500 5.500a9 9 0 0 1 0 13", 22) + '</button><span class="amVp">' + Math.round(SP.vol * 100) + ' %</span></div>';
+    }
     if (SP.route) { out = SP.routeType === "AirPlay" ? "AirPlay · " + SP.route : SP.route; h += '<div class="amOut">Sortie audio de l\'iPad : ' + esc(out) + '</div>'; }
     h += '</div></div>';
     if (SP.note && Date.now() - SP.noteAt < 6000) { h += '<div class="amNote">' + esc(SP.note) + '</div>'; }
-    h += '<div class="amH">Mes playlists</div><div class="amGrid">';
+    h += '<div class="amH">Changer de playlist</div><div class="amGrid">';
     for (i = 0; i < SP.pls.length; i++) {
       p = SP.pls[i]; hu = amHue(p.name);
-      h += '<div class="amPl"><button type="button" class="amPb" data-sp="play" data-id="' + esc(p.id) + '" style="background:-webkit-linear-gradient(135deg,hsl(' + hu + ',55%,34%),hsl(' + hu + ',50%,17%));background:linear-gradient(135deg,hsl(' + hu + ',55%,34%),hsl(' + hu + ',50%,17%))"><span class="amPn">' + esc(p.name) + '</span><span class="amPc">' + (p.n ? p.n + " titre" + (p.n > 1 ? "s" : "") : "Playlist") + '</span></button></div>';
+      h += '<button type="button" class="amPb" data-sp="play" data-id="' + esc(p.id) + '" style="border-color:hsl(' + hu + ',45%,38%)"><span class="amPn">' + esc(p.name) + '</span>' + (p.n ? '<span class="amPc">' + p.n + '</span>' : '') + '</button>';
     }
     h += '</div>';
     if (!SP.pls.length) { h += '<p class="note">' + esc(SP.plErr || (SP.plBusy ? "Chargement des playlists…" : "Aucune playlist chargée.")) + '</p>'; }
@@ -2452,7 +2461,7 @@ button:focus { outline: none; }
   $("dbgSend").onclick = function () { var b = $("dbgSend"); b.textContent = "Envoi…"; dgSend("bouton", function (e) { b.textContent = e ? "Échec (voir l'état)" : "Envoyé ✓"; setTimeout(function () { b.textContent = "Envoyer le diagnostic"; if ($("dbg").style.display !== "none") { drawDbg(); } }, 2500); }); };
 
   /* ---------------- Apple Music (lecteur système de l'iPad, via le pont Swift) ---------------- */
-  var SP = { st: null, msg: "", auth: "", pls: [], plErr: "", busy: false, hold: 0, sig: "", dn: 0, plBusy: false, plAt: 0, artKey: "", art: "", route: "", routeType: "", album: "", note: "", noteAt: 0 };
+  var SP = { st: null, msg: "", auth: "", pls: [], plErr: "", busy: false, hold: 0, sig: "", dn: 0, plBusy: false, plAt: 0, artKey: "", art: "", route: "", routeType: "", album: "", note: "", noteAt: 0, vol: null };
   function spArt(st, sz) {
     if (st && st.art) { return '<img src="' + esc(st.art) + '" alt="" onerror="this.style.display=\'none\'">'; }
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:' + sz + 'px;height:' + sz + 'px"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>';
@@ -2489,8 +2498,9 @@ button:focus { outline: none; }
         SP.msg = "";
       }
       SP.route = j.route || ""; SP.routeType = j.routeType || "";
+      if (typeof j.volume === "number") { SP.vol = j.volume; }
     }
-    a = JSON.stringify([SP.st && [SP.st.playing, SP.st.title, SP.st.artist, SP.st.art.length], SP.album, SP.route, SP.msg, SP.pls.length, SP.plErr, xMod, $("xV").style.display]);
+    a = JSON.stringify([SP.st && [SP.st.playing, SP.st.title, SP.st.artist, SP.st.art.length], SP.album, SP.route, SP.vol, SP.msg, SP.pls.length, SP.plErr, xMod, $("xV").style.display]);
     if (a !== SP.sig) { SP.sig = a; spRender(); }
   }
   function spPoll() {
@@ -2511,14 +2521,19 @@ button:focus { outline: none; }
   }
   function spAct(a, id) {
     var pl = SP.st && SP.st.playing, t0 = Date.now();
-    if (a !== "pp" && a !== "next" && a !== "prev" && a !== "play") { return; }
+    var cmd = a, arg = a === "play" ? String(id || "") : "", v;
+    if (a !== "pp" && a !== "next" && a !== "prev" && a !== "play" && a !== "vu" && a !== "vd") { return; }
     if (a === "pp" && SP.st) { SP.st.playing = !pl; spRender(); }
+    if (a === "vu" || a === "vd") {
+      v = Math.max(0, Math.min(1, Math.round(((SP.vol === null ? 0.5 : SP.vol) + (a === "vu" ? 0.0625 : -0.0625)) * 100) / 100));
+      cmd = "vol"; arg = String(v); SP.vol = v; SP.sig = ""; spRender();
+    }
     SP.hold = Date.now() + 4000;
-    window.LOCAL.music(a, a === "play" ? String(id || "") : "", function (err, j) {
-      evLog("Musique", "commande " + a + " : " + (err || ("ok, effet " + (j && j.changed === false ? "non" : "oui"))) + " en " + (Date.now() - t0) + " ms");
+    window.LOCAL.music(cmd, arg, function (err, j) {
+      evLog("Musique", "commande " + cmd + (arg ? " " + arg : "") + " : " + (err || ("ok, effet " + (j && j.changed === false ? "non" : "oui"))) + " en " + (Date.now() - t0) + " ms");
       SP.hold = 0; SP.busy = false;
       if (err) { SP.msg = String(err); spNote(String(err)); SP.sig = ""; spRender(); return; }
-      if (j && j.changed === false) { spNote("Sans effet : lance d'abord un morceau dans l'appli Musique"); }
+      if (j && j.changed === false && cmd !== "vol") { spNote("Sans effet : lance d'abord un morceau dans l'appli Musique"); }
       spApply(null, j);
       SP.sig = ""; spRender();
       setTimeout(spPoll, 2500);

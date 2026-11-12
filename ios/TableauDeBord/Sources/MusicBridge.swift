@@ -9,6 +9,7 @@ import UIKit
 final class MusicBridge {
     private var artCache: [UInt64: String] = [:]
     private var notifying = false
+    private var volumeView: MPVolumeView?
 
     private var player: MPMusicPlayerController { MPMusicPlayerController.systemMusicPlayer }
 
@@ -74,6 +75,9 @@ final class MusicBridge {
                 // Retour au début du même morceau : compte comme un effet.
                 o["changed"] = (self?.player.nowPlayingItem?.persistentID != before) || ((self?.player.currentPlaybackTime ?? 99) < 2)
             }
+        case "vol":
+            setVolume(Float(arg) ?? -1)
+            settle(after: 0.5, done: done) { _ in }
         case "playlists":
             done(playlistsJson(), "")
         case "play":
@@ -103,12 +107,32 @@ final class MusicBridge {
             o["artKey"] = key
             if key != knownArt { o["art"] = artwork(item) }
         }
+        o["volume"] = Double(AVAudioSession.sharedInstance().outputVolume)
         let outs = AVAudioSession.sharedInstance().currentRoute.outputs
         if let out = outs.first {
             o["route"] = out.portName
             o["routeType"] = out.portType.rawValue
         }
         return o
+    }
+
+    /// Volume : curseur d'un MPVolumeView caché (méthode courante pour régler le volume de la sortie audio en cours).
+    private func setVolume(_ v: Float) {
+        guard v >= 0 && v <= 1 else { return }
+        if volumeView == nil {
+            let vv = MPVolumeView(frame: CGRect(x: -2000, y: -2000, width: 200, height: 40))
+            vv.alpha = 0.01
+            let scene = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first
+            let win = scene?.windows.first(where: { $0.isKeyWindow }) ?? scene?.windows.first
+            win?.addSubview(vv)
+            vv.layoutIfNeeded()
+            volumeView = vv
+        }
+        volumeView?.layoutIfNeeded()
+        if let slider = volumeView?.subviews.compactMap({ $0 as? UISlider }).first {
+            slider.setValue(v, animated: false)
+            slider.sendActions(for: .touchUpInside)
+        }
     }
 
     /// Pochette (JPEG en base64), gardée en mémoire par morceau.

@@ -54,7 +54,7 @@ L'IPA n'est **pas signé** : il faut le signer avec ton identifiant Apple au mom
 Rien à faire à la main : le workflow `.github/workflows/ios.yml` copie `index.html`, génère le projet avec XcodeGen (`ios/project.yml`), compile sans signature et publie l'IPA.
 
 ## Apple Music (branche `test` seulement, version 3.20)
-- La tuile musique commande l'appli **Musique** de l'iPad (lecture/pause, suivant, précédent, titre et pochette en cours) et lance tes playlists (Autre > Musique). Elle remplace Spotify dans cette branche.
+- La tuile musique sert d'abord à **suivre** la musique en cours (titre, artiste, pochette, sortie audio) ; en plus : lecture/pause, suivant, précédent, volume, et changement de playlist (Autre > Musique). Elle remplace Spotify dans cette branche.
 - Elle passe par le lecteur système d'Apple : aucun compte développeur payant. Il faut l'abonnement Apple Music pour lire le catalogue, et une playlist doit être dans ta bibliothèque.
 - Au premier lancement, l'iPad demande l'autorisation « Médias et Apple Music » : accepte. Refusée par erreur : Réglages iPad > Tableau de bord > Médias et Apple Music.
-- Cette interface exige le pont 212 : elle ne se met à jour que sur un IPA compilé depuis `test` (sinon l'appli la refuse et demande de réinstaller).
+- Cette interface exige le pont 214 : elle ne se met à jour que sur un IPA compilé depuis `test` (sinon l'appli la refuse et demande de réinstaller).
