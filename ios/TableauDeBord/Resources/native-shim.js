@@ -87,6 +87,7 @@
     battery: function () { return ST.battery || ""; },
     setSleep: function (on) { post("setSleep", [!!on]); return "lum:ok;eco:non (iPad)"; },
     appCode: function () { return ST.appCode; },
+    music: function (id, action, arg) { post("music", [id, String(action || ""), String(arg || "")]); },
     otaSave: function (html, vj) { return otaSend(html, vj); },
     otaSaveSigned: function (html, vj) { return otaSend(html, vj); },
     otaClear: function () { post("otaClear", []); },
