@@ -1,12 +1,12 @@
 # Tableau de bord — appli iPad mini 4 (iPadOS 15)
 
-Même interface que la version Android (le `index.html` de la branche), dans une appli iOS (WKWebView) qui fournit le pont `window.Native` : réseau (Airzone en HTTP local, météo, GitHub, Tuya), réglages, batterie, veille, Bluetooth (lumière LED).
+Même interface que la version Android (le `index.html` de ce dépôt, copié de `dash-mini-4`), dans une appli iOS (WKWebView) qui fournit le pont `window.Native` : réseau (Airzone en HTTP local, météo, GitHub, Tuya), réglages, batterie, veille, Bluetooth (lumière LED).
 
 **État : appli 0.2 — compile sur GitHub Actions (Xcode 26, cible iPadOS 15.0). Pas encore essayée sur un vrai iPad.**
 Faits : étapes 1 (coque), 2 (HTTP + réglages), 3 (Bluetooth), import automatique des réglages. Retiré : étape 4 (mises à jour signées). Pas fait : étape 5 (signature automatisée, mise en place sur l'iPad).
 
 ## Récupérer l'appli
-1. GitHub > dépôt `dash-mini-4` > onglet **Actions** > dernier passage de « iPad (IPA non signé) » (branche `test`).
+1. GitHub > dépôt `Dashboard-Ipad` > onglet **Actions** > dernier passage de « iPad (IPA non signé) » (branche `main`).
 2. En bas de la page, section **Artifacts** : télécharger `TableauDeBord-iPad-unsigned-ipa` (zip contenant `TableauDeBord-iPad-unsigned.ipa`).
 
 L'IPA n'est **pas signé** : il faut le signer avec ton identifiant Apple au moment de l'installer.
@@ -35,7 +35,7 @@ L'IPA n'est **pas signé** : il faut le signer avec ton identifiant Apple au mom
 
 ## Mises à jour de l'interface
 - **Pas de mise à jour automatique sur iPad** (le code de vérification de signature a été retiré à ta demande ; il reste dans l'historique du dépôt, commit `2e6a978`). L'interface est celle livrée dans l'appli.
-- Pour la changer : GitHub > Actions > « iPad (IPA non signé) » > Run workflow (branche `test`), télécharger le nouvel IPA, le ré-installer avec Sideloadly. Tes réglages restent.
+- Pour la changer : GitHub > Actions > « iPad (IPA non signé) » > Run workflow (branche `main`), télécharger le nouvel IPA, le ré-installer avec Sideloadly. Tes réglages restent.
 - Dans Réglages, le bouton « Mettre à jour » répond que les mises à jour sont désactivées sur iPad.
 
 ## Différences avec Android
