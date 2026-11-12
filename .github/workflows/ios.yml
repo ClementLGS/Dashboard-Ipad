@@ -54,8 +54,13 @@ jobs:
           APP=$(find build/Build/Products -maxdepth 2 -name 'TableauDeBord.app' | head -1)
           echo "App : $APP"
           rm -rf Payload && mkdir Payload && cp -R "$APP" Payload/
-          zip -qry TableauDeBord-iPad-unsigned.ipa Payload
-          ls -la TableauDeBord-iPad-unsigned.ipa
+          # nom de l'IPA = version de l'interface + numéro de compilation (ex. TableauDeBord-iPad-3.21-beta-compil17)
+          VER=$(python3 -c "import json;print(json.load(open('../version.json'))['name'])")
+          SLUG=$(printf '%s' "$VER" | sed -e 's/ iPad//' -e 's/[()]//g' -e 's/ /-/g')
+          NAME="TableauDeBord-iPad-${SLUG}-compil${{ github.run_number }}"
+          echo "IPA_NAME=$NAME" >> "$GITHUB_ENV"
+          zip -qry "$NAME.ipa" Payload
+          ls -la "$NAME.ipa"
           plutil -p "$APP/Info.plist" | grep -E 'MinimumOSVersion|CFBundleIdentifier|UIDeviceFamily' || true
 
       - name: Erreurs de compilation (pour les voir dans les annotations)
@@ -66,6 +71,6 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: TableauDeBord-iPad-unsigned-ipa
-          path: ios/TableauDeBord-iPad-unsigned.ipa
+          name: ${{ env.IPA_NAME }}
+          path: ios/${{ env.IPA_NAME }}.ipa
           if-no-files-found: error
