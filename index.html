@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:3155 TDBA:211-->
+<!--TDBV:3156 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -43,6 +43,11 @@ button:focus { outline: none; }
 #swK svg { display: block; width: 18px; height: 18px; margin: 7px; }
 #sw.go #swK { background: #ffd60a; }
 #bat.low { color: #ff7a70; }
+#bat.chg { color: #34c759; }
+#bat.chg #batF { -webkit-animation: batchg 1.8s ease-in-out infinite; animation: batchg 1.8s ease-in-out infinite; }
+.perf #bat.chg #batF { -webkit-animation: none; animation: none; }
+@-webkit-keyframes batchg { 0% { opacity: 0.35; } 50% { opacity: 1; } 100% { opacity: 0.35; } }
+@keyframes batchg { 0% { opacity: 0.35; } 50% { opacity: 1; } 100% { opacity: 0.35; } }
 #bat.mid { color: #ffb347; }
 #hw { margin-left: 0; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; }
 #hIco { width: 42px; height: 42px; margin-right: 8px; }
@@ -1337,7 +1342,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("3155", 10) || 0, UI_NAME = "3.15 iPad 3".charAt(0) === "_" ? "?" : "3.15 iPad 3";
+  var UI_CODE = parseInt("3156", 10) || 0, UI_NAME = "3.15 iPad 3".charAt(0) === "_" ? "?" : "3.15 iPad 3";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -1629,9 +1634,9 @@ button:focus { outline: none; }
     a = r.split(";"); p = parseInt(a[0], 10); ch = a[1] === "1";
     if (isNaN(p)) { e.style.display = "none"; return; }
     e.style.display = "-webkit-flex"; e.style.display = "flex";
-    e.className = ch ? "" : (p <= 15 ? "low" : (p <= 30 ? "mid" : ""));
+    e.className = ch ? "chg" : (p <= 15 ? "low" : (p <= 30 ? "mid" : ""));
     $("batF").setAttribute("width", String(Math.max(0, Math.min(18, p * 18 / 100))));
-    $("batT").textContent = p + " %" + (ch ? " ⚡" : "");
+    $("batT").textContent = p + " %";
     BP = p; BC = ch;
   }
   function bleWatch() {
