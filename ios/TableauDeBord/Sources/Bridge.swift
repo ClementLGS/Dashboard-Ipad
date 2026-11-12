@@ -149,12 +149,22 @@ final class Bridge {
         try? sample.write(to: dir.appendingPathComponent("exemple-reglages.txt"), atomically: true, encoding: .utf8)
     }
 
+    /// Version de l'IPA : « 0.1 (compilation 12) » (numéro de compilation GitHub Actions).
+    private func appVersionText() -> String {
+        let info = Bundle.main.infoDictionary
+        let v = (info?["CFBundleShortVersionString"] as? String) ?? "?"
+        let b = (info?["CFBundleVersion"] as? String) ?? "?"
+        return "\(v) (compilation \(b))"
+    }
+
     private func stateDict(includeCfg: Bool) -> [String: Any] {
         var d: [String: Any] = [
             "battery": batteryString(),
             "ble": ble.available,
             "files": droppedFiles(),
-            "appCode": appCode
+            "appCode": appCode,
+            "appVer": appVersionText(),
+            "bridge": Ota.bridgeLevel
         ]
         if includeCfg {
             d["cfg"] = cfgDict()

@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:3190 TDBA:211-->
+<!--TDBV:3200 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -1229,9 +1229,15 @@ button:focus { outline: none; }
     if (!OKT[k]) { return "pas encore de réponse"; }
     return '<span class="ok">OK</span> dernière réponse ' + ago(OKT[k]);
   }
+  function ipaTxt() {
+    var t = "";
+    try { if (window.Native && typeof window.Native.appInfo === "function") { t = String(window.Native.appInfo() || ""); } } catch (e) { t = ""; }
+    return t || "inconnue (IPA ancien : réinstalle l'appli pour l'afficher)";
+  }
   function drawDbg() {
     var h = "", i, l, k;
     h += "<h3>État</h3>";
+    h += "<p>Appli (IPA) : " + ipaTxt() + "</p>";
     h += "<p>Page : " + (UI_NAME === "?" ? "2.08 (beta)" : UI_NAME) + ", ouverte depuis " + Math.round((Date.now() - T0) / 60000) + " min</p>";
     h += "<p>Clim : " + (S.linked ? '<span class="ok">liée</span>' : '<span class="e">non liée</span>') + ", " + stt("clim") + "</p>";
     h += "<p>Météo : " + stt("wx") + "</p>";
@@ -1343,7 +1349,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("3190", 10) || 0, UI_NAME = "3.19 iPad".charAt(0) === "_" ? "?" : "3.19 iPad";
+  var UI_CODE = parseInt("3200", 10) || 0, UI_NAME = "3.20 iPad".charAt(0) === "_" ? "?" : "3.20 iPad";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2335,7 +2341,7 @@ button:focus { outline: none; }
     try { ble = !!window.Native.bleAvailable(); } catch (e2) { }
     for (i = Math.max(0, LOG.length - 30); i < LOG.length; i++) { err.push({ t: new Date(LOG[i].t).toISOString(), code: LOG[i].c, zone: LOG[i].w, msg: dgScrub(LOG[i].m), n: LOG[i].n }); }
     for (i = Math.max(0, EV.length - 60); i < EV.length; i++) { ev.push({ t: new Date(EV[i].t).toISOString(), type: EV[i].k, msg: dgScrub(EV[i].m) }); }
-    return { at: new Date().toISOString(), raison: reason, version: UI_NAME, ui: UI_CODE, appli: (function () { try { return window.Native.appCode(); } catch (e3) { return 0; } })(),
+    return { at: new Date().toISOString(), raison: reason, version: UI_NAME, ui: UI_CODE, ipa: ipaTxt(), appli: (function () { try { return window.Native.appCode(); } catch (e3) { return 0; } })(),
       navigateur: navigator.userAgent, ecran: window.innerWidth + "x" + window.innerHeight, ouvertDepuisMin: Math.round((Date.now() - T0) / 60000),
       navigatorOnLine: navigator.onLine, reseauInaccessible: !!window.NETDOWN, veille: !!SLEEP, modeLeger: !!PERF, batterie: bat, bluetoothDisponible: ble,
       services: sv, clim: { liee: !!S.linked, allumee: !!S.on },
