@@ -21,4 +21,26 @@ let r3 = SettingsImport.apply(ical: nil, tuya: nil, reglages: "n'importe quoi\n"
 check("fichier sans ligne valide", r3.changed == 0 && r3.message.hasPrefix("Fichier de réglages lu"))
 check("empreinte change avec le contenu", SettingsImport.digest(ical: nil, tuya: nil, reglages: "a=1") != SettingsImport.digest(ical: nil, tuya: nil, reglages: "a=2"))
 
+// --- mises à jour de l'interface sans signature (Ota.swift) ---
+func page(_ v: Int, _ a: Int, local: Bool = true, size: Int = 30000) -> String {
+    return "<!--TDBV:\(v) TDBA:\(a)-->" + (local ? "window.LOCAL" : "") + String(repeating: "x", count: size)
+}
+let ok1 = page(3152, 211)
+let vjOk = "{\"ui\":3152,\"uisha\":\"" + SettingsImport.sha256Hex(Data(ok1.utf8)) + "\"}"
+check("interface valide acceptée (avec empreinte)", Ota.problem(html: ok1, versionJson: vjOk) == nil)
+check("interface valide acceptée (sans version.json)", Ota.problem(html: ok1, versionJson: "") == nil)
+check("empreinte fausse refusée (fichier abîmé)", Ota.problem(html: ok1 + "x", versionJson: vjOk)?.contains("version.json") == true)
+check("pas de window.LOCAL refusée", Ota.problem(html: page(3152, 211, local: false), versionJson: "") != nil)
+check("fichier trop petit refusé", Ota.problem(html: page(3152, 211, size: 100), versionJson: "") != nil)
+check("sans numéro de version refusé", Ota.problem(html: "window.LOCAL" + String(repeating: "x", count: 30000), versionJson: "") != nil)
+check("interface qui exige un pont plus récent refusée", Ota.problem(html: page(3152, Ota.bridgeLevel + 1), versionJson: "")?.contains("pont plus récent") == true)
+check("marqueur TDBV lu", Ota.mark(ok1, "TDBV") == 3152 && Ota.mark(ok1, "TDBA") == 211 && Ota.mark("rien", "TDBV") == -1)
+
+// --- version.json du dépôt = index.html du dépôt (sinon l'iPad refuserait la mise à jour : empreinte différente) ---
+let argv = CommandLine.arguments
+if argv.count >= 3, let vjText = try? String(contentsOfFile: argv[1], encoding: .utf8), let htmlData = try? Data(contentsOf: URL(fileURLWithPath: argv[2])),
+   let o = try? JSONSerialization.jsonObject(with: Data(vjText.utf8)) as? [String: Any], let want = o["uisha"] as? String {
+    if SettingsImport.sha256Hex(htmlData) == want.lowercased() { print("OK      version.json correspond à index.html") }
+    else { print("::warning::version.json ne correspond pas à index.html : lance python3 tools/version.py avant de pousser, sinon l'iPad refusera la mise à jour") }
+}
 exit(failed ? 1 : 0)

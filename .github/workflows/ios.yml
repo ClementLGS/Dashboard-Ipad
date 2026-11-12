@@ -25,10 +25,10 @@ jobs:
       - name: Installer XcodeGen
         run: brew install xcodegen
 
-      - name: Tester l'import des réglages
+      - name: Tester l'import des réglages et le contrôle des mises à jour
         run: |
-          swiftc -o /tmp/imptest ios/TableauDeBord/Sources/SettingsImport.swift ios/Tests/main.swift
-          /tmp/imptest
+          swiftc -o /tmp/imptest ios/TableauDeBord/Sources/SettingsImport.swift ios/TableauDeBord/Sources/Ota.swift ios/Tests/main.swift
+          /tmp/imptest version.json index.html
 
       - name: Copier l'interface (index.html de la branche)
         run: cp index.html ios/TableauDeBord/Resources/index.html
