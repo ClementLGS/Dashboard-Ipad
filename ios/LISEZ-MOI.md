@@ -7,7 +7,7 @@ Faits : étapes 1 (coque), 2 (HTTP + réglages), 3 (Bluetooth), import automatiq
 
 ## Récupérer l'appli
 1. GitHub > dépôt `Dashboard-Ipad` > onglet **Actions** > dernier passage de « iPad (IPA non signé) » (branche `main`).
-2. En bas de la page, section **Artifacts** : télécharger `TableauDeBord-iPad-unsigned-ipa` (zip contenant `TableauDeBord-iPad-unsigned.ipa`).
+2. En bas de la page, section **Artifacts** : télécharger `TableauDeBord-iPad-<version>-compil<N>` (zip contenant `TableauDeBord-iPad-<version>-compil<N>.ipa`).
 
 L'IPA n'est **pas signé** : il faut le signer avec ton identifiant Apple au moment de l'installer.
 
