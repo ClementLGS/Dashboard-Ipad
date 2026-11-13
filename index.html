@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:7300 TDBA:211-->
+<!--TDBV:7400 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -1721,7 +1721,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("7300", 10) || 0, UI_NAME = "4.33 iPad (beta)".charAt(0) === "_" ? "?" : "4.33 iPad (beta)";
+  var UI_CODE = parseInt("7400", 10) || 0, UI_NAME = "4.34 iPad (beta)".charAt(0) === "_" ? "?" : "4.34 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2571,6 +2571,7 @@ button:focus { outline: none; }
   function navDraw() {
     var src = S, zn = ZLAB ? ZLAB[0] : "", e = $("navIco"), ok, a = "", stopped, t;
     if (CZ) { zn = ZLAB[CZ - 1]; } else if (ZMEM && ZMEM !== 1 && NZ) { src = NZ; zn = ZLAB[ZMEM - 1]; }
+    if (!src.linked && !src.fail) { $("navSub").textContent = (zn ? zn + " " : "") + "…"; return; }   /* lecture en cours : pas de « injoignable » tant qu'aucun vrai échec */
     ok = src.linked && src.mode >= 0 && MODES[src.mode];
     stopped = ok && MODES[src.mode].az === 1;
     if (ok && src.on && !stopped && /^(heat|cool|fan|dry)$/.test(src.act || "")) { a = src.act; }
@@ -2585,7 +2586,7 @@ button:focus { outline: none; }
     var asked = ZMEM;
     call("GET", "/api/clim?zone=" + asked, null, function (err, z) {
       if (err || !z || asked !== ZMEM || CZ) { return; }
-      NZ = { linked: true, on: !!z.on, mode: modeIndex(z.mode), temp: z.setpoint, act: z.act || "" };
+      NZ = { linked: true, fail: false, on: !!z.on, mode: modeIndex(z.mode), temp: z.setpoint, act: z.act || "" };
       navDraw();
     });
   }
@@ -2612,11 +2613,11 @@ button:focus { outline: none; }
       if (err) {
         pullFail++;
         if (pullFail < 3) { setTimeout(pull, 2500); return; }   /* échec isolé : on réessaie avant de déclarer injoignable */
-        S.linked = false; drawClim(); drawTemp(); drawMode();
+        S.linked = false; S.fail = true; drawClim(); drawTemp(); drawMode();
         say("Clim injoignable [" + err.code + "] : " + err.message + ". Touche le badge rouge pour le diagnostic.", true);
         return;
       }
-      pullFail = 0; S.linked = true; S.on = !!z.on; S.run = (z.run === true || z.run === false) ? z.run : null; S.dem = z.dem || null; S.act = z.act || ""; S.rt = z.roomTemp; OKT.clim = Date.now(); ACT.clim = null; drawErr();
+      pullFail = 0; S.fail = false; S.linked = true; S.on = !!z.on; S.run = (z.run === true || z.run === false) ? z.run : null; S.dem = z.dem || null; S.act = z.act || ""; S.rt = z.roomTemp; OKT.clim = Date.now(); ACT.clim = null; drawErr();
       var mi = modeIndex(z.mode); if (mi >= 0) { S.mode = mi; }
       if (typeof z.minTemp === "number") { S.lo = Math.max(18, z.minTemp); }
       if (typeof z.maxTemp === "number") { S.hi = Math.min(30, z.maxTemp); }
@@ -3156,8 +3157,8 @@ button:focus { outline: none; }
   /* ouvre la page Clim habituelle, mais réglée sur la zone touchée */
   function zoneOpen(n) {
     clearTimeout(zTm); zTm = 0; ZMEM = n; xSet("zoneMem", n);
-    if (!CZ) { SZ = { mode: S.mode, temp: S.temp, on: S.on, linked: S.linked, lo: S.lo, hi: S.hi, run: S.run, dem: S.dem, act: S.act, rt: S.rt }; }
-    CZ = n; S.linked = false; S.on = false; S.act = ""; S.run = null; S.dem = null;
+    if (!CZ) { SZ = { mode: S.mode, temp: S.temp, on: S.on, linked: S.linked, fail: !!S.fail, lo: S.lo, hi: S.hi, run: S.run, dem: S.dem, act: S.act, rt: S.rt }; }
+    CZ = n; S.linked = false; S.fail = false; S.on = false; S.act = ""; S.run = null; S.dem = null;
     var h = document.querySelector("#p-clim .ttl h2"); if (h) { h.textContent = "Climatisation · " + ZLAB[n - 1]; }
     $("zoneV").style.display = "none";
     $("cBox").style.display = ""; $("modes").style.display = ""; $("info").style.display = ""; $("zBack").style.display = "block";
@@ -3165,7 +3166,7 @@ button:focus { outline: none; }
   }
   /* quitte la vue zone et remet l'état normal de la chambre */
   function zoneLeave() {
-    if (CZ && CZ !== 1) { NZ = { linked: S.linked, on: S.on, mode: S.mode, temp: S.temp, act: S.act }; }
+    if (CZ && CZ !== 1) { NZ = { linked: S.linked, fail: !!S.fail, on: S.on, mode: S.mode, temp: S.temp, act: S.act }; }
     var h = document.querySelector("#p-clim .ttl h2"); if (h) { h.textContent = "Climatisation de la chambre"; }
     if (SZ) { var k; for (k in SZ) { if (SZ.hasOwnProperty(k)) { S[k] = SZ[k]; } } SZ = null; }
     CZ = 0; lastUser = 0; drawMode(); drawClim(); drawTemp(); pull(); nzPull();
@@ -3210,6 +3211,7 @@ button:focus { outline: none; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.34", "Correctif : plus de « Clim injoignable » furtif dans le menu (test)", "En changeant de page ou de zone, le menu de gauche n'affiche plus « injoignable » une demi-seconde : il montre « … » pendant la lecture, et « injoignable » seulement après un vrai échec."],
       ["4.33", "Double toucher = allume / éteint une zone, liste défilable, humidité avec goutte (test)", "Sur le plan, deux touchers rapides sur une zone l'allument ou l'éteignent (un seul toucher ouvre la zone, avec un petit délai). La vue liste défile, la ligne technique grise est retirée, et l'humidité s'affiche avec une goutte."],
       ["4.32", "Barre de progression du changement de mode + clim plus réactive (test)", "Pendant un changement de mode, une barre grise se remplit sur 5 secondes de Froid à Ventilation, puis tout est relu. La page Clim se rafraîchit toutes les 5 s (au lieu de 15), le plan des zones aussi (au lieu de 30), pour voir plus vite les changements faits depuis l'appli Airzone."],
       ["4.31", "Correctif : zones à tort en « chauffage » (test)", "La 4.30 affichait toutes les zones en chauffage : elle lisait des réglages de l'Airzone comme s'ils étaient une demande. Maintenant « chauffage » ou « froid » seulement quand l'Airzone demande vraiment et que la consigne n'est pas atteinte, sinon « confort ». En vue liste, une ligne grise montre les valeurs brutes reçues (temporaire, pour vérifier)."],
