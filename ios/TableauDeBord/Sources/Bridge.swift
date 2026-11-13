@@ -8,7 +8,6 @@ final class Bridge {
     private let defaults = UserDefaults.standard
     private let cfgKey = "tdb.cfg.v1"
     private let ble = BleLights()
-    private let music = MusicBridge()
     private lazy var session: URLSession = {
         let c = URLSessionConfiguration.ephemeral
         c.waitsForConnectivity = false
@@ -236,12 +235,6 @@ final class Bridge {
             DispatchQueue.main.async { reloadPage() }
         case "otaClear":
             Ota.clear()
-        case "music":
-            guard a.count >= 3 else { return }
-            let id = int(a[0])
-            music.handle(action: str(a[1]), arg: str(a[2])) { [weak self] body, err in
-                self?.deliver(id: id, status: err.isEmpty ? 200 : 0, body: body, error: err)
-            }
         default:
             break
         }

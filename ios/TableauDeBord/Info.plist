@@ -55,8 +55,6 @@
 	<string>Le tableau de bord parle à la clim Airzone de ta chambre, sur ton réseau Wi-Fi.</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Le tableau de bord allume et règle la lumière LED de ta chambre en Bluetooth.</string>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>Le tableau de bord affiche le morceau en cours et commande la lecture de ta musique Apple Music.</string>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
