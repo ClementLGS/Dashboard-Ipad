@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:7400 TDBA:211-->
+<!--TDBV:7500 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -624,6 +624,18 @@ button:focus { outline: none; }
 #setV { position: relative; }
 #setV.demoLock > *:not(.demoOv) { visibility: hidden; }
 .demoOv { background: rgba(255,255,255,0.05); border-radius: 18px; position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index: 5; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; text-align: center; font-size: 24px; font-weight: bold; color: #ffd27a; }
+#demoPop { display: none; position: fixed; left: 0; top: 0; right: 0; bottom: 0; z-index: 70; background: rgba(0,0,0,0.55); -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; }
+#demoPop .dpc { width: 600px; max-width: 92%; max-height: 88%; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 24px 28px 22px; border-radius: 22px; background: rgba(26,30,36,0.94); border: 1px solid rgba(255,210,122,0.40); box-shadow: 0 10px 40px rgba(0,0,0,0.45); }
+#demoPop h3 { font-size: 30px; color: #ffd27a; margin-bottom: 4px; text-align: center; }
+#demoPop p { font-size: 19px; color: #dfe3ea; margin: 0 0 18px; text-align: center; }
+#demoPop .dpg { display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; margin: 0 -6px 14px; }
+#demoPop .dpt { width: calc(33.33% - 12px); margin: 6px; padding: 16px 8px 12px; border-radius: 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.10); text-align: center; color: #c3cad5; }
+#demoPop .dpt svg { display: block; width: 38px; height: 38px; margin: 0 auto 8px; color: #eceff3; }
+#demoPop .dpt b { display: block; font-size: 19px; color: #eceff3; }
+#demoPop .dpt span { display: block; font-size: 14px; color: #9aa3b0; margin-top: 2px; }
+#demoPop .dpn { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; font-size: 16px; color: #ffd27a; margin: 6px 0; }
+#demoPop .dpn svg { width: 22px; height: 22px; margin-right: 8px; -webkit-flex: none; flex: none; }
+#demoPop button { display: block; width: 100%; height: 52px; margin-top: 6px; border-radius: 14px; border: 0; background: #d8dde6; color: #14181e; font-size: 18px; font-weight: bold; }
 #demoTag { display: none; position: fixed; right: 8px; bottom: 6px; z-index: 50; padding: 3px 9px; border-radius: 8px; font-size: 11px; font-weight: bold; letter-spacing: 0.08em; color: #ffd27a; background: rgba(0,0,0,0.45); border: 1px solid rgba(255,210,122,0.5); pointer-events: none; }
 #fbT { display: block; width: 100%; height: 96px; padding: 10px 12px; font: inherit; font-size: 18px; color: #eceff3; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.14); border-radius: 12px; resize: none; -webkit-user-select: text; user-select: text; -webkit-appearance: none; }
 .fbI { display: -webkit-flex; display: flex; -webkit-align-items: flex-start; align-items: flex-start; padding: 10px 12px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.10); border-radius: 12px; background: rgba(255,255,255,0.045); }
@@ -1721,7 +1733,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("7400", 10) || 0, UI_NAME = "4.34 iPad (beta)".charAt(0) === "_" ? "?" : "4.34 iPad (beta)";
+  var UI_CODE = parseInt("7500", 10) || 0, UI_NAME = "4.35 iPad (beta)".charAt(0) === "_" ? "?" : "4.35 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -3211,6 +3223,7 @@ button:focus { outline: none; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.35", "Mode démonstration : retour à l'accueil et pop-up d'explication (test)", "En lançant le mode démonstration, le tableau de bord revient à l'accueil et une fenêtre explique le but : tester chaque catégorie (Accueil, Clim, Lumières, Météo, Agenda, Autre) pour faire un retour complet."],
       ["4.34", "Correctif : plus de « Clim injoignable » furtif dans le menu (test)", "En changeant de page ou de zone, le menu de gauche n'affiche plus « injoignable » une demi-seconde : il montre « … » pendant la lecture, et « injoignable » seulement après un vrai échec."],
       ["4.33", "Double toucher = allume / éteint une zone, liste défilable, humidité avec goutte (test)", "Sur le plan, deux touchers rapides sur une zone l'allument ou l'éteignent (un seul toucher ouvre la zone, avec un petit délai). La vue liste défile, la ligne technique grise est retirée, et l'humidité s'affiche avec une goutte."],
       ["4.32", "Barre de progression du changement de mode + clim plus réactive (test)", "Pendant un changement de mode, une barre grise se remplit sur 5 secondes de Froid à Ventilation, puis tout est relu. La page Clim se rafraîchit toutes les 5 s (au lieu de 15), le plan des zones aussi (au lieu de 30), pour voir plus vite les changements faits depuis l'appli Airzone."],
@@ -3335,12 +3348,26 @@ button:focus { outline: none; }
     var b = document.createElement("button"), tag = document.createElement("div"), bar = $("dbgClr").parentNode;
     b.type = "button"; b.id = "dbgDemo"; tag.id = "demoTag"; tag.textContent = "MODE DÉMONSTRATION";
     document.body.appendChild(tag);
+    var pop = document.createElement("div"); pop.id = "demoPop";
+    function nIco(p) { var e = document.querySelector('.nb[data-p="' + p + '"] svg'); return e ? e.outerHTML : ""; }
+    var CAL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>';
+    var DT = [["home", "Accueil", "Coup d\'œil"], ["clim", "Clim", "Zones et modes"], ["lum", "Lumières", "LED et lampe"], ["wx", "Météo", "Animation et semaine"], ["cal", "Agenda", "Rendez-vous fictifs"], ["app", "Autre", "Tous les modules"]], dh = "", di;
+    for (di = 0; di < DT.length; di++) { dh += '<div class="dpt">' + (DT[di][0] === "cal" ? CAL : nIco(DT[di][0])) + '<b>' + DT[di][1] + '</b><span>' + DT[di][2] + '</span></div>'; }
+    pop.innerHTML = '<div class="dpc"><h3>Mode démonstration</h3>'
+      + '<p>Teste chaque catégorie, puis fais ton retour.</p>'
+      + '<div class="dpg">' + dh + '</div>'
+      + '<div class="dpn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/></svg>Clim et lumières sont réelles</div>'
+      + '<div class="dpn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14v12H9l-4 4z"/></svg>Note tout dans Feedback (page Autre)</div>'
+      + '<button type="button" id="demoGo">Commencer</button></div>';
+    document.body.appendChild(pop);
+    $("demoGo").onclick = function () { pop.style.display = "none"; };
     function paint() { b.textContent = DEMO ? "Arrêter le mode démonstration" : "Mode démonstration"; tag.style.display = DEMO ? "block" : "none"; }
     b.onclick = function () {
       DEMO = DEMO ? 0 : 1; xSet("demo", DEMO); DEMOP = null; paint();
-      appView("lib");
+      appView("lib"); go("home");
       loadAgenda();
       $("dbg").style.display = "none";
+      pop.style.display = DEMO ? "-webkit-flex" : "none"; if (DEMO) { pop.style.display = "flex"; }
     };
     bar.insertBefore(b, $("dbgSend")); paint();
   })();
