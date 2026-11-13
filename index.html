@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:4500 TDBA:211-->
+<!--TDBV:4600 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -623,6 +623,8 @@ button:focus { outline: none; }
     </div>
     <div class="modes" id="modes"></div>
     <div class="note" id="info">Le mode est commun à toute la maison.</div>
+    <button type="button" class="xbtn" id="zBtn" style="margin-top:14px">Sélection de zone</button>
+    <div id="zoneV" style="display:none"></div>
    </section>
 
    <section class="page" id="p-lum">
@@ -1608,7 +1610,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("4500", 10) || 0, UI_NAME = "4.5 iPad (beta)".charAt(0) === "_" ? "?" : "4.5 iPad (beta)";
+  var UI_CODE = parseInt("4600", 10) || 0, UI_NAME = "4.6 iPad (beta)".charAt(0) === "_" ? "?" : "4.6 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2643,6 +2645,8 @@ button:focus { outline: none; }
     else if (a === "eco") { ECO = ECO ? 0 : 1; xSet("eco", ECO); idleTick(); dispDraw(); }
     else if (a === "fbAdd") { fbAdd(v); }
     else if (a === "fbDel") { fbDel(Number(v)); }
+    else if (a === "ideaHist") { IHIST = !IHIST; ideesDraw(); $("xB").scrollTop = 0; }
+    else if (a === "bugHist") { BHIST = !BHIST; bugsDraw(); $("xB").scrollTop = 0; }
     else if (a === "ideaDone") { ideeToggle(decodeURIComponent(v)); }
     
     else if (a === "fbSend") { fbSend(); }
@@ -2790,20 +2794,30 @@ button:focus { outline: none; }
   function ideeIsDone(t) { return IDONE[t] !== undefined ? !!IDONE[t] : (t === "Catégorie bug"); }
   function ideeToggle(t) { IDONE[t] = ideeIsDone(t) ? 0 : 1; xSet("ideeDone", IDONE); ideesDraw(true); }
   function ideeBtn(t) { return '<button type="button" class="xbtn sm" data-x="ideaDone" data-a="' + encodeURIComponent(t) + '" style="-webkit-flex:none;flex:none;margin-left:10px;align-self:center">' + (ideeIsDone(t) ? "Remettre" : "Réalisée ✓") + '</button>'; }
+  var IHIST = false;
+  function histBar(on, kind, n) { return '<div class="xrow2" style="margin-bottom:12px"><button type="button" class="xbtn sm" data-x="' + kind + '">' + (on ? "← Retour à la liste" : "Historique (" + n + ")") + '</button></div>'; }
   function ideesDraw(keep) {
-    var h = "", j, it, col, d, y = keep && $("xB") ? $("xB").scrollTop : 0;
+    var h = "", j, it, col, d, y = keep && $("xB") ? $("xB").scrollTop : 0, nd = 0, hl = [];
+    for (j = 0; j < IDEES.u.length; j++) { if (ideeIsDone(IDEES.u[j][0])) { nd++; } }
+    for (j = 0; j < IDEES.l.length; j++) { if (ideeIsDone(IDEES.l[j][0])) { nd++; } }
+    h += histBar(IHIST, "ideaHist", nd);
+    if (IHIST) {
+      h += '<p class="note" style="margin-bottom:12px">Les idées réalisées (les tiennes et celles de Claude). « Remettre » la renvoie dans la liste.</p>';
+      if (!nd) { h += '<p class="note">Rien de réalisé pour l\'instant.</p>'; }
+    }
     if (IDEES.u && IDEES.u.length) {
       h += '<div class="note" style="margin-bottom:8px;font-size:16px;color:#eceff3"><b>Tes idées</b></div>';
       for (j = 0; j < IDEES.u.length; j++) {
-        d = ideeIsDone(IDEES.u[j][0]);
+        d = ideeIsDone(IDEES.u[j][0]); if (d !== IHIST) { continue; }
         h += '<div class="fbI" style="' + (d ? "opacity:0.55" : "") + '"><span class="tg" style="color:' + (d ? "#5fd08a" : "#e6c35c") + '">' + (d ? "Réalisée" : "Idée") + '</span><span class="tx"' + (d ? ' style="text-decoration:line-through"' : "") + '>' + esc(IDEES.u[j][0]) + '<small>' + esc(IDEES.u[j][1]) + '</small></span>' + ideeBtn(IDEES.u[j][0]) + '</div>';
       }
       h += '<div class="note" style="margin:16px 0 8px;font-size:16px;color:#eceff3"><b>Idées de Claude</b></div>';
     }
+    if (IHIST) { $("xB").innerHTML = h; if (y) { $("xB").scrollTop = y; } return; }
     h += '<p class="note" style="margin-bottom:10px">Pour ajouter une idée : Autre &gt; Feedback, tape ou dicte-la, appuie sur « Idée », puis « Envoyer à Claude ». Claude la range ici à la prochaine version.</p>';
     h += '<p class="note" style="margin-bottom:12px">Mises à jour à chaque version test. Dernière mise à jour : ' + IDEES.maj + '. Dis-moi lesquelles te plaisent.</p>';
     for (j = 0; j < IDEES.l.length; j++) {
-      it = IDEES.l[j]; d = ideeIsDone(it[0]); col = it[1] === "Facile" ? "#5fd08a" : (it[1] === "Moyen" ? "#e6c35c" : "#ff9a8d");
+      it = IDEES.l[j]; d = ideeIsDone(it[0]); if (d !== IHIST) { continue; } col = it[1] === "Facile" ? "#5fd08a" : (it[1] === "Moyen" ? "#e6c35c" : "#ff9a8d");
       h += '<div style="display:-webkit-flex;display:flex;padding:12px 14px;margin-bottom:10px;border:1px solid #2f353e;border-radius:14px;background:#1a1e24;' + (d ? "opacity:0.55" : "") + '"><div style="-webkit-flex:1;flex:1;min-width:0"><div style="font-size:19px;font-weight:bold' + (d ? ";text-decoration:line-through" : "") + '">' + esc(it[0]) + ' <span style="font-size:12px;font-weight:bold;color:' + (d ? "#5fd08a" : col) + ';border:1px solid ' + (d ? "#5fd08a" : col) + ';border-radius:8px;padding:1px 7px;margin-left:6px;white-space:nowrap">' + (d ? "Réalisée" : esc(it[1])) + '</span></div><div style="font-size:15px;color:#b9c2d0;margin-top:6px">' + esc(it[2]) + '</div><div class="note" style="margin-top:6px">' + esc(it[3]) + '</div></div>' + ideeBtn(it[0]) + '</div>';
     }
     $("xB").innerHTML = h; if (y) { $("xB").scrollTop = y; }
@@ -2814,19 +2828,64 @@ button:focus { outline: none; }
     /* ["Titre", "Détail", "À corriger" | "Corrigé en 4.x", "jj/mm"] */
     ["Idées : écran non défilable", "L'écran Idées ne défilait pas (hauteur de la zone effacée par erreur, vrai aussi pour Historique et Feedback), et on ne pouvait pas marquer une idée comme réalisée.", "Corrigé en 4.5", "13/11"]
   ] };
+  var BHIST = false;
   function bugsDraw() {
-    var h = '<p class="note" style="margin-bottom:12px">Les bugs que tu notes dans Feedback (bouton « Bug ») puis envoies à Claude sont rangés ici, avec leur état. Dernière mise à jour : ' + BUGS.maj + '.</p>', i, b, ok;
-    if (!BUGS.l.length) { h += '<p class="note">Aucun bug noté pour l\'instant.</p>'; }
+    var h = "", i, b, ok, nf = 0, n = 0;
+    for (i = 0; i < BUGS.l.length; i++) { if (/^Corrigé/.test(BUGS.l[i][2])) { nf++; } }
+    h += histBar(BHIST, "bugHist", nf);
+    h += '<p class="note" style="margin-bottom:12px">' + (BHIST ? "Les bugs corrigés, avec la version qui les a réglés." : "Les bugs que tu notes dans Feedback (bouton « Bug ») puis envoies à Claude sont rangés ici, avec leur état. Une fois corrigés, ils passent dans l'historique.") + ' Dernière mise à jour : ' + BUGS.maj + '.</p>';
     for (i = 0; i < BUGS.l.length; i++) {
-      b = BUGS.l[i]; ok = /^Corrigé/.test(b[2]);
+      b = BUGS.l[i]; ok = /^Corrigé/.test(b[2]); if (ok !== BHIST) { continue; } n++;
       h += '<div class="fbI"><span class="tg" style="color:' + (ok ? "#5fd08a" : "#ff6b6b") + '">' + esc(b[2]) + '</span><span class="tx"><b>' + esc(b[0]) + '</b>' + (b[1] ? '<br>' + esc(b[1]) : "") + '<small>' + esc(b[3]) + '</small></span></div>';
     }
+    if (!n) { h += '<p class="note">' + (BHIST ? "Aucun bug corrigé pour l'instant." : "Aucun bug en attente.") + '</p>'; }
     $("xB").innerHTML = h;
   }
+
+
+  /* ---------------- Sélection de zone (1re itération, versions TEST) : plan simplifié de la maison, 5 zones ---------------- */
+  var ZR = [[0, 0, 260, 200], [260, 0, 240, 200], [500, 0, 260, 200], [0, 200, 380, 200], [380, 200, 380, 200]];
+  var ZN = xGet("zoneNames", {}), zSel = 0;
+  function zName(n) { return ZN[n] || ("Zone " + n); }
+  function zoneDraw() {
+    var h = '<div class="xrow2" style="margin:2px 0 10px"><button type="button" class="xbtn sm" data-z="back">← Retour à la clim</button></div>', n, r, mine = parseInt((window.LOCAL ? window.LOCAL.cfg() : {}).zone, 10) || 1, sel;
+    h += '<svg viewBox="-6 -6 772 412" style="width:100%;max-height:48vh;display:block"><rect x="0" y="0" width="760" height="400" rx="14" fill="#14171c" stroke="#3a414c" stroke-width="3"/>';
+    for (n = 1; n <= 5; n++) {
+      r = ZR[n - 1]; sel = n === zSel;
+      h += '<g data-z="' + n + '" style="cursor:pointer"><rect x="' + (r[0] + 5) + '" y="' + (r[1] + 5) + '" width="' + (r[2] - 10) + '" height="' + (r[3] - 10) + '" rx="10" fill="' + (sel ? "#2a3a52" : "#1c2128") + '" stroke="' + (sel ? "#6ea8fe" : "#3a414c") + '" stroke-width="' + (sel ? 4 : 2) + '"/>'
+        + '<text x="' + (r[0] + r[2] / 2) + '" y="' + (r[1] + r[3] / 2 - 4) + '" text-anchor="middle" fill="#eceff3" font-size="28" font-weight="bold">' + esc(zName(n)) + '</text>'
+        + '<text x="' + (r[0] + r[2] / 2) + '" y="' + (r[1] + r[3] / 2 + 28) + '" text-anchor="middle" fill="' + (n === mine ? "#5fd08a" : "#8d95a3") + '" font-size="20">' + (n === mine ? "Ma chambre" : (ZN[n] ? "Zone " + n : "")) + '</text></g>';
+    }
+    h += '</svg>';
+    if (!zSel) { h += '<p class="note" style="margin-top:10px">Touche une zone pour la sélectionner. Le plan est un gabarit : on l\'ajustera avec le vrai plan de la maison.</p>'; }
+    else {
+      h += '<div class="tile" style="margin-top:10px;padding:14px 18px"><div style="font-size:21px;font-weight:bold">' + esc(zName(zSel)) + (zSel === mine ? ' <span style="color:#5fd08a;font-size:15px">· ma chambre</span>' : "") + '</div>'
+        + '<div class="note" style="margin:6px 0 10px">Les réglages de la zone (mode, température) arrivent à la prochaine itération.</div>'
+        + '<div style="display:-webkit-flex;display:flex"><input id="zNm" type="text" maxlength="18" value="' + esc(ZN[zSel] || "") + '" placeholder="Nom de la pièce" style="-webkit-flex:1;flex:1;min-width:0;height:46px;border-radius:12px;border:1px solid #2f353e;background:#14171c;color:#eceff3;font-size:18px;padding:0 12px;margin-right:10px">'
+        + '<button type="button" class="xbtn sm" data-z="save">Renommer</button></div></div>';
+    }
+    $("zoneV").innerHTML = h;
+  }
+  function zoneShow(on) {
+    var ids = ["cBox", "modes", "info", "zBtn"], i;
+    for (i = 0; i < ids.length; i++) { $(ids[i]).style.display = on ? "none" : ""; }
+    $("zoneV").style.display = on ? "block" : "none";
+    if (on) { zoneDraw(); }
+  }
+  $("zBtn").onclick = function () { zSel = 0; zoneShow(true); };
+  $("zoneV").addEventListener("click", function (e) {
+    var t = e.target, z = null;
+    while (t && t !== $("zoneV")) { if (t.getAttribute && t.getAttribute("data-z")) { z = t.getAttribute("data-z"); break; } t = t.parentNode; }
+    if (!z) { return; }
+    if (z === "back") { zoneShow(false); }
+    else if (z === "save") { var v = $("zNm").value.replace(/^\s+|\s+$/g, ""); if (v) { ZN[zSel] = v; } else { delete ZN[zSel]; } xSet("zoneNames", ZN); zoneDraw(); }
+    else { zSel = parseInt(z, 10); zoneDraw(); }
+  });
 
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.6", "Historiques et sélection de zone (test)", "Idées et Bugs : une sous-catégorie Historique reçoit ce qui est réalisé ou corrigé. Clim : bouton « Sélection de zone », plan simplifié de la maison avec les 5 zones (première version : sélection et renommage)."],
       ["4.5", "Défilement et idées réalisées", "Correctif : les écrans longs (Idées, Historique, Feedback) défilent de nouveau. Dans Idées, bouton « Réalisée » pour barrer une idée."],
       ["4.4", "Bug et idée rangés (test)", "Le bug « Idées non défilable » est dans Bugs ; l'idée « Feedback s'envoie tout seul » est dans Idées. Ils disparaissent de Feedback."],
       ["4.3", "Catégorie Bugs (test)", "Autre > Bugs : la liste de tous les bugs notés dans Feedback, avec leur état. Visible seulement dans les versions test."],
