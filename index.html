@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:7200 TDBA:211-->
+<!--TDBV:7300 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -124,6 +124,7 @@ button:focus { outline: none; }
 #room { margin-top: 8px; font-size: 15px; min-height: 20px; }
 .modes { -webkit-flex: none; flex: none; display: -webkit-flex; display: flex; margin-top: 12px; margin-bottom: 18px; position: relative; }
 @keyframes mprogF { from { -webkit-transform: scaleX(0); transform: scaleX(0); } to { -webkit-transform: scaleX(1); transform: scaleX(1); } }
+#zoneV { -webkit-flex: 1 1 0; flex: 1 1 0; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .mprog { display: block; position: absolute; left: 0; right: 8px; bottom: -11px; height: 5px; border-radius: 3px; background: rgba(255,255,255,0.08); overflow: hidden; }
 .mprog b { display: block; width: 100%; height: 100%; border-radius: 3px; background: #8a93a1; -webkit-transform-origin: 0 50%; transform-origin: 0 50%; -webkit-transform: scaleX(0); transform: scaleX(0); -webkit-animation: mprogF 5s linear forwards; animation: mprogF 5s linear forwards; }
 .mb { -webkit-flex: 1 1 0; flex: 1 1 0; height: 62px; margin-right: 8px; border-radius: 14px; background: rgba(26,30,36,0.5); border: 2px solid #2f353e; font-size: 15px; font-weight: bold; display: block; }
@@ -1720,7 +1721,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("7200", 10) || 0, UI_NAME = "4.32 iPad (beta)".charAt(0) === "_" ? "?" : "4.32 iPad (beta)";
+  var UI_CODE = parseInt("7300", 10) || 0, UI_NAME = "4.33 iPad (beta)".charAt(0) === "_" ? "?" : "4.33 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -3100,9 +3101,9 @@ button:focus { outline: none; }
         h += '<button type="button" data-z="' + n + '" style="display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:space-between;justify-content:space-between;text-align:left;width:calc(50% - 12px);margin:6px;padding:14px 18px;background:' + (t.bg ? zRgba(t.bg, 0.14) : "#1b2027") + ';border:1px solid ' + (t.bg ? zRgba(t.bg, 0.7) : "#2f353e") + ';border-radius:18px;color:' + (t.k === "off" ? "#8a93a1" : "#eceff3") + '">'
           + '<div><div style="font-size:17px;font-weight:bold;color:#b4bcc9">' + esc(ZLAB[n - 1]) + '</div>'
           + '<div style="display:-webkit-flex;display:flex;-webkit-align-items:baseline;align-items:baseline;margin-top:2px"><span style="font-size:44px;font-weight:bold;line-height:50px">' + (z.err ? "!" : zNum(z.roomTemp)) + '</span>'
-          + (typeof z.humidity === "number" ? '<span style="font-size:15px;color:#b4bcc9;margin-left:12px">' + z.humidity + ' %</span>' : '') + '</div>'
+          + (typeof z.humidity === "number" ? '<span style="display:-webkit-inline-flex;display:inline-flex;-webkit-align-items:center;align-items:center;font-size:16px;color:#9fc3dd;margin-left:14px"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#7fb4d8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px"><path d="M12 3.5c3.2 4 5.5 6.9 5.5 10a5.5 5.5 0 0 1-11 0c0-3.1 2.3-6 5.5-10z"/></svg>' + z.humidity + ' %</span>' : '') + '</div>'
           + '<div style="font-size:20px;font-weight:bold;margin-top:6px;color:' + (t.k === "off" ? "#8a93a1" : "#d8dde6") + '">' + (t.k === "stop" ? "arrêt" : t.k === "off" ? "éteinte" : (t.k === "comfort" ? "Confort · " : "") + zNum(z.setpoint)) + '</div>'
-          + '<div style="font-size:11px;color:#5d6674;margin-top:4px">' + esc(z.dem ? JSON.stringify(z.dem).replace(/[{}"]/g, "").replace(/_demand/g, "").replace(/,/g, " ") : "demande ?") + ' · mode ' + z.mode + '</div></div>'
+          + '</div>'
           + '<div style="width:96px;height:96px;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;opacity:' + (t.k === "off" ? "0.55" : "1") + '">' + zIco(z, 84) + '</div></button>';
       }
       h += '</div><div style="margin-top:8px">' + '<button type="button" id="zView" aria-label="' + (ZVIEW === "plan" ? "Afficher en liste" : "Afficher le plan") + '" style="width:84px;height:44px;border-radius:12px;background:transparent;border:0;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;padding:0;margin:0">' + (ZVIEW === "plan" ? '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#eceff3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>' : '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#eceff3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 11.5L12 4l8.5 7.5M6 10v9.5h12V10M10 19.5v-5h4v5"/></svg>') + '</button>' + '</div>';
@@ -3186,13 +3187,30 @@ button:focus { outline: none; }
       m = parseInt(m, 10); zoneOptim(MODES[m].az); setMode(m, function () { zoneDraw(); zoneLoad(); }); zoneDraw(); return;
     }
     if (!z) { return; }
-    if (z === "back") { zoneOpen(ZMEM || 1); }
-    else { zoneOpen(parseInt(z, 10)); }
+    if (z === "back") { zoneOpen(ZMEM || 1); return; }
+    z = parseInt(z, 10);
+    if (ZVIEW !== "plan") { zoneOpen(z); return; }
+    /* plan : un toucher ouvre la zone (après un court délai), un double toucher allume / éteint la zone */
+    if (zTapN === z && Date.now() - zTapT < 450) { clearTimeout(zTapTm); zTapN = 0; zonePower(z); return; }
+    zTapN = z; zTapT = Date.now(); clearTimeout(zTapTm);
+    zTapTm = setTimeout(function () { zTapN = 0; zoneOpen(z); }, 380);
   });
+  var zTapN = 0, zTapT = 0, zTapTm = 0;
+  function zonePower(n) {
+    var zd = ZD[n - 1], want;
+    if (!S.linked || !zd || zd.err) { return; }
+    want = zd.on ? 0 : 1; zd.on = want; zd.act = zAct(zd); modeAt = Date.now(); zoneDraw();
+    call("POST", "/api/clim", { zone: n, on: want }, function (err) {
+      if (err) { zd.on = want ? 0 : 1; zd.act = zAct(zd); zoneDraw(); say("Échec [" + err.code + "] : " + err.message, true); }
+      else { say((ZLAB[n - 1]) + (want ? " allumée" : " éteinte"), false); }
+      modeAt = Date.now(); setTimeout(zoneLoad, 1500);
+    });
+  }
 
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.33", "Double toucher = allume / éteint une zone, liste défilable, humidité avec goutte (test)", "Sur le plan, deux touchers rapides sur une zone l'allument ou l'éteignent (un seul toucher ouvre la zone, avec un petit délai). La vue liste défile, la ligne technique grise est retirée, et l'humidité s'affiche avec une goutte."],
       ["4.32", "Barre de progression du changement de mode + clim plus réactive (test)", "Pendant un changement de mode, une barre grise se remplit sur 5 secondes de Froid à Ventilation, puis tout est relu. La page Clim se rafraîchit toutes les 5 s (au lieu de 15), le plan des zones aussi (au lieu de 30), pour voir plus vite les changements faits depuis l'appli Airzone."],
       ["4.31", "Correctif : zones à tort en « chauffage » (test)", "La 4.30 affichait toutes les zones en chauffage : elle lisait des réglages de l'Airzone comme s'ils étaient une demande. Maintenant « chauffage » ou « froid » seulement quand l'Airzone demande vraiment et que la consigne n'est pas atteinte, sinon « confort ». En vue liste, une ligne grise montre les valeurs brutes reçues (temporaire, pour vérifier)."],
       ["4.30", "Clim : « chauffage » seulement si l'Airzone le demande (test)", "Une zone n'est plus affichée en chauffage juste parce que la consigne dépasse de 0,1° la température : on suit la demande réellement envoyée par l'Airzone, sinon « confort ». Le message « changement de mode en cours » reste 5 secondes, puis tout est relu."],
