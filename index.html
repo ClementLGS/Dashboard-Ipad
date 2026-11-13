@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:5300 TDBA:211-->
+<!--TDBV:5400 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -623,7 +623,7 @@ button:focus { outline: none; }
     </div>
     <div class="modes" id="modes"></div>
     <div class="note" id="info">Le mode est commun à toute la maison.</div>
-    <button type="button" class="xbtn" id="zBack" style="margin-top:10px;display:none;align-self:flex-start">← Plan de la maison</button>
+    <button type="button" class="xbtn" id="zBack" style="margin-top:auto;display:none;align-self:center">Sélection pièce</button>
     <div id="zoneV" style="display:none"></div>
    </section>
 
@@ -1627,7 +1627,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("5300", 10) || 0, UI_NAME = "4.13 iPad (beta)".charAt(0) === "_" ? "?" : "4.13 iPad (beta)";
+  var UI_CODE = parseInt("5400", 10) || 0, UI_NAME = "4.14 iPad (beta)".charAt(0) === "_" ? "?" : "4.14 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2880,7 +2880,14 @@ button:focus { outline: none; }
     return '<svg viewBox="0 0 24 24" width="' + size + '" height="' + size + '" fill="none" stroke="' + col + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (m ? m.svg : '<circle cx="12" cy="12" r="8"/>') + '</svg>';
   }
   function zoneDraw() {
-    var h = ZMEM ? '<div class="xrow2" style="margin:0 0 6px"><button type="button" class="xbtn sm" data-z="back">← Retour : ' + esc(ZLAB[ZMEM - 1]) + '</button></div>' : '<div style="height:6px"></div>', n, z, p;
+    var h, n, z, p, i, mb = "";
+    for (i = 0; i < MODES.length; i++) {
+      mb += '<button type="button" data-zm="' + i + '" aria-label="Mode ' + MODES[i].t + '" style="display:block;text-align:center;background:' + (i === S.mode ? "#2e3540" : "transparent") + ';border:1px solid ' + (i === S.mode ? "#d8dde6" : "transparent") + ';border-radius:12px;padding:5px 9px;margin-left:4px;color:#eceff3;font-size:12px;font-weight:bold;line-height:14px;' + (S.linked ? "" : "opacity:0.45") + '">'
+        + '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="' + MODES[i].c + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + MODES[i].svg + '</svg><div>' + MODES[i].t + '</div></button>';
+    }
+    h = '<div style="display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:space-between;justify-content:space-between;margin:0 0 6px"><div>'
+      + (ZMEM ? '<button type="button" class="xbtn sm" data-z="back">← Retour : ' + esc(ZLAB[ZMEM - 1]) + '</button>' : '') + '</div>'
+      + '<div style="display:-webkit-flex;display:flex;padding:4px 6px;border:1px solid #2f353e;border-radius:16px;background:rgba(26,30,36,0.6)">' + mb + '</div></div>';
     h += '<div style="position:relative;width:100%;max-width:760px;margin:0 auto"><img src="' + PLAN + '" style="width:100%;display:block" alt="">';
     for (n = 1; n <= 5; n++) {
       z = ZD[n - 1] || {}; p = ZPOS[n - 1];
@@ -2932,8 +2939,13 @@ button:focus { outline: none; }
   ZREADY = true;
   if (curPage === "clim") { zoneEnter(); }
   $("zoneV").addEventListener("click", function (e) {
-    var t = e.target, z = null;
-    while (t && t !== $("zoneV")) { if (t.getAttribute && t.getAttribute("data-z")) { z = t.getAttribute("data-z"); break; } t = t.parentNode; }
+    var t = e.target, z = null, m = null;
+    while (t && t !== $("zoneV")) {
+      if (t.getAttribute && t.getAttribute("data-zm") !== null && t.getAttribute("data-zm") !== undefined) { m = t.getAttribute("data-zm"); break; }
+      if (t.getAttribute && t.getAttribute("data-z")) { z = t.getAttribute("data-z"); break; }
+      t = t.parentNode;
+    }
+    if (m !== null) { setMode(parseInt(m, 10)); zoneDraw(); setTimeout(zoneLoad, 2500); return; }
     if (!z) { return; }
     if (z === "back") { zoneOpen(ZMEM || 1); }
     else { zoneOpen(parseInt(z, 10)); }
@@ -2942,6 +2954,7 @@ button:focus { outline: none; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.14", "Modes sur le plan, bouton Sélection pièce (test)", "Sur le plan de la maison, un encadré en haut à droite regroupe les modes (froid, chaud, auto, déshum., ventil.) ; ils valent pour toute la maison. Sur la page d'une zone, le bouton est devenu « Sélection pièce », centré en bas."],
       ["4.13", "Clim s'ouvre sur le plan (test)", "L'onglet Clim s'ouvre sur le plan de la maison. Une fois une zone choisie, elle est mémorisée : en revenant sur Clim, tu retrouves directement sa température et ses modes, avec « ← Plan de la maison » pour changer de zone."],
       ["4.12", "Une zone = la page Clim habituelle (test)", "Sélection de zone : toucher une pièce rouvre la page « Climatisation », mais réglée sur cette zone (consigne, curseur, marche/arrêt, modes). Bouton « ← Plan de la maison » pour revenir."],
       ["4.11", "Zones recentrées et réglables (test)", "Plan des zones : encadré gris discret, pastilles recentrées dans leur pièce et un peu plus petites. Touche une pièce pour ouvrir sa fenêtre : consigne au demi-degré avec − / + ou le curseur, marche/arrêt."],
