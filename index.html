@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:5400 TDBA:211-->
+<!--TDBV:5500 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -1627,7 +1627,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("5400", 10) || 0, UI_NAME = "4.14 iPad (beta)".charAt(0) === "_" ? "?" : "4.14 iPad (beta)";
+  var UI_CODE = parseInt("5500", 10) || 0, UI_NAME = "4.15 iPad (beta)".charAt(0) === "_" ? "?" : "4.15 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2887,7 +2887,7 @@ button:focus { outline: none; }
     }
     h = '<div style="display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:space-between;justify-content:space-between;margin:0 0 6px"><div>'
       + (ZMEM ? '<button type="button" class="xbtn sm" data-z="back">← Retour : ' + esc(ZLAB[ZMEM - 1]) + '</button>' : '') + '</div>'
-      + '<div style="display:-webkit-flex;display:flex;padding:4px 6px;border:1px solid #2f353e;border-radius:16px;background:rgba(26,30,36,0.6)">' + mb + '</div></div>';
+      + '<div style="display:-webkit-flex;display:flex;margin-top:22px">' + mb + '</div></div>';
     h += '<div style="position:relative;width:100%;max-width:760px;margin:0 auto"><img src="' + PLAN + '" style="width:100%;display:block" alt="">';
     for (n = 1; n <= 5; n++) {
       z = ZD[n - 1] || {}; p = ZPOS[n - 1];
@@ -2954,6 +2954,7 @@ button:focus { outline: none; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.15", "Modes du plan sans encadré (test)", "Sur le plan, les modes n'ont plus d'encadré (fond transparent) et sont descendus un peu."],
       ["4.14", "Modes sur le plan, bouton Sélection pièce (test)", "Sur le plan de la maison, un encadré en haut à droite regroupe les modes (froid, chaud, auto, déshum., ventil.) ; ils valent pour toute la maison. Sur la page d'une zone, le bouton est devenu « Sélection pièce », centré en bas."],
       ["4.13", "Clim s'ouvre sur le plan (test)", "L'onglet Clim s'ouvre sur le plan de la maison. Une fois une zone choisie, elle est mémorisée : en revenant sur Clim, tu retrouves directement sa température et ses modes, avec « ← Plan de la maison » pour changer de zone."],
       ["4.12", "Une zone = la page Clim habituelle (test)", "Sélection de zone : toucher une pièce rouvre la page « Climatisation », mais réglée sur cette zone (consigne, curseur, marche/arrêt, modes). Bouton « ← Plan de la maison » pour revenir."],
