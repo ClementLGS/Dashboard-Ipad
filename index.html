@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:3360 TDBA:211-->
+<!--TDBV:3370 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -548,6 +548,11 @@ button:focus { outline: none; }
 /* dans un fond animé, les halos de couleur ne bougent plus : la scène porte le mouvement, et trois grands calques en moins à recomposer */
 #bg[class*="w-a-"] b { -webkit-animation: none; animation: none; will-change: auto; }
 /* feedback */
+.demoB { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; margin: 0 0 10px; padding: 11px 16px; border-radius: 14px; background: rgba(255,210,122,0.12); border: 1px solid rgba(255,210,122,0.45); color: #f4e6c6; font-size: 16px; line-height: 1.35; }
+.demoB b { -webkit-flex: none; flex: none; width: 26px; height: 26px; margin-right: 12px; border-radius: 13px; background: #ffd27a; color: #1a1e24; text-align: center; line-height: 26px; font-style: italic; font-family: Georgia, serif; }
+#setV { position: relative; }
+#setV.demoLock > *:not(.demoOv) { visibility: hidden; }
+.demoOv { background: rgba(255,255,255,0.05); border-radius: 18px; position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index: 5; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; text-align: center; font-size: 24px; font-weight: bold; color: #ffd27a; }
 #demoTag { display: none; position: fixed; right: 8px; bottom: 6px; z-index: 50; padding: 3px 9px; border-radius: 8px; font-size: 11px; font-weight: bold; letter-spacing: 0.08em; color: #ffd27a; background: rgba(0,0,0,0.45); border: 1px solid rgba(255,210,122,0.5); pointer-events: none; }
 #fbT, #imT { display: block; width: 100%; height: 96px; padding: 10px 12px; font: inherit; font-size: 18px; color: #eceff3; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.14); border-radius: 12px; resize: none; -webkit-user-select: text; user-select: text; -webkit-appearance: none; }
 .fbI { display: -webkit-flex; display: flex; -webkit-align-items: flex-start; align-items: flex-start; padding: 10px 12px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.10); border-radius: 12px; background: rgba(255,255,255,0.045); }
@@ -1507,6 +1512,37 @@ button:focus { outline: none; }
     $("libNote").style.display = lib ? "block" : "none";
     if (wx && W7) { drawW7(); }
     if (st) { drawSet(); }
+    cView = v; demoSync();
+  }
+  /* mode démonstration : infobulles qui expliquent chaque catégorie (Réglages grisé, Idées vidé, Feedback intact) */
+  var cView = "lib";
+  var DEMOI = {
+    agenda: "Agenda — tes prochains rendez-vous sur 7 jours, repris de ton Google Agenda. Le prochain s'affiche aussi sur l'accueil, avec le temps restant.",
+    wx7: "Météo de la semaine — les prévisions jour par jour : température, pluie, vent. Pour savoir comment s'habiller ou quand sortir le linge.",
+    conso: "Consommation — mesure ce que l'appli demande à la tablette, pour trouver ce qui la fait chauffer ou ramer.",
+    affichage: "Affichage — réglages de fluidité et d'énergie : mode léger, animations, test de fluidité et réglage de la synchro des lumières.",
+    fonds: "Fonds d'écran — choisis un fond fixe ou animé. Tout l'écran prend ses couleurs, les menus se fondent dedans.",
+    idees: "Idées — l'endroit où l'on garde les envies d'amélioration du tableau de bord : celles de Claude, mises à jour à chaque version test, et les tiennes, notées ou dictées à la voix.",
+    volets: "Volets — à venir : ouvrir et fermer les volets de la chambre depuis la tablette.",
+    mails: "Mails — à venir : un aperçu des messages importants, sans ouvrir la boîte mail.",
+    air: "Air — à venir : qualité de l'air et température réelle de la chambre.",
+    trajet: "Trajet — à venir : temps de trajet vers Mérignac, avec la circulation du moment.",
+    veille: "Veille — éteint l'affichage pour la nuit ; un appui le réveille."
+  };
+  function demoBub(t) { var d = document.createElement("div"); d.className = "demoB"; d.innerHTML = '<b>i</b><span>' + esc(t) + '</span>'; return d; }
+  function demoSync() {
+    var o = document.querySelectorAll(".demoB, .demoOv"), i, k, b, sv = $("setV");
+    for (i = o.length - 1; i >= 0; i--) { o[i].parentNode.removeChild(o[i]); }
+    sv.className = sv.className.replace(/ ?demoLock/g, ""); $("xB").style.height = "";
+    if (!DEMO) { return; }
+    if (cView === "agenda") { $("agV").insertBefore(demoBub(DEMOI.agenda), $("agV").firstChild); }
+    else if (cView === "wx7") { $("wxV").insertBefore(demoBub(DEMOI.wx7), $("wxV").firstChild); }
+    else if (cView === "set") {
+      sv.className += " demoLock"; b = document.createElement("div"); b.className = "demoOv"; b.innerHTML = "<span>Fenêtre impossible<br>en mode démonstration</span>"; sv.appendChild(b);
+    } else if (cView === "x" && xMod !== "feedback") {
+      b = demoBub(DEMOI[xMod] || ""); $("xB").parentNode.insertBefore(b, $("xB")); $("xB").style.height = "calc(100vh - 295px)";
+      if (xMod === "idees") { $("xB").innerHTML = ""; }
+    }
   }
   function go(p) {
     if (p === "app") { appView("lib"); }
@@ -1526,11 +1562,12 @@ button:focus { outline: none; }
         return function () {
           var k = b.getAttribute("data-mod");
           if (k === "agenda") { appView("agenda"); return; }
-          if (k === "reglages") { if (DEMO) { $("libMsg").textContent = "Réglages bloqués : le mode démonstration est actif (Diagnostic > Mode démonstration pour l'arrêter)."; return; } appView("set"); return; }
+          if (k === "reglages") { appView("set"); return; }
           if (k === "affichage" || k === "fonds" || k === "idees" || k === "feedback") { xOpen(k); return; }
           if (k === "meteo7") { appView("wx7"); loadW7(); return; }
           if (k === "conso") { xOpen("conso"); return; }
-          if (k === "veille") { sleepOn(); return; }
+          if (k === "veille") { if (DEMO) { $("libMsg").textContent = DEMOI.veille; } sleepOn(); return; }
+          if (DEMO && DEMOI[k]) { $("libMsg").textContent = DEMOI[k]; if (k === "veille") { sleepOn(); } return; }
           $("libMsg").textContent = "« " + b.getElementsByTagName("span")[0].textContent + " » : emplacement libre, module pas encore créé.";
         };
       })(mods[i]);
@@ -1554,7 +1591,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("3360", 10) || 0, UI_NAME = "3.36 iPad (beta)".charAt(0) === "_" ? "?" : "3.36 iPad (beta)";
+  var UI_CODE = parseInt("3370", 10) || 0, UI_NAME = "3.37 iPad (beta)".charAt(0) === "_" ? "?" : "3.37 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2558,7 +2595,7 @@ button:focus { outline: none; }
     $("xB").scrollTop = s1; $("xV").scrollTop = s2;
     if (!consoTm) { consoTm = setInterval(function () { if (xMod !== "conso" || $("xV").style.display === "none") { clearInterval(consoTm); consoTm = 0; return; } consoDraw(); }, 2000); }
   }
-  function xDraw() { if (xMod === "feedback") { fbDraw(); } else if (xMod === "idees") { ideesDraw(); } else if (xMod === "fonds") { wallDraw(); } else if (xMod === "conso") { consoDraw(); } else { dispDraw(); } }
+  function xDraw() { demoSync(); if (xMod === "feedback") { fbDraw(); } else if (xMod === "idees") { if (!DEMO) { ideesDraw(); } } else if (xMod === "fonds") { wallDraw(); } else if (xMod === "conso") { consoDraw(); } else { dispDraw(); } }
   function xOpen(m) { xMod = m || "affichage"; appView("x"); xDraw(); }
   $("xB").onclick = function (ev) {
     var t = ev.target, a, v;
@@ -2792,7 +2829,7 @@ button:focus { outline: none; }
     function paint() { b.textContent = DEMO ? "Arrêter le mode démonstration" : "Mode démonstration"; tag.style.display = DEMO ? "block" : "none"; }
     b.onclick = function () {
       DEMO = DEMO ? 0 : 1; xSet("demo", DEMO); DEMOP = null; paint();
-      if (DEMO) { appView("lib"); }
+      appView("lib");
       loadAgenda();
       $("dbg").style.display = "none";
     };
