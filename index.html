@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:5100 TDBA:211-->
+<!--TDBV:5200 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -624,6 +624,7 @@ button:focus { outline: none; }
     <div class="modes" id="modes"></div>
     <div class="note" id="info">Le mode est commun à toute la maison.</div>
     <button type="button" class="xbtn" id="zBtn" style="margin-top:14px">Sélection de zone</button>
+    <button type="button" class="xbtn" id="zBack" style="margin-top:10px;display:none;align-self:flex-start">← Plan de la maison</button>
     <div id="zoneV" style="display:none"></div>
    </section>
 
@@ -1251,7 +1252,7 @@ button:focus { outline: none; }
           if (path === "/api/lum") { return lumApply(cmd, done); }
           return cb(404, { error: "introuvable" });
         }
-        if (path === "/api/clim") { return readZone(null, function (e, z) { done(e, e ? null : view(z)); }); }
+        if (path === "/api/clim") { var qz = /[?&]zone=(\d+)/.exec(url); return readZone(qz ? parseInt(qz[1], 10) : null, function (e, z) { done(e, e ? null : view(z)); }); }
         if (path === "/api/zones") { return allZones(done); }
         if (path === "/api/meteo") { return withMeta(fetchWeather, wxS, done); }
         if (path === "/api/meteo7") { return withMeta(fetchWeather7, w7S, done); }
@@ -1395,7 +1396,7 @@ button:focus { outline: none; }
   document.addEventListener("click", function () { pfT = pfNow(); }, true);
   document.addEventListener("click", function () { if (pfT) { pfAdd("Touches (interface)", pfNow() - pfT); pfT = 0; } }, false);
   function callRaw(method, url, body, cb, quiet) {
-    var x, done = false, what = url.replace("/api/", ""), timer = null, t0 = pfNow();
+    var x, done = false, what = url.replace("/api/", "").split("?")[0], timer = null, t0 = pfNow();
     function end(err, data) { if (!done) { done = true; if (timer) { clearTimeout(timer); } var t1 = pfNow(); pfWait(pfKey(what), t1 - t0); if (err && !quiet) { noteErr(err, what); } cb(err, data); pfAdd(pfKey(what), pfNow() - t1); } }
     function reply(status, j) {
       var code, msg;
@@ -1449,7 +1450,7 @@ button:focus { outline: none; }
     }, true);
   }
   function call(method, url, body, cb) {
-    if (url !== "/api/clim" && url !== "/api/zones") { return callRaw(method, url, body, cb, false); }
+    if (url.split("?")[0] !== "/api/clim" && url !== "/api/zones") { return callRaw(method, url, body, cb, false); }
     if (method === "GET" && CQ.length) { return; }   /* un seul relevé en attente suffit */
     CQ.push({ m: method, u: url, b: body, cb: cb }); cnext();
   }
@@ -1578,6 +1579,7 @@ button:focus { outline: none; }
   }
   function go(p) {
     curPage = p;
+    if (p !== "clim" && CZ) { zoneExitAll(); }
     if (p === "app") { appView("lib"); } else { demoSync(); }
     if (p === "lum") { loadLum(); }
     var i, navs = document.querySelectorAll(".nb");
@@ -1624,7 +1626,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("5100", 10) || 0, UI_NAME = "4.11 iPad (beta)".charAt(0) === "_" ? "?" : "4.11 iPad (beta)";
+  var UI_CODE = parseInt("5200", 10) || 0, UI_NAME = "4.12 iPad (beta)".charAt(0) === "_" ? "?" : "4.12 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2009,6 +2011,7 @@ button:focus { outline: none; }
     slTm = setTimeout(slTick, 60000 - (Date.now() % 60000) + 100);
   }
   function sleepOn() {
+    if (CZ) { zoneExitAll(); }
     var i;
     SLEEP = 1; $("bg").style.display = "none";
     for (i = 0; i < IVS.length; i++) { _ci.call(window, IVS[i].id); }
@@ -2386,6 +2389,7 @@ button:focus { outline: none; }
     { t: "Déshum.", az: 5, c: "#d8dde6", svg: '<path d="M12 3C8.5 8 6.5 11 6.5 14a5.5 5.5 0 0 0 11 0C17.5 11 15.5 8 12 3z"/>' },
     { t: "Ventil.", az: 4, c: "#d8dde6", svg: '<path d="M12 12c0-4 1-7 4-7s3 4-4 7zM12 12c4 0 7 1 7 4s-4 3-7-4zM12 12c0 4-1 7-4 7s-3-4 4-7zM12 12c-4 0-7-1-7-4s4-3 7 4z"/>' }
   ];
+  var CZ = 0, SZ = null;   /* CZ : zone affichée dans la page Clim (0 = la chambre, état normal) ; SZ : copie de l'état de la chambre */
   var S = { mode: -1, temp: 22, on: false, linked: false, lo: 18, hi: 30, run: null, dem: null, act: "", rt: null };
   var ACTT = { heat: "Chauffage", cool: "Refroidissement", comfort: "Confort", fan: "Ventilation", dry: "Déshumidification" };
   var lastUser = 0, sendTimer = 0, busy = false, modeBusy = false;
@@ -2405,12 +2409,13 @@ button:focus { outline: none; }
   function drawMode() {
     var bs = $("modes").getElementsByTagName("button"), i;
     for (i = 0; i < bs.length; i++) { bs[i].className = "mb" + (i === S.mode ? " sel" : ""); bs[i].disabled = !S.linked || modeBusy; }
+    if (CZ) { return; }
     $("hMode").textContent = S.linked && S.mode >= 0 ? "Mode " + MODES[S.mode].t.toLowerCase().replace(".", "") : " ";
   }
   function drawTemp() {
     var v = (S.linked ? fmt(S.temp) : "--");
     $("temp").innerHTML = v + "<small>°C</small>";
-    $("hTemp").innerHTML = v + "<small>°C</small>";
+    if (!CZ) { $("hTemp").innerHTML = v + "<small>°C</small>"; }
     $("dn").disabled = !S.linked || S.temp <= S.lo;
     $("up").disabled = !S.linked || S.temp >= S.hi;
     var r = $("tr");
@@ -2424,14 +2429,17 @@ button:focus { outline: none; }
     else if (!S.on) { txt = "Éteinte"; cls = "pill"; }
     else if (S.act) { txt = ACTT[S.act]; cls = "pill" + (S.act === "heat" ? " heat" : (S.act === "cool" || S.act === "dry" ? " cool" : (S.act === "comfort" ? "" : " on"))); }
     else { txt = "Allumée"; cls = "pill on"; }
-    for (i = 0; i < 2; i++) { ps[i].textContent = txt; ps[i].className = cls; }
+    for (i = 0; i < (CZ ? 1 : 2); i++) { ps[i].textContent = txt; ps[i].className = cls; }
+    if (CZ) { $("pw").className = "pw" + (S.on ? " on" : ""); $("pwt").textContent = S.on ? "Éteindre" : "Allumer"; return; }
     $("pw").className = $("pw2").className = "pw" + (S.on ? " on" : "");
     $("pwt").textContent = $("pw2t").textContent = S.on ? "Éteindre" : "Allumer";
     $("navSub").textContent = S.linked ? fmt(S.temp) + "° · " + (!S.on ? "éteinte" : (S.act ? ACTT[S.act].toLowerCase() : "allumée")) : "injoignable";
   }
   function pull() {
     if (Date.now() - lastUser < 6000) { return; }
-    call("GET", "/api/clim", null, function (err, z) {
+    var czAsk = CZ;
+    call("GET", CZ ? "/api/clim?zone=" + CZ : "/api/clim", null, function (err, z) {
+      if (czAsk !== CZ) { return; }
       if (err) {
         S.linked = false; drawClim(); drawTemp(); drawMode();
         say("Clim injoignable [" + err.code + "] : " + err.message + ". Touche le badge rouge pour le diagnostic.", true);
@@ -2443,7 +2451,7 @@ button:focus { outline: none; }
       if (typeof z.maxTemp === "number") { S.hi = Math.min(30, z.maxTemp); }
       if (typeof z.setpoint === "number") { S.temp = Math.max(S.lo, Math.min(S.hi, z.setpoint)); }
       $("room").textContent = typeof z.roomTemp === "number" ? "Dans la pièce : " + fmt(z.roomTemp) + "°" + (typeof z.humidity === "number" ? " · humidité " + z.humidity + " %" : "") : "";
-      $("hRoom").textContent = typeof z.roomTemp === "number" ? "Pièce " + fmt(z.roomTemp) + "°" + (typeof z.humidity === "number" ? " · " + z.humidity + " %" : "") : " ";
+      if (!CZ) $("hRoom").textContent = typeof z.roomTemp === "number" ? "Pièce " + fmt(z.roomTemp) + "°" + (typeof z.humidity === "number" ? " · " + z.humidity + " %" : "") : " ";
       drawMode(); drawClim(); drawTemp();
       say("Le mode est commun à toute la maison.", false);
     });
@@ -2460,7 +2468,7 @@ button:focus { outline: none; }
     clearTimeout(sendTimer);
     sendTimer = setTimeout(function () {
       var t = S.temp;
-      call("POST", "/api/clim", { setpoint: t }, function (err) {
+      call("POST", "/api/clim", CZ ? { zone: CZ, setpoint: t } : { setpoint: t }, function (err) {
         if (err) { say("Consigne refusée [" + err.code + "] : " + err.message, true); lastUser = 0; pull(); }
         else { say("Consigne : " + fmt(t) + "°", false); lastUser = Date.now() - 3000; }
       });
@@ -2470,7 +2478,7 @@ button:focus { outline: none; }
     if (!S.linked || modeBusy || i === S.mode) { return; }
     var prev = S.mode;
     modeBusy = true; S.mode = i; drawMode(); lastUser = Date.now();
-    call("POST", "/api/clim", { mode: MODES[i].az }, function (err) {
+    call("POST", "/api/clim", CZ ? { zone: CZ, mode: MODES[i].az } : { mode: MODES[i].az }, function (err) {
       modeBusy = false;
       if (err) { S.mode = prev; say("Mode refusé [" + err.code + "] : " + err.message, true); }
       else { say("Mode : " + MODES[i].t, false); }
@@ -2482,9 +2490,9 @@ button:focus { outline: none; }
     var want = !S.on;
     busy = true; $("pw").disabled = $("pw2").disabled = true; clearTimeout(sendTimer);
     S.on = want; drawClim(); lastUser = 0;
-    call("POST", "/api/clim", { on: want ? 1 : 0 }, function (err) {
+    call("POST", "/api/clim", CZ ? { zone: CZ, on: want ? 1 : 0 } : { on: want ? 1 : 0 }, function (err) {
       if (err) { S.on = !want; drawClim(); say("Échec [" + err.code + "] : " + err.message, true); }
-      else { say(want ? "Clim allumée (chambre seulement)" : "Clim éteinte (chambre seulement)", false); }
+      else { say(CZ ? (want ? "Zone allumée" : "Zone éteinte") : (want ? "Clim allumée (chambre seulement)" : "Clim éteinte (chambre seulement)"), false); }
       busy = false; $("pw").disabled = $("pw2").disabled = false; lastUser = 0; pull();
     });
   }
@@ -2870,7 +2878,6 @@ button:focus { outline: none; }
   }
   function zoneDraw() {
     var h = '<div class="xrow2" style="margin:0 0 6px"><button type="button" class="xbtn sm" data-z="back">← Retour à la clim</button></div>', n, z, p;
-    if (zSel) { return zoneDetail(); }
     h += '<div style="position:relative;width:100%;max-width:760px;margin:0 auto"><img src="' + PLAN + '" style="width:100%;display:block" alt="">';
     for (n = 1; n <= 5; n++) {
       z = ZD[n - 1] || {}; p = ZPOS[n - 1];
@@ -2878,16 +2885,6 @@ button:focus { outline: none; }
         + zIco(z, 30) + '<div style="font-size:16px;font-weight:bold;line-height:18px">' + (z.err ? "!" : zNum(z.roomTemp)) + '</div><div style="font-size:12px;color:#b4bcc9;line-height:14px">' + (z.on ? "→ " + zNum(z.setpoint) : "éteinte") + '</div></button>';
     }
     h += '</div><p class="note" style="margin-top:8px;text-align:center">Sous chaque logo : température de la pièce, puis consigne. Touche une zone pour la régler.</p>';
-    $("zoneV").innerHTML = h;
-  }
-  function zoneDetail() {
-    var z = ZD[zSel - 1] || {}, h = '<div class="xrow2" style="margin:0 0 10px"><button type="button" class="xbtn sm" data-z="plan">← Plan de la maison</button></div>';
-    h += '<div class="tile" style="padding:18px 22px"><div style="display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;margin-bottom:10px"><span style="margin-right:14px">' + zIco(z, 44) + '</span><span style="font-size:26px;font-weight:bold;-webkit-flex:1;flex:1">' + esc(ZLAB[zSel - 1]) + ' <span style="font-size:15px;color:#8d95a3;font-weight:normal">· zone ' + zSel + '</span></span>'
-      + '<button type="button" class="xbtn sm" data-z="pw" style="margin:0">' + (z.on ? "Éteindre" : "Allumer") + '</button></div>'
-      + '<div style="display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;margin:8px 0">'
-      + '<button type="button" class="sb" data-z="dn">&minus;</button><div class="zv" style="font-size:64px;font-weight:bold;margin:0 28px;min-width:150px;text-align:center">' + zNum(z.setpoint) + '</div><button type="button" class="sb" data-z="up">+</button></div>'
-      + '<div class="tsl" style="margin:6px 0 12px"><input type="range" id="zTr" min="' + (isNaN(parseFloat(z.minTemp)) ? 18 : parseFloat(z.minTemp)) + '" max="' + (isNaN(parseFloat(z.maxTemp)) ? 30 : parseFloat(z.maxTemp)) + '" step="0.5" value="' + (isNaN(parseFloat(z.setpoint)) ? 21 : parseFloat(z.setpoint)) + '" aria-label="Choisir la température de la zone"></div>'
-      + '<div class="note" style="text-align:center">Pièce : ' + zNum(z.roomTemp) + (z.humidity ? " · humidité " + z.humidity + " %" : "") + ' · le mode est commun à toute la maison.</div></div>';
     $("zoneV").innerHTML = h;
   }
   function zoneLoad() {
@@ -2905,51 +2902,41 @@ button:focus { outline: none; }
   function zoneShow(on) {
     var ids = ["cBox", "modes", "info", "zBtn"], i;
     for (i = 0; i < ids.length; i++) { $(ids[i]).style.display = on ? "none" : ""; }
+    $("zBack").style.display = "none";
     $("zoneV").style.display = on ? "block" : "none";
     if (on) { zoneDraw(); zonePoll(); } else { clearTimeout(zTm); zTm = 0; }
   }
-  function zoneSet(cmd) {
-    var z = ZD[zSel - 1], k;
-    if (!z) { return; }
-    for (k in cmd) { if (cmd.hasOwnProperty(k)) { z[k] = cmd[k]; } }
-    zoneDraw(); clearTimeout(zSend);
-    zSend = setTimeout(function () {
-      var c2 = { zone: zSel }, k2;
-      for (k2 in cmd) { if (cmd.hasOwnProperty(k2)) { c2[k2] = cmd[k2]; } }
-      zSend = 0; cmd = {};
-      call("POST", "/api/clim", c2, function (err) { if (!err) { zoneLoad(); } });
-    }, 700);
+  /* ouvre la page Clim habituelle, mais réglée sur la zone touchée */
+  function zoneOpen(n) {
+    clearTimeout(zTm); zTm = 0;
+    if (!CZ) { SZ = { mode: S.mode, temp: S.temp, on: S.on, linked: S.linked, lo: S.lo, hi: S.hi, run: S.run, dem: S.dem, act: S.act, rt: S.rt }; }
+    CZ = n; S.linked = false; S.on = false; S.act = ""; S.run = null; S.dem = null;
+    var h = document.querySelector("#p-clim .ttl h2"); if (h) { h.textContent = "Climatisation · " + ZLAB[n - 1]; }
+    $("zoneV").style.display = "none";
+    $("cBox").style.display = ""; $("modes").style.display = ""; $("info").style.display = ""; $("zBtn").style.display = "none"; $("zBack").style.display = "block";
+    $("room").textContent = ""; lastUser = 0; drawMode(); drawClim(); drawTemp(); pull();
   }
-  $("zoneV").addEventListener("input", function (e) {
-    var t = e.target, d;
-    if (!t || t.id !== "zTr") { return; }
-    d = $("zoneV").querySelector(".zv"); if (d) { d.textContent = zNum(t.value); }
-  });
-  $("zoneV").addEventListener("change", function (e) {
-    var t = e.target;
-    if (t && t.id === "zTr") { zoneSet({ setpoint: parseFloat(t.value) }); }
-  });
-  $("zBtn").onclick = function () { zSel = 0; zoneShow(true); };
+  /* quitte la vue zone et remet l'état normal de la chambre */
+  function zoneLeave() {
+    var h = document.querySelector("#p-clim .ttl h2"); if (h) { h.textContent = "Climatisation de la chambre"; }
+    if (SZ) { var k; for (k in SZ) { if (SZ.hasOwnProperty(k)) { S[k] = SZ[k]; } } SZ = null; }
+    CZ = 0; lastUser = 0; drawMode(); drawClim(); drawTemp(); pull();
+  }
+  function zoneExitAll() { if (!CZ) { return; } zoneLeave(); zoneShow(false); }
+  $("zBtn").onclick = function () { zoneShow(true); };
+  $("zBack").onclick = function () { zoneLeave(); zoneShow(true); };
   $("zoneV").addEventListener("click", function (e) {
-    var t = e.target, z = null, d;
+    var t = e.target, z = null;
     while (t && t !== $("zoneV")) { if (t.getAttribute && t.getAttribute("data-z")) { z = t.getAttribute("data-z"); break; } t = t.parentNode; }
     if (!z) { return; }
-    d = ZD[zSel - 1] || {};
-    if (z === "back") { zSel = 0; zoneShow(false); }
-    else if (z === "plan") { zSel = 0; zoneDraw(); }
-    else if (z === "pw") { zoneSet({ on: d.on ? 0 : 1 }); }
-    else if (z === "up" || z === "dn") {
-      var sp = parseFloat(d.setpoint), lo = parseFloat(d.minTemp), hi = parseFloat(d.maxTemp);
-      if (isNaN(sp)) { return; }
-      sp += z === "up" ? 0.5 : -0.5; if (!isNaN(lo)) { sp = Math.max(lo, sp); } if (!isNaN(hi)) { sp = Math.min(hi, sp); }
-      zoneSet({ setpoint: sp });
-    }
-    else { zSel = parseInt(z, 10); zoneDraw(); }
+    if (z === "back") { zoneShow(false); }
+    else { zoneOpen(parseInt(z, 10)); }
   });
 
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.12", "Une zone = la page Clim habituelle (test)", "Sélection de zone : toucher une pièce rouvre la page « Climatisation », mais réglée sur cette zone (consigne, curseur, marche/arrêt, modes). Bouton « ← Plan de la maison » pour revenir."],
       ["4.11", "Zones recentrées et réglables (test)", "Plan des zones : encadré gris discret, pastilles recentrées dans leur pièce et un peu plus petites. Touche une pièce pour ouvrir sa fenêtre : consigne au demi-degré avec − / + ou le curseur, marche/arrêt."],
       ["4.10", "Plan droit et propre (test)", "Le plan de la maison reprend ton dessin sans changer un trait : gris, fond transparent, coupes de portes nettes, mur de droite redressé, et image remise droite (elle penchait d'environ 13°)."],
       ["4.9", "Plan refait depuis ton fichier (test)", "Le plan est retracé à partir de plan_maison.jpg : mêmes murs et cloisons, traits droits et propres, ouvertures nettes, fond transparent, gris."],
