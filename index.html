@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:6800 TDBA:211-->
+<!--TDBV:6900 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -35,9 +35,9 @@ button:focus { outline: none; }
 .wNow { position: relative; }
 #nowFx { position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; border-radius: 20px; pointer-events: none; }
 #nowFx i { position: absolute; display: block; }
-#nowFx.k-sun { background: linear-gradient(165deg, rgba(255,184,64,.20), rgba(255,184,64,0) 62%); }
-#nowFx.k-partly { background: linear-gradient(165deg, rgba(255,184,64,.13), rgba(120,150,200,.07) 70%); }
-#nowFx.k-cloud { background: linear-gradient(180deg, rgba(140,155,180,.12), rgba(140,155,180,0) 70%); }
+#nowFx.k-sun { background: linear-gradient(180deg, rgba(70,170,230,.34), rgba(20,90,160,.22) 55%, rgba(8,40,90,.30)); }
+#nowFx.k-partly { background: linear-gradient(180deg, rgba(70,160,220,.24), rgba(20,80,150,.16) 60%, rgba(8,40,90,.22)); }
+#nowFx.k-cloud { background: linear-gradient(180deg, rgba(140,155,180,.22), rgba(140,155,180,.05) 75%); }
 #nowFx.k-rain { background: linear-gradient(180deg, rgba(70,110,170,.20), rgba(70,110,170,.03)); }
 #nowFx.k-storm { background: linear-gradient(180deg, rgba(95,70,160,.26), rgba(60,50,110,.05)); }
 #nowFx.k-snow { background: linear-gradient(180deg, rgba(150,180,225,.15), rgba(150,180,225,.02)); }
@@ -51,9 +51,16 @@ button:focus { outline: none; }
 @keyframes nfTwk { 0%, 100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.35); } }
 @keyframes nfFog { from { transform: translate3d(-14%,0,0); } to { transform: translate3d(14%,0,0); } }
 @keyframes nfFlash { 0%, 62% { opacity: 0; } 63% { opacity: 1; } 66% { opacity: 0.1; } 68% { opacity: 0.8; } 73%, 100% { opacity: 0; } }
-.nf-rays { left: 50%; top: 24%; width: 980px; height: 980px; margin: -490px 0 0 -490px; border-radius: 50%; background: repeating-conic-gradient(rgba(255,205,90,.20) 0deg 6deg, rgba(255,205,90,0) 6deg 18deg); -webkit-mask-image: radial-gradient(closest-side, #000 8%, rgba(0,0,0,0) 72%); mask-image: radial-gradient(closest-side, #000 8%, rgba(0,0,0,0) 72%); animation: nfSpin 140s linear infinite; }
 .nf-glow { left: 50%; top: 24%; width: 300px; height: 300px; margin: -150px 0 0 -150px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,205,90,.38), rgba(255,205,90,0)); animation: nfBreath 7s ease-in-out infinite alternate; }
 .nf-glow.m { background: radial-gradient(closest-side, rgba(247,233,168,.28), rgba(247,233,168,0)); }
+@keyframes nfShimmer { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+@keyframes nfMote { 0% { transform: translate3d(0,0,0); opacity: 0; } 15% { opacity: 0.9; } 100% { transform: translate3d(26px,-300px,0); opacity: 0; } }
+.nf-halo { left: 50%; top: -120px; width: 620px; height: 620px; margin-left: -310px; border-radius: 50%; background: radial-gradient(closest-side, rgba(200,240,255,.45), rgba(120,200,255,.14) 55%, rgba(120,200,255,0)); animation: nfBreath 9s ease-in-out infinite alternate; }
+.nf-core { left: 50%; top: -92px; width: 200px; height: 200px; margin-left: -100px; border-radius: 50%; background: radial-gradient(closest-side, #ffffff 0%, #eafaff 24%, rgba(190,235,255,.9) 40%, rgba(120,200,255,.35) 62%, rgba(100,190,255,0)); animation: nfBreath 6s ease-in-out infinite alternate; }
+.nf-bw { left: 50%; top: 0; width: 0; height: 0; }
+.nf-beam { top: 0; transform-origin: 50% 0; -webkit-clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%); clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%); animation: nfShimmer 7s ease-in-out infinite, nfSway 11s ease-in-out infinite alternate; }
+@keyframes nfSway { 0% { transform: rotate(-3.5deg); } 100% { transform: rotate(3.5deg); } }
+.nf-mote { width: 3px; height: 3px; border-radius: 50%; background: #e6f8ff; animation: nfMote 14s linear infinite; }
 .nf-cld { left: -280px; animation: nfDrift 70s linear infinite; }
 .nf-cld svg { display: block; width: 100%; height: 100%; }
 .nf-drop { top: -20px; width: 2px; height: 22px; border-radius: 1px; background: linear-gradient(to bottom, rgba(120,190,255,0), rgba(140,200,255,.95)); animation: nfRain 1s linear infinite; }
@@ -1706,7 +1713,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("6800", 10) || 0, UI_NAME = "4.28 iPad (beta)".charAt(0) === "_" ? "?" : "4.28 iPad (beta)";
+  var UI_CODE = parseInt("6900", 10) || 0, UI_NAME = "4.29 iPad (beta)".charAt(0) === "_" ? "?" : "4.29 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2214,9 +2221,19 @@ button:focus { outline: none; }
     function drops(n) { for (i = 0; i < n; i++) { h += '<i class="nf-drop" style="left:' + r(-6, 108).toFixed(1) + '%;animation-duration:' + r(0.75, 1.25).toFixed(2) + 's;animation-delay:-' + r(0, 1.2).toFixed(2) + 's"></i>'; } }
     function flakes(n) { for (i = 0; i < n; i++) { var z = r(3, 7); h += '<i class="nf-flake" style="left:' + r(0, 98).toFixed(1) + '%;width:' + z.toFixed(1) + 'px;height:' + z.toFixed(1) + 'px;animation-duration:' + r(6, 11).toFixed(1) + 's;animation-delay:-' + r(0, 10).toFixed(1) + 's"></i>'; } }
     function stars(n) { for (i = 0; i < n; i++) { h += '<i class="nf-star" style="left:' + r(3, 96).toFixed(1) + '%;top:' + r(3, 70).toFixed(1) + '%;animation-delay:-' + r(0, 3.6).toFixed(1) + 's"></i>'; } }
-    if (k === "sun") { h += '<i class="nf-glow"></i><i class="nf-rays"></i>'; }
-    else if (k === "partly") { h += '<i class="nf-glow"></i><i class="nf-rays" style="opacity:.6"></i>'; cld(2, "#ffffff", 0.10); }
-    else if (k === "cloud") { cld(4, "#dfe6f0", 0.12); }
+    function sunny(n, amp) {
+      var a, w, l, d, al;
+      h += '<i class="nf-halo"></i>';
+      for (i = 0; i < n; i++) {
+        a = -70 + i * (140 / (n - 1)) + r(-4, 4); w = r(18, 70); l = r(520, 780); d = r(5, 9); al = r(0.09, 0.22) * amp;
+        h += '<i class="nf-bw" style="-webkit-transform:rotate(' + a.toFixed(1) + 'deg);transform:rotate(' + a.toFixed(1) + 'deg)"><i class="nf-beam" style="left:-' + (w / 2).toFixed(0) + 'px;width:' + w.toFixed(0) + 'px;height:' + l.toFixed(0) + 'px;background:linear-gradient(to bottom,rgba(225,248,255,' + al.toFixed(2) + '),rgba(150,215,255,0));animation-duration:' + d.toFixed(1) + 's;animation-delay:-' + r(0, d).toFixed(1) + 's"></i></i>';
+      }
+      h += '<i class="nf-core"></i>';
+      for (i = 0; i < 9; i++) { h += '<i class="nf-mote" style="left:' + r(8, 92).toFixed(0) + '%;top:' + r(55, 100).toFixed(0) + '%;animation-duration:' + r(10, 18).toFixed(0) + 's;animation-delay:-' + r(0, 16).toFixed(0) + 's"></i>'; }
+    }
+    if (k === "sun") { sunny(22, 0.9); }
+    else if (k === "partly") { sunny(14, 0.7); cld(3, "#ffffff", 0.16); }
+    else if (k === "cloud") { cld(8, "#dfe6f0", 0.2); }
     else if (k === "rain") { cld(2, "#8d9bb3", 0.20); drops(26); }
     else if (k === "storm") { cld(3, "#6f6a94", 0.28); drops(30); h += '<i class="nf-flash"></i><i class="nf-bolt"></i>'; }
     else if (k === "snow") { cld(2, "#ffffff", 0.10); flakes(22); }
@@ -2497,7 +2514,7 @@ button:focus { outline: none; }
   var CZ = 0, SZ = null;   /* CZ : zone affichée dans la page Clim (0 = la chambre, état normal) ; SZ : copie de l'état de la chambre */
   var S = { mode: -1, temp: 22, on: false, linked: false, lo: 18, hi: 30, run: null, dem: null, act: "", rt: null };
   var ACTT = { heat: "Chauffage", cool: "Refroidissement", comfort: "Confort", fan: "Ventilation", dry: "Déshumidification" };
-  var lastUser = 0, sendTimer = 0, busy = false, modeBusy = false;
+  var lastUser = 0, sendTimer = 0, busy = false, modeBusy = false, modeAt = 0;
 
   function say(t, bad) { var m = $("info"); m.textContent = t; m.style.color = bad ? "#ff7a70" : ""; }
   function modeIndex(code) { for (var i = 0; i < MODES.length; i++) { if (MODES[i].az === code) { return i; } } return -1; }
@@ -2520,6 +2537,7 @@ button:focus { outline: none; }
     }
     if (modeBusy) { say("Changement de mode en cours…", false); }
     navDraw();
+    if (!CZ && $("zoneV").style.display !== "none" && typeof zoneDraw === "function") { zoneDraw(); }   /* la barre de modes de la vue zones suit toujours S.mode */
     if (CZ) { return; }
     $("hMode").textContent = S.linked && S.mode >= 0 ? "Mode " + MODES[S.mode].t.toLowerCase().replace(".", "") : " ";
   }
@@ -2537,14 +2555,14 @@ button:focus { outline: none; }
   /* onglet Clim (barre de gauche) : icône, température et mode de la zone sélectionnée (la chambre par défaut) ; l'icône s'anime quand ça tourne */
   var NZ = null, nzTm = 0;
   function navDraw() {
-    var src = S, zn = "", e = $("navIco"), ok, a = "", stopped, t;
+    var src = S, zn = ZLAB ? ZLAB[0] : "", e = $("navIco"), ok, a = "", stopped, t;
     if (CZ) { zn = ZLAB[CZ - 1]; } else if (ZMEM && ZMEM !== 1 && NZ) { src = NZ; zn = ZLAB[ZMEM - 1]; }
     ok = src.linked && src.mode >= 0 && MODES[src.mode];
     stopped = ok && MODES[src.mode].az === 1;
     if (ok && src.on && !stopped && /^(heat|cool|fan|dry)$/.test(src.act || "")) { a = src.act; }
     if (e) { e.innerHTML = ok ? MODES[src.mode].svg : '<path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/>'; e.setAttribute("class", a ? "an-" + a : ""); }
     t = src.linked ? fmt(src.temp) + "° · " + (stopped ? "arrêt" : !src.on ? "éteinte" : (src.act ? ACTT[src.act].toLowerCase() : "allumée")) : "injoignable";
-    $("navSub").textContent = (zn && zn !== ZLAB[0] ? zn + " " : "") + t;
+    $("navSub").textContent = (zn ? zn + " " : "") + t;
   }
   /* relève la zone mémorisée quand on n'est pas sur la page Clim, pour que l'onglet reste à jour */
   function nzPull() {
@@ -2622,7 +2640,7 @@ button:focus { outline: none; }
     modeBusy = true; modeWant = -1; S.mode = i; drawMode(); lastUser = Date.now();
     call("POST", "/api/clim", CZ ? { zone: CZ, mode: MODES[i].az } : { mode: MODES[i].az }, function (err) {
       var w = modeWant, applied = err ? prev : i;
-      modeBusy = false; modeWant = -1;
+      modeBusy = false; modeWant = -1; modeAt = Date.now();
       if (err) { say("Mode refusé [" + err.code + "] : " + err.message, true); }
       else { say("Mode : " + MODES[i].t, false); }
       if (w >= 0 && w !== applied) { S.mode = applied; return setMode(w, done); }
@@ -3081,12 +3099,20 @@ button:focus { outline: none; }
   var zBusyAt = 0, zRetry = 0;
   function zoneLoad() {
     if (zBusy && Date.now() - zBusyAt < 30000) { return; } zBusy = true; zBusyAt = Date.now();
+    var t0 = Date.now();
     call("GET", "/api/zones", null, function (err, d) {
-      var k, bad = 0;
+      var k, bad = 0, mi, v;
       zBusy = false;
+      if (!err && t0 < modeAt + 1800) { setTimeout(zoneLoad, 1200); return; }   /* lecture partie avant la fin d'un changement de mode : périmée, on relit */
       if (!err && d && d.length && !modeBusy) {
         for (k = 0; k < d.length; k++) { if (d[k] && d[k].err) { bad++; if (ZD[k] && !ZD[k].err) { d[k] = ZD[k]; } } }   /* une zone muette garde ses dernières valeurs */
-        ZD = d; if ($("zoneV").style.display !== "none" && !zSend) { zoneDraw(); }
+        ZD = d;
+        if (!CZ && Date.now() - modeAt > 3000) {   /* le mode est commun : la barre suit celui lu sur les zones */
+          for (k = 0; k < d.length; k++) { if (d[k] && !d[k].err && d[k].mode != null) { v = d[k].mode; break; } }
+          mi = v != null ? modeIndex(v) : -1;
+          if (mi >= 0 && mi !== S.mode) { S.mode = mi; drawMode(); }
+        }
+        if ($("zoneV").style.display !== "none" && !zSend) { zoneDraw(); }
         if (bad && zRetry < 2) { zRetry++; setTimeout(zoneLoad, 2500); } else if (!bad) { zRetry = 0; }
       } else if (err && zRetry < 2) { zRetry++; setTimeout(zoneLoad, 2500); }
     });
@@ -3135,7 +3161,7 @@ button:focus { outline: none; }
       t = t.parentNode;
     }
     if (m !== null) {
-      m = parseInt(m, 10); zoneOptim(MODES[m].az); setMode(m, function () { zoneDraw(); setTimeout(zoneLoad, 600); }); zoneDraw(); return;
+      m = parseInt(m, 10); zoneOptim(MODES[m].az); setMode(m, function () { zoneDraw(); setTimeout(zoneLoad, 2200); }); zoneDraw(); return;
     }
     if (!z) { return; }
     if (z === "back") { zoneOpen(ZMEM || 1); }
@@ -3145,6 +3171,7 @@ button:focus { outline: none; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.29", "Vrais rayons de soleil dans l'encadré Météo (test)", "Quand il fait beau : un soleil lumineux en haut de l'encadré, des faisceaux de lumière qui s'ouvrent en éventail et scintillent doucement, un halo qui respire, et quelques particules de lumière qui montent. Fini les traits qui tournent."],
       ["4.28", "Réparation : clim injoignable et zones vides (test)", "Cause : un relevé de clim pouvait être abandonné sans réponse quand un autre attendait (apparu avec le suivi de zone de l'onglet Clim) : la page restait sur « injoignable » ou les zones restaient vides. Maintenant les relevés identiques se partagent la même réponse, une zone muette garde ses dernières valeurs, et un échec isolé est retenté avant d'afficher « injoignable »."],
       ["4.27", "Changement de mode plus fiable, onglet Clim par zone (test)", "Les boutons de mode ne se bloquent plus pendant un changement (le dernier appui compte), un « changement de mode en cours… » clignote, et le changement ne fait plus qu'une requête au boîtier. L'onglet Clim de la barre de gauche affiche le mode et la température de la zone sélectionnée."],
       ["4.26", "Ambiance météo dans l'encadré Météo (test)", "Le fond « Météo dynamique » et les animations du bandeau du haut sont retirés. À la place, l'encadré « météo actuelle » de l'onglet Météo s'anime selon le temps : rayons de soleil qui tournent, nuages, pluie, orage avec éclairs, neige, brouillard, nuit étoilée."],
