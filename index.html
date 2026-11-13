@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:8400 TDBA:211-->
+<!--TDBV:8500 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -1680,7 +1680,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     lum: "Lumières — allume, éteins et règle la couleur de la LED et de la lampe Lego, ou éteins tout d'un appui.",
     wx: "Météo — les conditions du moment et les prévisions des prochaines heures, pour t'organiser sans sortir le téléphone.",
     lib: "Autre — la bibliothèque des modules : infos, réglages d'écran et idées à venir. Chaque module a sa propre fenêtre.",
-    veille: "Veille — éteint l'affichage pour la nuit ; un appui le réveille."
+    veille: "Veille — éteint l'affichage pour la nuit ; un simple toucher le réveille, et il se met en veille seul après 2 min sans toucher."
   };
   function demoBub(t) { var d = document.createElement("div"); d.className = "demoB"; d.innerHTML = '<b>i</b><span>' + esc(t) + '</span>'; return d; }
   function demoSync() {
@@ -1751,7 +1751,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("8400", 10) || 0, UI_NAME = "4.44 iPad (beta)".charAt(0) === "_" ? "?" : "4.44 iPad (beta)";
+  var UI_CODE = parseInt("8500", 10) || 0, UI_NAME = "4.45 iPad (beta)".charAt(0) === "_" ? "?" : "4.45 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2155,19 +2155,29 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     $("slp").style.display = "none"; $("app").style.display = ""; $("bg").style.display = "";
     for (i = 0; i < IVS.length; i++) { IVS[i].id = _si.call(window, IVS[i].f, IVS[i].ms); }
     lastMin = -1; tick(); batDraw(); pull(); loadLum(); loadWeather(); loadAgenda();
+    try { if (window.veilleArm) { window.veilleArm(); } } catch (e) { }
   }
+  /* réveil : un simple toucher de l'écran suffit */
   (function () {
-    var p = $("slp"), bar = $("slP"), t0 = 0, tm = 0;
-    function cancel() { clearTimeout(tm); t0 = 0; bar.style.display = "none"; bar.style.width = "0"; }
-    function tick() {
-      var e = Date.now() - t0;
-      bar.style.width = Math.min(100, e / 30) + "%";
-      if (e >= 3000) { cancel(); sleepOff(); } else { tm = setTimeout(tick, 100); }
+    var p = $("slp"), bar = $("slP");
+    function wake(ev) {
+      if (!SLEEP) { return; }
+      if (ev && ev.preventDefault && ev.cancelable !== false) { ev.preventDefault(); }
+      bar.style.display = "none"; bar.style.width = "0";
+      sleepOff();
     }
-    function start(ev) { if (!SLEEP || t0) { return; } if (ev.preventDefault) { ev.preventDefault(); } t0 = Date.now(); bar.style.display = "block"; tick(); }
-    p.addEventListener("touchstart", start); p.addEventListener("mousedown", start);
-    p.addEventListener("touchend", cancel); p.addEventListener("touchcancel", cancel); p.addEventListener("mouseup", cancel); p.addEventListener("mouseleave", cancel);
+    p.addEventListener("touchstart", wake); p.addEventListener("mousedown", wake);
     p.addEventListener("contextmenu", function (ev) { ev.preventDefault(); });
+  })();
+  /* veille automatique : après 2 min sans aucun toucher, l'écran passe en veille */
+  (function () {
+    var IDLE = 120000, tm = 0;
+    function arm() { clearTimeout(tm); if (!SLEEP) { tm = setTimeout(function () { if (!SLEEP) { sleepOn(); } }, IDLE); } }
+    function touch() { if (!SLEEP) { arm(); } }
+    document.addEventListener("touchstart", touch, true); document.addEventListener("touchmove", touch, true);
+    document.addEventListener("mousedown", touch, true); document.addEventListener("keydown", touch, true);
+    window.veilleArm = arm;
+    arm();
   })();
 
   loadLum(); setInterval(slow(pw("Lumières", loadLum)), 30000);
@@ -3039,6 +3049,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     ["Catégorie bug", "13/11 · notée dans Feedback"],
     ["Feedback s'envoie tout seul à Claude", "13/11 · notée dans Feedback"],
     ["Encadré météo animé devant le fond d'écran", "13/11 · notée dans Feedback (réalisée en 4.38)"],
+    ["Circulation et infos", "13/11 · envoyée depuis la tablette : circulation / embouteillages et actualités"],
     ["Alerte météo", "13/11 · dite en direct : vigilance Météo-France (orages, pluie-inondation…) et crues (Vigicrues) pour la Gironde"]
   ], l: [
     ["Pluie dans l'heure", "Facile", "Un bandeau « il va pleuvoir dans 20 min » sur l'accueil, à partir des prévisions déjà utilisées (Open-Meteo, pas de 15 min). Utile pour le linge, la fenêtre, la sortie.", "Mise à jour seule"],
@@ -3281,6 +3292,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.45", "Veille automatique après 2 min (test)", "Sans aucun toucher pendant 2 minutes, l’écran passe en veille tout seul ; un simple toucher le réveille (plus besoin de maintenir 3 secondes). Idée « Circulation » notée dans Autre > Idées."],
       ["4.44", "Correctif : écrans défilables + testeur météo dans Météo (test)", "Le testeur de météos, ajouté en bas d'Autre en 4.42, poussait les pages Historique, Feedback, Idées, Bugs, Affichage, Fonds et Consommation vers le bas : leur bas sortait de l'écran et on ne pouvait plus défiler jusqu'au bout. Il est retiré d'Autre et devient un petit bouton « Tester » à côté du titre de la page Météo (panneau en bas, visible seulement sur Météo)."],
       ["4.43", "Idée « Alerte météo » notée (test)", "Vigilance Météo-France (orages, pluie-inondation…) et crues (Vigicrues) pour la Gironde, ajoutée dans Autre > Idées. Elle demandera une clé gratuite du portail API de Météo-France."],
       ["4.42", "Météo : 3 niveaux de pluie + testeur dans Autre (test)", "Bruine, pluie et forte pluie ont chacune leur ambiance (nombre, épaisseur et vitesse des gouttes, ciel plus sombre). Le niveau vient du code Open-Meteo, affiné par les mm/h de l'heure en cours. Le testeur de météos n'est plus qu'en bas de la page Autre (chips Bruine, Pluie, Forte pluie…), avec un badge pour arrêter la simulation sur la page Météo.", "13/11"],
