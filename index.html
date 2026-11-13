@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:7700 TDBA:211-->
+<!--TDBV:7800 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -33,6 +33,9 @@ button:focus { outline: none; }
 
 /* ---- ambiance animée dans l'encadré « météo actuelle » (onglet Météo) ---- */
 .wNow { position: relative; }
+/* page Météo : le fond animé est figé (une seule animation à la fois) et l'encadré de gauche passe devant, plus opaque */
+html.wxp #bg *, html.wxp #bg *:before, html.wxp #bg *:after { -webkit-animation-play-state: paused !important; animation-play-state: paused !important; }
+html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 #nowFx { position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; border-radius: 20px; pointer-events: none; }
 #nowFx i { position: absolute; display: block; }
 #nowFx.k-sun { background: linear-gradient(180deg, rgba(70,170,230,.34), rgba(20,90,160,.22) 55%, rgba(8,40,90,.30)); }
@@ -1685,6 +1688,7 @@ button:focus { outline: none; }
   function go(p) {
     var was = curPage;
     curPage = p;
+    document.documentElement.className = (document.documentElement.className.replace(/\bwxp\b/g, "") + (p === "wx" ? " wxp" : "")).replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
     if (p !== "clim" && was === "clim") { zoneExitAll(); }
     if (p === "clim" && was !== "clim" && ZREADY) { zoneEnter(); }
     if (p === "app") { appView("lib"); } else { demoSync(); }
@@ -1733,7 +1737,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("7700", 10) || 0, UI_NAME = "4.37 iPad (beta)".charAt(0) === "_" ? "?" : "4.37 iPad (beta)";
+  var UI_CODE = parseInt("7800", 10) || 0, UI_NAME = "4.38 iPad (beta)".charAt(0) === "_" ? "?" : "4.38 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -3224,6 +3228,7 @@ button:focus { outline: none; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.38", "Météo plus fluide avec un fond animé (test)", "Sur la page Météo, le fond d'écran animé est figé et l'encadré de gauche passe devant, plus opaque : une seule animation tourne à la fois, donc moins de chute de FPS."],
       ["4.37", "Batterie à jour plus vite (correctif, test)", "Le niveau de batterie est relu toutes les 10 secondes (au lieu de 60) et à chaque toucher de l'écran. Retour de ton feedback sur la 4.33."],
       ["4.36", "Feedback envoyé automatiquement (test)", "Dès que tu ranges une remarque (Bien, À améliorer, Idée ou Bug), elle part toute seule vers Claude : plus besoin d'appuyer sur « Envoyer à Claude ». Le bouton reste pour réessayer si l'envoi échoue."],
       ["4.35", "Mode démonstration : retour à l'accueil et pop-up d'explication (test)", "En lançant le mode démonstration, le tableau de bord revient à l'accueil et une fenêtre explique le but : tester chaque catégorie (Accueil, Clim, Lumières, Météo, Agenda, Autre) pour faire un retour complet."],
