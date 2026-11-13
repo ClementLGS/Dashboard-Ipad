@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:3330 TDBA:211-->
+<!--TDBV:3340 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -536,6 +536,23 @@ button:focus { outline: none; }
 @-webkit-keyframes fxLava { 0% { -webkit-transform: translate3d(0,0,0) scale(1,1); } 50% { -webkit-transform: translate3d(40px,-38vh,0) scale(0.8,1.35); } 100% { -webkit-transform: translate3d(-30px,-78vh,0) scale(1.25,0.9); } }
 @keyframes fxLava { 0% { transform: translate3d(0,0,0) scale(1,1); } 50% { transform: translate3d(40px,-38vh,0) scale(0.8,1.35); } 100% { transform: translate3d(-30px,-78vh,0) scale(1.25,0.9); } }
 .wfx .lav { border-radius: 50%; -webkit-animation: fxLava 7s ease-in-out infinite alternate; animation: fxLava 7s ease-in-out infinite alternate; }
+
+/* ---- 3.34 : cadre de sélection des fonds (dessiné par-dessus, coins nets), module Feedback, économie d'énergie ---- */
+.wpi .wp { border: 0; -webkit-mask-image: -webkit-radial-gradient(white, black); }
+.wpi .wp:after { content: ""; position: absolute; left: 0; top: 0; right: 0; bottom: 0; border-radius: 14px; border: 2px solid rgba(255,255,255,0.14); }
+.wpi.sel .wp:after { border: 3px solid #fff; }
+.wpi .wp[class*="w-"] { position: relative; }
+/* économie : sans appui depuis 2 min, toutes les animations se figent (fond, icônes météo, batterie) ; un appui les relance */
+.idle *, .idle *:before, .idle *:after { -webkit-animation-play-state: paused !important; animation-play-state: paused !important; }
+/* dans un fond animé, les halos de couleur ne bougent plus : la scène porte le mouvement, et trois grands calques en moins à recomposer */
+#bg[class*="w-a-"] b { -webkit-animation: none; animation: none; will-change: auto; }
+/* feedback */
+#fbT { display: block; width: 100%; height: 96px; padding: 10px 12px; font: inherit; font-size: 18px; color: #eceff3; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.14); border-radius: 12px; resize: none; -webkit-user-select: text; user-select: text; -webkit-appearance: none; }
+.fbI { display: -webkit-flex; display: flex; -webkit-align-items: flex-start; align-items: flex-start; padding: 10px 12px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.10); border-radius: 12px; background: rgba(255,255,255,0.045); }
+.fbI .tg { -webkit-flex: none; flex: none; min-width: 96px; margin-right: 12px; font-size: 12px; font-weight: bold; letter-spacing: 0.06em; text-transform: uppercase; padding-top: 3px; }
+.fbI .tx { -webkit-flex: 1; flex: 1; min-width: 0; font-size: 16px; word-wrap: break-word; -webkit-user-select: text; user-select: text; }
+.fbI .tx small { display: block; font-size: 12px; color: #8f98a5; margin-top: 2px; }
+.fbI .rm { -webkit-flex: none; flex: none; width: 40px; height: 40px; margin-left: 8px; border-radius: 20px; border: 0; background: rgba(255,255,255,0.08); color: #b9c2d0; font-size: 20px; }
 </style></head><body><div id="bg"><b class="h1"></b><b class="h2"></b><b class="h3"></b><div id="bgA" class="wfx"></div><i class="al" style="left:150px;top:-120px;width:900px;height:700px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(143,163,189,0.37) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(143,163,189,0.37) 0%,rgba(0,0,0,0) 68%)"></i><i class="bl" style="left:700px;top:250px;width:900px;height:700px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(111,127,149,0.34) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(111,127,149,0.34) 0%,rgba(0,0,0,0) 68%)"></i><i class="al" style="left:-200px;top:350px;width:700px;height:600px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(160,173,191,0.24) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(160,173,191,0.24) 0%,rgba(0,0,0,0) 68%)"></i></div>
 <div id="app">
  <div id="nav">
@@ -600,7 +617,7 @@ button:focus { outline: none; }
 
    <section class="page" id="p-app">
     <div class="ttl"><span class="fx" style="-webkit-align-items:center;align-items:center"><button type="button" class="bk" id="agBack" style="display:none" aria-label="Retour à la bibliothèque">&lsaquo; Autre</button><h2 id="appT">Autre</h2></span><span class="note" id="libNote">Bibliothèque de modules</span></div>
-    <div id="libV" class="lib"><div class="libH">Infos</div><div class="mod"><button type="button" class="mi on" data-mod="agenda"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Agenda</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="meteo7"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .4-8A6 6 0 0 0 6 11a3.500 3.500 0 0 0 1 7z"/></svg><span>Météo</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="conso"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg><span>Consommation</span></span></button></div><div class="libH">Écran et réglages</div><div class="mod"><button type="button" class="mi on" data-mod="affichage"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span>Affichage</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="fonds"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="M3.5 17l5-4.5 4 3.5 3-2.5 5 4.5"/></svg><span>Fonds</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="veille"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.500 4a8 8 0 1 0 10.500 10.500z"/></svg><span>Veille</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="reglages"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.400 15a1.650 1.650 0 0 0 .330 1.820l.060.060a2 2 0 1 1-2.830 2.830l-.060-.060a1.650 1.650 0 0 0-1.820-.330 1.650 1.650 0 0 0-1 1.510V21a2 2 0 0 1-4 0v-.090A1.650 1.650 0 0 0 9 19.400a1.650 1.650 0 0 0-1.820.330l-.060.060a2 2 0 1 1-2.830-2.830l.060-.060A1.650 1.650 0 0 0 4.680 15a1.650 1.650 0 0 0-1.510-1H3a2 2 0 0 1 0-4h.090A1.650 1.650 0 0 0 4.600 9a1.650 1.650 0 0 0-.330-1.820l-.060-.060a2 2 0 1 1 2.830-2.830l.060.060A1.650 1.650 0 0 0 9 4.680a1.650 1.650 0 0 0 1-1.510V3a2 2 0 0 1 4 0v.090a1.650 1.650 0 0 0 1 1.510 1.650 1.650 0 0 0 1.820-.330l.060-.060a2 2 0 1 1 2.830 2.830l-.060.060A1.650 1.650 0 0 0 19.400 9a1.650 1.650 0 0 0 1.510 1H21a2 2 0 0 1 0 4h-.090a1.650 1.650 0 0 0-1.510 1z"/></svg><span>Réglages</span></span></button></div><div class="libH">À venir</div><div class="mod"><button type="button" class="mi on" data-mod="idees"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.500 10.900c.700.600 1 1.300 1 2.100h5c0-.800.300-1.500 1-2.100A6 6 0 0 0 12 3z"/></svg><span>Idées</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="volets"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16M5 8h14M5 12h14M5 16h14M12 16v4"/></svg><span>Volets</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="mails"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.500 7l8.500 6 8.500-6"/></svg><span>Mails</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="air"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h11a2.500 2.500 0 1 0-2.500-2.500M3 15h14a2.500 2.500 0 1 1-2.500 2.500M3 12h7"/></svg><span>Air</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="trajet"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16l1.500-5h11L19 16M5 16v3h2v-1.500h10V19h2v-3M5 16h14"/><circle cx="8" cy="13.500" r=".5"/><circle cx="16" cy="13.500" r=".5"/></svg><span>Trajet</span></span></button></div></div>
+    <div id="libV" class="lib"><div class="libH">Infos</div><div class="mod"><button type="button" class="mi on" data-mod="agenda"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Agenda</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="meteo7"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .4-8A6 6 0 0 0 6 11a3.500 3.500 0 0 0 1 7z"/></svg><span>Météo</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="conso"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg><span>Consommation</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="feedback"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12.500h5"/></svg><span>Feedback</span></span></button></div><div class="libH">Écran et réglages</div><div class="mod"><button type="button" class="mi on" data-mod="affichage"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span>Affichage</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="fonds"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="M3.5 17l5-4.5 4 3.5 3-2.5 5 4.5"/></svg><span>Fonds</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="veille"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.500 4a8 8 0 1 0 10.500 10.500z"/></svg><span>Veille</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="reglages"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.400 15a1.650 1.650 0 0 0 .330 1.820l.060.060a2 2 0 1 1-2.830 2.830l-.060-.060a1.650 1.650 0 0 0-1.820-.330 1.650 1.650 0 0 0-1 1.510V21a2 2 0 0 1-4 0v-.090A1.650 1.650 0 0 0 9 19.400a1.650 1.650 0 0 0-1.820.330l-.060.060a2 2 0 1 1-2.830-2.830l.060-.060A1.650 1.650 0 0 0 4.680 15a1.650 1.650 0 0 0-1.510-1H3a2 2 0 0 1 0-4h.090A1.650 1.650 0 0 0 4.600 9a1.650 1.650 0 0 0-.330-1.820l-.060-.060a2 2 0 1 1 2.830-2.830l.060.060A1.650 1.650 0 0 0 9 4.680a1.650 1.650 0 0 0 1-1.510V3a2 2 0 0 1 4 0v.090a1.650 1.650 0 0 0 1 1.510 1.650 1.650 0 0 0 1.820-.330l.060-.060a2 2 0 1 1 2.830 2.830l-.060.060A1.650 1.650 0 0 0 19.400 9a1.650 1.650 0 0 0 1.510 1H21a2 2 0 0 1 0 4h-.090a1.650 1.650 0 0 0-1.510 1z"/></svg><span>Réglages</span></span></button></div><div class="libH">À venir</div><div class="mod"><button type="button" class="mi on" data-mod="idees"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.500 10.900c.700.600 1 1.300 1 2.100h5c0-.800.300-1.500 1-2.100A6 6 0 0 0 12 3z"/></svg><span>Idées</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="volets"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16M5 8h14M5 12h14M5 16h14M12 16v4"/></svg><span>Volets</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="mails"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.500 7l8.500 6 8.500-6"/></svg><span>Mails</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="air"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h11a2.500 2.500 0 1 0-2.500-2.500M3 15h14a2.500 2.500 0 1 1-2.500 2.500M3 12h7"/></svg><span>Air</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="trajet"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16l1.500-5h11L19 16M5 16v3h2v-1.500h10V19h2v-3M5 16h14"/><circle cx="8" cy="13.500" r=".5"/><circle cx="16" cy="13.500" r=".5"/></svg><span>Trajet</span></span></button></div></div>
     <div class="note" id="libMsg" style="margin-top:8px;min-height:18px">Les modules grisés (« À venir ») sont des emplacements libres : dis-moi lesquels créer.</div>
     <div id="wxV" style="display:none;-webkit-flex:1;flex:1;min-height:0;-webkit-flex-direction:column;flex-direction:column">
      <div class="tile agT"><p class="msg" id="w7Msg">Chargement de la météo de la semaine…</p>
@@ -1489,7 +1506,7 @@ button:focus { outline: none; }
           var k = b.getAttribute("data-mod");
           if (k === "agenda") { appView("agenda"); return; }
           if (k === "reglages") { appView("set"); return; }
-          if (k === "affichage" || k === "fonds" || k === "idees") { xOpen(k); return; }
+          if (k === "affichage" || k === "fonds" || k === "idees" || k === "feedback") { xOpen(k); return; }
           if (k === "meteo7") { appView("wx7"); loadW7(); return; }
           if (k === "conso") { xOpen("conso"); return; }
           if (k === "veille") { sleepOn(); return; }
@@ -1516,7 +1533,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("3330", 10) || 0, UI_NAME = "3.33 iPad (beta)".charAt(0) === "_" ? "?" : "3.33 iPad (beta)";
+  var UI_CODE = parseInt("3340", 10) || 0, UI_NAME = "3.34 iPad (beta)".charAt(0) === "_" ? "?" : "3.34 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2378,6 +2395,7 @@ button:focus { outline: none; }
   }
   function dispDraw() {
     var h = '<div class="xrow2" style="margin-bottom:10px"><button type="button" class="xbtn lg' + (PERF ? " on" : "") + '" data-x="perf">Mode léger : ' + (PERF ? "oui" : "non") + '</button><button type="button" class="xbtn lg' + (ICO ? " on" : "") + '" data-x="ico" style="margin-left:8px">Animation météo : ' + ["non", "complète", "légère"][ICO] + '</button></div>';
+    h += '<div class="xrow2" style="margin-bottom:6px"><button type="button" class="xbtn' + (ECO ? " on" : "") + '" data-x="eco">Animations : ' + (ECO ? "pause après 2 min sans appui" : "en continu") + '</button></div><p class="note" style="margin-bottom:10px">En pause, le fond animé et les icônes se figent quand personne ne touche l\'écran : la tablette chauffe moins et consomme moins. Un appui les relance.</p>';
     h += '<p class="note" style="margin-bottom:10px">Le mode léger supprime les ombres, les transparences, les halos et les animations pour que la tablette reste fluide. Compare avec « non » grâce au test ci-dessous.</p>';
     h += '<div class="xrow2"><span style="font-size:20px;font-weight:bold">Fluidité : <span id="fpsV">…</span> images/s · pire image <span id="fpsW">…</span> ms</span></div><div class="fpsb"><i id="fpsS"></i></div><p class="note">Même mesure que le bandeau des versions TEST (pire image : la plus longue pause des 5 dernières secondes). La bille doit glisser sans saccade. Autour de 60 images/s : parfait. Moins de 20 : la tablette peine.</p>';
     h += '<div class="xrow2" style="margin-top:8px"><span style="font-size:17px;margin-right:10px">Synchro des lumières (Lego par rapport à la LED) : <b>' + (xGet("sync", 0) > 0 ? "+" : "") + xGet("sync", 0) + ' ms</b></span><button type="button" class="xbtn sm" data-x="synm">− 50</button><button type="button" class="xbtn sm" data-x="synp">+ 50</button></div>';
@@ -2422,19 +2440,19 @@ button:focus { outline: none; }
     } else if (w === "a-ocean") {
       for (i = 1; i <= 3; i++) { h += '<u class="wv wv' + i + '"' + (still ? ' style="width:200%"' : "") + '></u>'; }
     } else if (w === "a-braise") {
-      for (i = 0; i < 18; i++) { sz = rnd(3, 8) * (still ? 2 : 1); d = rnd(3.5, 8); h += '<u class="emb" style="left:' + rnd(0, 96).toFixed(1) + '%;' + box(sz) + at(5, 95) + 'background:' + (i % 3 ? "#ffb060" : "#ff6a3a") + ';' + an(d, rnd(0, d)) + '"></u>'; }
+      for (i = 0; i < 12; i++) { sz = rnd(3, 8) * (still ? 2 : 1); d = rnd(3.5, 8); h += '<u class="emb" style="left:' + rnd(0, 96).toFixed(1) + '%;' + box(sz) + at(5, 95) + 'background:' + (i % 3 ? "#ffb060" : "#ff6a3a") + ';' + an(d, rnd(0, d)) + '"></u>'; }
     } else if (w === "a-neige") {
-      for (i = 0; i < 26; i++) { sz = rnd(3, 9) * (still ? 2 : 1); d = rnd(4, 9); h += '<u class="snw" style="left:' + rnd(-4, 98).toFixed(1) + '%;' + box(sz) + at(0, 96) + 'opacity:' + rnd(0.45, 0.95).toFixed(2) + ';' + an(d, rnd(0, d)) + '"></u>'; }
+      for (i = 0; i < 18; i++) { sz = rnd(3, 9) * (still ? 2 : 1); d = rnd(4, 9); h += '<u class="snw" style="left:' + rnd(-4, 98).toFixed(1) + '%;' + box(sz) + at(0, 96) + 'opacity:' + rnd(0.45, 0.95).toFixed(2) + ';' + an(d, rnd(0, d)) + '"></u>'; }
     } else if (w === "a-nebuleuse") {
       h = '<u class="str st1"></u><u class="st2w"><u class="str st2"></u></u><u class="sht" style="top:8%;' + (still ? "height:5px;width:260px;opacity:1;" : "") + tf("rotate(24deg) translate3d(420px,0,0)") + '"></u><u class="sht" style="top:38%;left:10%;' + (still ? "opacity:0;" : "") + an(9, 4) + '"></u>';
     } else if (w === "a-pluie") {
-      for (i = 0; i < 30; i++) { d = rnd(0.7, 1.4); h += '<u class="rn" style="left:' + rnd(0, 118).toFixed(1) + '%;' + (still ? "width:4px;height:110px;" : "") + at(-10, 90) + 'opacity:' + rnd(0.35, 0.9).toFixed(2) + ';' + an(d, rnd(0, d)) + '"></u>'; }
+      for (i = 0; i < 20; i++) { d = rnd(0.7, 1.4); h += '<u class="rn" style="left:' + rnd(0, 118).toFixed(1) + '%;' + (still ? "width:4px;height:110px;" : "") + at(-10, 90) + 'opacity:' + rnd(0.35, 0.9).toFixed(2) + ';' + an(d, rnd(0, d)) + '"></u>'; }
     } else if (w === "a-lucioles") {
-      for (i = 0; i < 16; i++) { sz = rnd(10, 20) * (still ? 2 : 1); d = rnd(3.5, 7); h += '<u class="fly" style="left:' + rnd(8, 96).toFixed(1) + '%;top:' + rnd(15, 95).toFixed(1) + '%;' + box(sz) + (still ? "opacity:" + rnd(0.4, 1).toFixed(2) + ";" : "") + (i % 2 ? "-webkit-animation-direction:reverse;animation-direction:reverse;" : "") + an(d, rnd(0, d)) + '"></u>'; }
+      for (i = 0; i < 12; i++) { sz = rnd(10, 20) * (still ? 2 : 1); d = rnd(3.5, 7); h += '<u class="fly" style="left:' + rnd(8, 96).toFixed(1) + '%;top:' + rnd(15, 95).toFixed(1) + '%;' + box(sz) + (still ? "opacity:" + rnd(0.4, 1).toFixed(2) + ";" : "") + (i % 2 ? "-webkit-animation-direction:reverse;animation-direction:reverse;" : "") + an(d, rnd(0, d)) + '"></u>'; }
     } else if (w === "a-bulles") {
-      for (i = 0; i < 18; i++) { sz = rnd(10, 34) * (still ? 1.8 : 1); d = rnd(3.5, 8); h += '<u class="bub" style="left:' + rnd(0, 96).toFixed(1) + '%;' + box(sz) + at(5, 90) + an(d, rnd(0, d)) + '"></u>'; }
+      for (i = 0; i < 12; i++) { sz = rnd(10, 34) * (still ? 1.8 : 1); d = rnd(3.5, 8); h += '<u class="bub" style="left:' + rnd(0, 96).toFixed(1) + '%;' + box(sz) + at(5, 90) + an(d, rnd(0, d)) + '"></u>'; }
     } else if (w === "a-vitesse") {
-      for (i = 0; i < 34; i++) { a = rnd(0, 360); d = rnd(0.9, 2.2); h += '<u class="wpR" style="-webkit-transform:rotate(' + a.toFixed(0) + 'deg);transform:rotate(' + a.toFixed(0) + 'deg)"><u class="wpL" style="' + (still ? "height:5px;" : "") + tf("translate3d(" + rnd(60, 480).toFixed(0) + "px,0,0)") + an(d, rnd(0, d)) + '"></u></u>'; }
+      for (i = 0; i < 22; i++) { a = rnd(0, 360); d = rnd(0.9, 2.2); h += '<u class="wpR" style="-webkit-transform:rotate(' + a.toFixed(0) + 'deg);transform:rotate(' + a.toFixed(0) + 'deg)"><u class="wpL" style="' + (still ? "height:5px;" : "") + tf("translate3d(" + rnd(60, 480).toFixed(0) + "px,0,0)") + an(d, rnd(0, d)) + '"></u></u>'; }
     } else if (w === "a-lave") {
       cols = ["rgba(255,90,60,.36)", "rgba(240,60,140,.33)", "rgba(255,150,40,.33)", "rgba(200,60,200,.28)", "rgba(255,70,90,.33)", "rgba(255,170,70,.28)"];
       for (i = 0; i < 6; i++) { sz = 170 + (i * 53) % 130; d = 4.5 + i * 0.9; h += '<u class="lav" style="left:' + (i * 17 - 4) + '%;top:' + (still ? 5 + (i * 37) % 60 : 72 + (i * 11) % 22) + '%;' + box(sz * (still ? 0.8 : 1)) + 'background:radial-gradient(closest-side,' + cols[i] + ' 55%,rgba(0,0,0,0));' + an(d, i * 1.3) + '"></u>'; }
@@ -2462,7 +2480,7 @@ button:focus { outline: none; }
     for (i = 0; i < tn.length; i++) { k = tn[i].parentNode.clientWidth / 1024; if (k > 0) { tn[i].style.height = Math.ceil(tn[i].parentNode.clientHeight / k) + "px"; tn[i].style.webkitTransform = tn[i].style.transform = "scale(" + k.toFixed(4) + ")"; } }
   }
   var xMod = "affichage";
-  var XNAME = { affichage: "Affichage", fonds: "Fonds d'écran", conso: "Consommation", idees: "Idées" };
+  var XNAME = { affichage: "Affichage", fonds: "Fonds d'écran", conso: "Consommation", idees: "Idées", feedback: "Feedback" };
   var consoTm = 0;
   function pfFmt(ms) { return ms < 1000 ? (ms < 10 ? ms.toFixed(1) : Math.round(ms)) + " ms" : (ms / 1000).toFixed(1) + " s"; }
   function consoDraw() {
@@ -2488,7 +2506,7 @@ button:focus { outline: none; }
     $("xB").scrollTop = s1; $("xV").scrollTop = s2;
     if (!consoTm) { consoTm = setInterval(function () { if (xMod !== "conso" || $("xV").style.display === "none") { clearInterval(consoTm); consoTm = 0; return; } consoDraw(); }, 2000); }
   }
-  function xDraw() { if (xMod === "idees") { ideesDraw(); } else if (xMod === "fonds") { wallDraw(); } else if (xMod === "conso") { consoDraw(); } else { dispDraw(); } }
+  function xDraw() { if (xMod === "feedback") { fbDraw(); } else if (xMod === "idees") { ideesDraw(); } else if (xMod === "fonds") { wallDraw(); } else if (xMod === "conso") { consoDraw(); } else { dispDraw(); } }
   function xOpen(m) { xMod = m || "affichage"; appView("x"); xDraw(); }
   $("xB").onclick = function (ev) {
     var t = ev.target, a, v;
@@ -2501,6 +2519,10 @@ button:focus { outline: none; }
     else if (a === "synm" || a === "synp") { xSet("sync", Math.max(-1000, Math.min(1000, xGet("sync", 0) + (a === "synp" ? 50 : -50)))); dispDraw(); }
     else if (a === "consoZ") { PF = {}; PWAIT = {}; PZ = pfNow(); consoDraw(); }
     else if (a === "wall") { WALL = v; xSet("wall", WALL); wallApply(); wallDraw(); }
+    else if (a === "eco") { ECO = ECO ? 0 : 1; xSet("eco", ECO); idleTick(); dispDraw(); }
+    else if (a === "fbAdd") { fbAdd(v); }
+    else if (a === "fbDel") { fbDel(Number(v)); }
+    else if (a === "fbSend") { fbSend(); }
   };
 
   /* ---------------- diagnostic à distance : la tablette dépose son état dans un dépôt GitHub PRIVÉ et lit des commandes simples (liste fermée) ---------------- */
@@ -2564,7 +2586,7 @@ button:focus { outline: none; }
       navigatorOnLine: navigator.onLine, reseauInaccessible: !!window.NETDOWN, veille: !!SLEEP, modeLeger: !!PERF, batterie: bat, bluetoothDisponible: ble,
       services: sv, clim: { liee: !!S.linked, allumee: !!S.on },
       reglages: { airzone: c.airzone || "(vide)", lumiereBluetooth: c.lum ? "renseignée" : "vide", agenda: c.ical ? "renseigné" : "vide", tuya: c.tyid ? "renseigné" : "vide", miseAJour: c.updurl },
-      erreurs: err, evenements: ev };
+      feedback: FB, erreurs: err, evenements: ev };
   }
   function dgSend(reason, cb) {
     var c = dgCfg();
@@ -2640,6 +2662,47 @@ button:focus { outline: none; }
     $("xB").innerHTML = h;
   }
 
+  /* ---------------- Feedback : remarques dictées (micro du clavier) ou tapées, gardées sur la tablette et jointes au diagnostic ---------------- */
+  var FB = xGet("fb", []), fbMsg = "";
+  var FBT = { bien: ["Bien", "#5fd08a"], mal: ["À améliorer", "#ff9a8d"], idee: ["Idée", "#e6c35c"] };
+  function fbDraw(keep) {
+    var h, i, it, d, t = keep && $("fbT") ? $("fbT").value : "";
+    h = '<textarea id="fbT" placeholder="Appuie ici, puis sur le micro du clavier pour dicter une remarque…"></textarea>'
+      + '<div class="xrow2" style="margin-top:10px"><span class="note" style="margin-right:10px">Ranger la remarque dans :</span><button type="button" class="xbtn sm" data-x="fbAdd" data-a="bien">Bien</button><button type="button" class="xbtn sm" data-x="fbAdd" data-a="mal">À améliorer</button><button type="button" class="xbtn sm" data-x="fbAdd" data-a="idee">Idée</button></div>'
+      + '<div class="xrow2"><button type="button" class="xbtn sm" data-x="fbSend">Envoyer à Claude (' + FB.length + ')</button><span class="note" id="fbM">' + esc(fbMsg || "Les remarques restent sur la tablette tant que tu ne les envoies pas.") + '</span></div>';
+    if (!FB.length) { h += '<p class="note" style="margin-top:6px">Aucune remarque pour l\'instant.</p>'; }
+    for (i = FB.length - 1; i >= 0; i--) {
+      it = FB[i]; d = new Date(it.t);
+      h += '<div class="fbI"><span class="tg" style="color:' + (FBT[it.k] || FBT.idee)[1] + '">' + (FBT[it.k] || FBT.idee)[0] + '</span><span class="tx">' + esc(it.m) + '<small>' + pad(d.getDate()) + "/" + pad(d.getMonth() + 1) + " à " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + ' · version ' + esc(it.v || "?") + '</small></span><button type="button" class="rm" data-x="fbDel" data-a="' + i + '" aria-label="Supprimer">×</button></div>';
+    }
+    $("xB").innerHTML = h;
+    if (t) { $("fbT").value = t; }
+  }
+  function fbAdd(k) {
+    var e = $("fbT"), m = e ? String(e.value).replace(/^\s+|\s+$/g, "") : "";
+    if (!m) { fbMsg = "Écris ou dicte d'abord une remarque dans le cadre."; fbDraw(); return; }
+    FB.push({ t: Date.now(), k: k, m: m.substr(0, 1500), v: UI_NAME });
+    if (FB.length > 200) { FB.shift(); }
+    xSet("fb", FB); fbMsg = "Noté dans « " + FBT[k][0] + " »."; try { e.blur(); } catch (e1) { }
+    fbDraw();
+  }
+  function fbDel(i) { if (i >= 0 && i < FB.length) { FB.splice(i, 1); xSet("fb", FB); fbMsg = "Remarque supprimée."; fbDraw(true); } }
+  function fbSend() {
+    if (!FB.length) { fbMsg = "Rien à envoyer."; fbDraw(true); return; }
+    fbMsg = "Envoi…"; fbDraw(true);
+    dgSend("feedback", function (e) { fbMsg = e ? "Envoi impossible : " + e : "Envoyé (" + FB.length + " remarque" + (FB.length > 1 ? "s" : "") + "). Dis à Claude de lire le feedback."; if (xMod === "feedback") { fbDraw(true); } });
+  }
+  /* ---------------- économie d'énergie : animations figées quand personne ne touche l'écran ---------------- */
+  var ECO = xGet("eco", 1), IDLE = 0;
+  function idleTick() {
+    var on = ECO && !SLEEP && Date.now() - lastTouch > 120000 ? 1 : 0, c;
+    if (on === IDLE) { return; }
+    IDLE = on; c = document.documentElement.className.replace(/\bidle\b/g, "").replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
+    document.documentElement.className = on ? (c ? c + " idle" : "idle") : c;
+  }
+  setInterval(idleTick, 5000);
+  document.addEventListener("touchstart", function () { lastTouch = Date.now(); if (IDLE) { idleTick(); } }, true);
+
   /* bouton « Simuler une erreur » dans Autre (versions TEST seulement, jamais dans main) */
   (function () {
     var b = document.createElement("button"), lib = $("libMsg");
@@ -2662,6 +2725,7 @@ button:focus { outline: none; }
       var now = Date.now(), f, mn;
       if (SLEEP) { bar.style.display = "none"; setTimeout(function () { n = 0; t0 = last = Date.now(); worst = 0; loop(); }, 2000); return; }
       bar.style.display = (window.TSIM || edOn) ? "none" : "block";
+      if (IDLE) { bar.textContent = "FPS en pause (économie) · touche l'écran · TEST"; bar.className = ""; setTimeout(function () { n = 0; t0 = last = Date.now(); worst = 0; loop(); }, 1000); return; }
       n++; if (now - last > worst) { worst = now - last; } last = now;
       if (now - t0 >= 1000) {
         f = Math.round(n * 1000 / (now - t0));
