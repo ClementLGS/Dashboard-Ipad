@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:7000 TDBA:211-->
+<!--TDBV:7100 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -830,12 +830,12 @@ button:focus { outline: none; }
   function actOf(z, dem) {
     /* l'Airzone dit lui-même si la zone demande (heat_demand / cold_demand / air_demand…) ; on s'y fie, et on ne compare consigne/pièce qu'en dernier recours */
     function on(ks) { var i, v, seen = false, yes = false; for (i = 0; i < ks.length; i++) { v = dem ? dem[ks[i]] : undefined; if (v !== undefined && v !== null) { seen = true; if (Number(v) > 0 || v === true) { yes = true; } } } return seen ? yes : null; }
-    var h = on(["heat_demand", "heatStage"]), c = on(["cold_demand", "coldStage"]), d = parseFloat(z.setpoint) - parseFloat(z.roomTemp);
+    var h = on(["heat_demand"]), c = on(["cold_demand"]), d = parseFloat(z.setpoint) - parseFloat(z.roomTemp);
     if (h === null) { h = on(["air_demand", "floor_demand"]); } if (c === null) { c = on(["air_demand"]); }
     if (!z.on) { return ""; }
     if (z.mode === 4) { return "fan"; }
-    if (z.mode === 3) { if (h === null) { if (isNaN(d)) { return ""; } h = d > 0; } return h ? "heat" : "comfort"; }
-    if (z.mode === 2) { if (c === null) { if (isNaN(d)) { return ""; } c = d < 0; } return c ? "cool" : "comfort"; }
+    if (z.mode === 3) { if (h === null) { if (isNaN(d)) { return ""; } h = d > 0; } else if (!isNaN(d) && d <= 0) { h = false; } return h ? "heat" : "comfort"; }
+    if (z.mode === 2) { if (c === null) { if (isNaN(d)) { return ""; } c = d < 0; } else if (!isNaN(d) && d >= 0) { c = false; } return c ? "cool" : "comfort"; }
     if (z.mode === 5) { if (c === null) { if (isNaN(d)) { return ""; } c = d < 0; } return c ? "dry" : "comfort"; }
     if (z.mode === 7) { if (h === null && c === null) { if (isNaN(d)) { return ""; } return d > 0 ? "heat" : (d < 0 ? "cool" : "comfort"); } return h ? "heat" : (c ? "cool" : "comfort"); }
     return "";
@@ -1717,7 +1717,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("7000", 10) || 0, UI_NAME = "4.30 iPad (beta)".charAt(0) === "_" ? "?" : "4.30 iPad (beta)";
+  var UI_CODE = parseInt("7100", 10) || 0, UI_NAME = "4.31 iPad (beta)".charAt(0) === "_" ? "?" : "4.31 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -3062,12 +3062,12 @@ button:focus { outline: none; }
   function actOfUI(z, dem) {
     /* l'Airzone dit lui-même si la zone demande (heat_demand / cold_demand / air_demand…) ; on s'y fie, et on ne compare consigne/pièce qu'en dernier recours */
     function on(ks) { var i, v, seen = false, yes = false; for (i = 0; i < ks.length; i++) { v = dem ? dem[ks[i]] : undefined; if (v !== undefined && v !== null) { seen = true; if (Number(v) > 0 || v === true) { yes = true; } } } return seen ? yes : null; }
-    var h = on(["heat_demand", "heatStage"]), c = on(["cold_demand", "coldStage"]), d = parseFloat(z.setpoint) - parseFloat(z.roomTemp);
+    var h = on(["heat_demand"]), c = on(["cold_demand"]), d = parseFloat(z.setpoint) - parseFloat(z.roomTemp);
     if (h === null) { h = on(["air_demand", "floor_demand"]); } if (c === null) { c = on(["air_demand"]); }
     if (!z.on) { return ""; }
     if (z.mode === 4) { return "fan"; }
-    if (z.mode === 3) { if (h === null) { if (isNaN(d)) { return ""; } h = d > 0; } return h ? "heat" : "comfort"; }
-    if (z.mode === 2) { if (c === null) { if (isNaN(d)) { return ""; } c = d < 0; } return c ? "cool" : "comfort"; }
+    if (z.mode === 3) { if (h === null) { if (isNaN(d)) { return ""; } h = d > 0; } else if (!isNaN(d) && d <= 0) { h = false; } return h ? "heat" : "comfort"; }
+    if (z.mode === 2) { if (c === null) { if (isNaN(d)) { return ""; } c = d < 0; } else if (!isNaN(d) && d >= 0) { c = false; } return c ? "cool" : "comfort"; }
     if (z.mode === 5) { if (c === null) { if (isNaN(d)) { return ""; } c = d < 0; } return c ? "dry" : "comfort"; }
     if (z.mode === 7) { if (h === null && c === null) { if (isNaN(d)) { return ""; } return d > 0 ? "heat" : (d < 0 ? "cool" : "comfort"); } return h ? "heat" : (c ? "cool" : "comfort"); }
     return "";
@@ -3093,7 +3093,8 @@ button:focus { outline: none; }
           + '<div><div style="font-size:17px;font-weight:bold;color:#b4bcc9">' + esc(ZLAB[n - 1]) + '</div>'
           + '<div style="display:-webkit-flex;display:flex;-webkit-align-items:baseline;align-items:baseline;margin-top:2px"><span style="font-size:44px;font-weight:bold;line-height:50px">' + (z.err ? "!" : zNum(z.roomTemp)) + '</span>'
           + (typeof z.humidity === "number" ? '<span style="font-size:15px;color:#b4bcc9;margin-left:12px">' + z.humidity + ' %</span>' : '') + '</div>'
-          + '<div style="font-size:20px;font-weight:bold;margin-top:6px;color:' + (t.k === "off" ? "#8a93a1" : "#d8dde6") + '">' + (t.k === "stop" ? "arrêt" : t.k === "off" ? "éteinte" : (t.k === "comfort" ? "Confort · " : "") + zNum(z.setpoint)) + '</div></div>'
+          + '<div style="font-size:20px;font-weight:bold;margin-top:6px;color:' + (t.k === "off" ? "#8a93a1" : "#d8dde6") + '">' + (t.k === "stop" ? "arrêt" : t.k === "off" ? "éteinte" : (t.k === "comfort" ? "Confort · " : "") + zNum(z.setpoint)) + '</div>'
+          + '<div style="font-size:11px;color:#5d6674;margin-top:4px">' + esc(z.dem ? JSON.stringify(z.dem).replace(/[{}"]/g, "").replace(/_demand/g, "").replace(/,/g, " ") : "demande ?") + ' · mode ' + z.mode + '</div></div>'
           + '<div style="width:96px;height:96px;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;opacity:' + (t.k === "off" ? "0.55" : "1") + '">' + zIco(z, 84) + '</div></button>';
       }
       h += '</div><div style="margin-top:8px">' + '<button type="button" id="zView" aria-label="' + (ZVIEW === "plan" ? "Afficher en liste" : "Afficher le plan") + '" style="width:84px;height:44px;border-radius:12px;background:transparent;border:0;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;padding:0;margin:0">' + (ZVIEW === "plan" ? '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#eceff3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>' : '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#eceff3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 11.5L12 4l8.5 7.5M6 10v9.5h12V10M10 19.5v-5h4v5"/></svg>') + '</button>' + '</div>';
@@ -3184,6 +3185,7 @@ button:focus { outline: none; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.31", "Correctif : zones à tort en « chauffage » (test)", "La 4.30 affichait toutes les zones en chauffage : elle lisait des réglages de l'Airzone comme s'ils étaient une demande. Maintenant « chauffage » ou « froid » seulement quand l'Airzone demande vraiment et que la consigne n'est pas atteinte, sinon « confort ». En vue liste, une ligne grise montre les valeurs brutes reçues (temporaire, pour vérifier)."],
       ["4.30", "Clim : « chauffage » seulement si l'Airzone le demande (test)", "Une zone n'est plus affichée en chauffage juste parce que la consigne dépasse de 0,1° la température : on suit la demande réellement envoyée par l'Airzone, sinon « confort ». Le message « changement de mode en cours » reste 5 secondes, puis tout est relu."],
       ["4.29", "Vrais rayons de soleil dans l'encadré Météo (test)", "Quand il fait beau : un soleil lumineux en haut de l'encadré, des faisceaux de lumière qui s'ouvrent en éventail et scintillent doucement, un halo qui respire, et quelques particules de lumière qui montent. Fini les traits qui tournent."],
       ["4.28", "Réparation : clim injoignable et zones vides (test)", "Cause : un relevé de clim pouvait être abandonné sans réponse quand un autre attendait (apparu avec le suivi de zone de l'onglet Clim) : la page restait sur « injoignable » ou les zones restaient vides. Maintenant les relevés identiques se partagent la même réponse, une zone muette garde ses dernières valeurs, et un échec isolé est retenté avant d'afficher « injoignable »."],
