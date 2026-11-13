@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:6700 TDBA:211-->
+<!--TDBV:6800 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -1516,16 +1516,20 @@ button:focus { outline: none; }
     var o;
     if (CQB || !CQ.length) { return; }
     o = CQ.shift(); CQB = true;
+    function fin(e, d) { var k, l = o.cbs; CQB = false; for (k = 0; k < l.length; k++) { try { l[k](e, d); } catch (x) { } } cnext(); }
     callRaw(o.m, o.u, o.b, function (err, data) {
       if (err && err.code === "E02") {
-        setTimeout(function () { callRaw(o.m, o.u, o.b, function (e2, d2) { CQB = false; o.cb(e2, d2); cnext(); }, false); }, 1800);
-      } else { CQB = false; o.cb(err, data); cnext(); }
+        setTimeout(function () { callRaw(o.m, o.u, o.b, fin, false); }, 1800);
+      } else { fin(err, data); }
     }, true);
   }
   function call(method, url, body, cb) {
     if (url.split("?")[0] !== "/api/clim" && url !== "/api/zones") { return callRaw(method, url, body, cb, false); }
-    if (method === "GET" && CQ.length) { return; }   /* un seul relevé en attente suffit */
-    if (method === "GET") { CQ.push({ m: method, u: url, b: body, cb: cb }); } else { CQ.unshift({ m: method, u: url, b: body, cb: cb }); }   /* un ordre passe devant les relevés en attente */
+    var q;
+    if (method === "GET") {   /* même relevé déjà en attente : on s'y rattache (son résultat servira aux deux), rien n'est jamais abandonné sans réponse */
+      for (q = 0; q < CQ.length; q++) { if (CQ[q].m === "GET" && CQ[q].u === url) { CQ[q].cbs.push(cb); return; } }
+      CQ.push({ m: method, u: url, b: body, cbs: [cb] });
+    } else { CQ.unshift({ m: method, u: url, b: body, cbs: [cb] }); }   /* un ordre passe devant les relevés en attente */
     cnext();
   }
 
@@ -1702,7 +1706,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("6700", 10) || 0, UI_NAME = "4.27 iPad (beta)".charAt(0) === "_" ? "?" : "4.27 iPad (beta)";
+  var UI_CODE = parseInt("6800", 10) || 0, UI_NAME = "4.28 iPad (beta)".charAt(0) === "_" ? "?" : "4.28 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2567,17 +2571,20 @@ button:focus { outline: none; }
     $("pw").className = $("pw2").className = "pw" + (S.on ? " on" : "");
     $("pwt").textContent = $("pw2t").textContent = S.on ? "Éteindre" : "Allumer";
   }
+  var pullFail = 0;
   function pull() {
     if (Date.now() - lastUser < 6000) { return; }
     var czAsk = CZ;
     call("GET", CZ ? "/api/clim?zone=" + CZ : "/api/clim", null, function (err, z) {
       if (czAsk !== CZ) { return; }
       if (err) {
+        pullFail++;
+        if (pullFail < 3) { setTimeout(pull, 2500); return; }   /* échec isolé : on réessaie avant de déclarer injoignable */
         S.linked = false; drawClim(); drawTemp(); drawMode();
         say("Clim injoignable [" + err.code + "] : " + err.message + ". Touche le badge rouge pour le diagnostic.", true);
         return;
       }
-      S.linked = true; S.on = !!z.on; S.run = (z.run === true || z.run === false) ? z.run : null; S.dem = z.dem || null; S.act = z.act || ""; S.rt = z.roomTemp; OKT.clim = Date.now(); ACT.clim = null; drawErr();
+      pullFail = 0; S.linked = true; S.on = !!z.on; S.run = (z.run === true || z.run === false) ? z.run : null; S.dem = z.dem || null; S.act = z.act || ""; S.rt = z.roomTemp; OKT.clim = Date.now(); ACT.clim = null; drawErr();
       var mi = modeIndex(z.mode); if (mi >= 0) { S.mode = mi; }
       if (typeof z.minTemp === "number") { S.lo = Math.max(18, z.minTemp); }
       if (typeof z.maxTemp === "number") { S.hi = Math.min(30, z.maxTemp); }
@@ -2619,8 +2626,8 @@ button:focus { outline: none; }
       if (err) { say("Mode refusé [" + err.code + "] : " + err.message, true); }
       else { say("Mode : " + MODES[i].t, false); }
       if (w >= 0 && w !== applied) { S.mode = applied; return setMode(w, done); }
-      S.mode = applied; drawMode(); lastUser = 0; pull();
-      if (done) { done(err); }
+      S.mode = applied; drawMode(); lastUser = Date.now() - 4500;   /* le boîtier met un instant à appliquer : relecture dans ~1,5 s */
+      setTimeout(function () { lastUser = 0; pull(); if (done) { done(err); } }, 1500);
     });
   }
   function power() {
@@ -3071,11 +3078,17 @@ button:focus { outline: none; }
     $("zoneV").innerHTML = h;
     if ($("zView")) { $("zView").onclick = function () { ZVIEW = ZVIEW === "plan" ? "liste" : "plan"; zoneDraw(); }; }
   }
+  var zBusyAt = 0, zRetry = 0;
   function zoneLoad() {
-    if (zBusy) { return; } zBusy = true;
+    if (zBusy && Date.now() - zBusyAt < 30000) { return; } zBusy = true; zBusyAt = Date.now();
     call("GET", "/api/zones", null, function (err, d) {
+      var k, bad = 0;
       zBusy = false;
-      if (!err && d && d.length && !modeBusy) { ZD = d; if ($("zoneV").style.display !== "none" && !zSend) { zoneDraw(); } }
+      if (!err && d && d.length && !modeBusy) {
+        for (k = 0; k < d.length; k++) { if (d[k] && d[k].err) { bad++; if (ZD[k] && !ZD[k].err) { d[k] = ZD[k]; } } }   /* une zone muette garde ses dernières valeurs */
+        ZD = d; if ($("zoneV").style.display !== "none" && !zSend) { zoneDraw(); }
+        if (bad && zRetry < 2) { zRetry++; setTimeout(zoneLoad, 2500); } else if (!bad) { zRetry = 0; }
+      } else if (err && zRetry < 2) { zRetry++; setTimeout(zoneLoad, 2500); }
     });
   }
   function zonePoll() {
@@ -3132,6 +3145,7 @@ button:focus { outline: none; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.28", "Réparation : clim injoignable et zones vides (test)", "Cause : un relevé de clim pouvait être abandonné sans réponse quand un autre attendait (apparu avec le suivi de zone de l'onglet Clim) : la page restait sur « injoignable » ou les zones restaient vides. Maintenant les relevés identiques se partagent la même réponse, une zone muette garde ses dernières valeurs, et un échec isolé est retenté avant d'afficher « injoignable »."],
       ["4.27", "Changement de mode plus fiable, onglet Clim par zone (test)", "Les boutons de mode ne se bloquent plus pendant un changement (le dernier appui compte), un « changement de mode en cours… » clignote, et le changement ne fait plus qu'une requête au boîtier. L'onglet Clim de la barre de gauche affiche le mode et la température de la zone sélectionnée."],
       ["4.26", "Ambiance météo dans l'encadré Météo (test)", "Le fond « Météo dynamique » et les animations du bandeau du haut sont retirés. À la place, l'encadré « météo actuelle » de l'onglet Météo s'anime selon le temps : rayons de soleil qui tournent, nuages, pluie, orage avec éclairs, neige, brouillard, nuit étoilée."],
       ["4.25", "Fond animé « Météo dynamique » (test)", "Nouveau fond d'écran animé, dans Autre > Fonds d'écran > Animés : il suit la météo du moment. Soleil (rayons), éclaircies, nuages qui dérivent, pluie, orage (éclairs), neige, brouillard, nuit étoilée avec lune. Il change tout seul quand la météo change, et sa vignette montre la scène actuelle."],
