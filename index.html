@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:4000 TDBA:211-->
+<!--TDBV:4100 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -552,6 +552,12 @@ button:focus { outline: none; }
 /* dans un fond animé, les halos de couleur ne bougent plus : la scène porte le mouvement, et trois grands calques en moins à recomposer */
 #bg[class*="w-a-"] b { -webkit-animation: none; animation: none; will-change: auto; }
 /* feedback */
+.demoB { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; margin: 0 0 10px; padding: 11px 16px; border-radius: 14px; background: rgba(255,210,122,0.12); border: 1px solid rgba(255,210,122,0.45); color: #f4e6c6; font-size: 16px; line-height: 1.35; }
+.demoB b { -webkit-flex: none; flex: none; width: 26px; height: 26px; margin-right: 12px; border-radius: 13px; background: #ffd27a; color: #1a1e24; text-align: center; line-height: 26px; font-style: italic; font-family: Georgia, serif; }
+#setV { position: relative; }
+#setV.demoLock > *:not(.demoOv) { visibility: hidden; }
+.demoOv { background: rgba(255,255,255,0.05); border-radius: 18px; position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index: 5; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; text-align: center; font-size: 24px; font-weight: bold; color: #ffd27a; }
+#demoTag { display: none; position: fixed; right: 8px; bottom: 6px; z-index: 50; padding: 3px 9px; border-radius: 8px; font-size: 11px; font-weight: bold; letter-spacing: 0.08em; color: #ffd27a; background: rgba(0,0,0,0.45); border: 1px solid rgba(255,210,122,0.5); pointer-events: none; }
 #fbT { display: block; width: 100%; height: 96px; padding: 10px 12px; font: inherit; font-size: 18px; color: #eceff3; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.14); border-radius: 12px; resize: none; -webkit-user-select: text; user-select: text; -webkit-appearance: none; }
 .fbI { display: -webkit-flex; display: flex; -webkit-align-items: flex-start; align-items: flex-start; padding: 10px 12px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.10); border-radius: 12px; background: rgba(255,255,255,0.045); }
 .fbI .tg { -webkit-flex: none; flex: none; min-width: 96px; margin-right: 12px; font-size: 12px; font-weight: bold; letter-spacing: 0.06em; text-transform: uppercase; padding-top: 3px; }
@@ -622,7 +628,7 @@ button:focus { outline: none; }
 
    <section class="page" id="p-app">
     <div class="ttl"><span class="fx" style="-webkit-align-items:center;align-items:center"><button type="button" class="bk" id="agBack" style="display:none" aria-label="Retour à la bibliothèque">&lsaquo; Autre</button><h2 id="appT">Autre</h2></span><span class="note" id="libNote">Bibliothèque de modules</span></div>
-    <div id="libV" class="lib"><div class="libH">Infos</div><div class="mod"><button type="button" class="mi on" data-mod="agenda"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Agenda</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="meteo7"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .4-8A6 6 0 0 0 6 11a3.500 3.500 0 0 0 1 7z"/></svg><span>Météo</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="conso"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg><span>Consommation</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="feedback"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12.500h5"/></svg><span>Feedback</span></span></button></div><div class="libH">Écran et réglages</div><div class="mod"><button type="button" class="mi on" data-mod="affichage"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span>Affichage</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="fonds"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="M3.5 17l5-4.5 4 3.5 3-2.5 5 4.5"/></svg><span>Fonds</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="veille"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.500 4a8 8 0 1 0 10.500 10.500z"/></svg><span>Veille</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="reglages"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.400 15a1.650 1.650 0 0 0 .330 1.820l.060.060a2 2 0 1 1-2.830 2.830l-.060-.060a1.650 1.650 0 0 0-1.820-.330 1.650 1.650 0 0 0-1 1.510V21a2 2 0 0 1-4 0v-.090A1.650 1.650 0 0 0 9 19.400a1.650 1.650 0 0 0-1.820.330l-.060.060a2 2 0 1 1-2.830-2.830l.060-.060A1.650 1.650 0 0 0 4.680 15a1.650 1.650 0 0 0-1.510-1H3a2 2 0 0 1 0-4h.090A1.650 1.650 0 0 0 4.600 9a1.650 1.650 0 0 0-.330-1.820l-.060-.060a2 2 0 1 1 2.830-2.830l.060.060A1.650 1.650 0 0 0 9 4.680a1.650 1.650 0 0 0 1-1.510V3a2 2 0 0 1 4 0v.090a1.650 1.650 0 0 0 1 1.510 1.650 1.650 0 0 0 1.820-.330l.060-.060a2 2 0 1 1 2.830 2.830l-.060.060A1.650 1.650 0 0 0 19.400 9a1.650 1.650 0 0 0 1.510 1H21a2 2 0 0 1 0 4h-.090a1.650 1.650 0 0 0-1.510 1z"/></svg><span>Réglages</span></span></button></div><div class="libH">À venir</div><div class="mod"><button type="button" class="mi" data-mod="volets"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16M5 8h14M5 12h14M5 16h14M12 16v4"/></svg><span>Volets</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="mails"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.500 7l8.500 6 8.500-6"/></svg><span>Mails</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="air"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h11a2.500 2.500 0 1 0-2.500-2.500M3 15h14a2.500 2.500 0 1 1-2.500 2.500M3 12h7"/></svg><span>Air</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="trajet"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16l1.500-5h11L19 16M5 16v3h2v-1.500h10V19h2v-3M5 16h14"/><circle cx="8" cy="13.500" r=".5"/><circle cx="16" cy="13.500" r=".5"/></svg><span>Trajet</span></span></button></div></div>
+    <div id="libV" class="lib"><div class="libH">Infos</div><div class="mod"><button type="button" class="mi on" data-mod="agenda"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Agenda</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="meteo7"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .4-8A6 6 0 0 0 6 11a3.500 3.500 0 0 0 1 7z"/></svg><span>Météo</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="conso"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg><span>Consommation</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="feedback"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12.500h5"/></svg><span>Feedback</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="histo"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.500"/><path d="M12 7.500V12l3 2"/></svg><span>Historique</span></span></button></div><div class="libH">Écran et réglages</div><div class="mod"><button type="button" class="mi on" data-mod="affichage"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span>Affichage</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="fonds"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="M3.5 17l5-4.5 4 3.5 3-2.5 5 4.5"/></svg><span>Fonds</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="veille"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.500 4a8 8 0 1 0 10.500 10.500z"/></svg><span>Veille</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="reglages"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.400 15a1.650 1.650 0 0 0 .330 1.820l.060.060a2 2 0 1 1-2.830 2.830l-.060-.060a1.650 1.650 0 0 0-1.820-.330 1.650 1.650 0 0 0-1 1.510V21a2 2 0 0 1-4 0v-.090A1.650 1.650 0 0 0 9 19.400a1.650 1.650 0 0 0-1.820.330l-.060.060a2 2 0 1 1-2.830-2.830l.060-.060A1.650 1.650 0 0 0 4.680 15a1.650 1.650 0 0 0-1.510-1H3a2 2 0 0 1 0-4h.090A1.650 1.650 0 0 0 4.600 9a1.650 1.650 0 0 0-.330-1.820l-.060-.060a2 2 0 1 1 2.830-2.830l.060.060A1.650 1.650 0 0 0 9 4.680a1.650 1.650 0 0 0 1-1.510V3a2 2 0 0 1 4 0v.090a1.650 1.650 0 0 0 1 1.510 1.650 1.650 0 0 0 1.820-.330l.060-.060a2 2 0 1 1 2.830 2.830l-.060.060A1.650 1.650 0 0 0 19.400 9a1.650 1.650 0 0 0 1.510 1H21a2 2 0 0 1 0 4h-.090a1.650 1.650 0 0 0-1.510 1z"/></svg><span>Réglages</span></span></button></div><div class="libH">À venir</div><div class="mod"><button type="button" class="mi" data-mod="volets"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16M5 8h14M5 12h14M5 16h14M12 16v4"/></svg><span>Volets</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="mails"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.500 7l8.500 6 8.500-6"/></svg><span>Mails</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="air"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h11a2.500 2.500 0 1 0-2.500-2.500M3 15h14a2.500 2.500 0 1 1-2.500 2.500M3 12h7"/></svg><span>Air</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="trajet"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16l1.500-5h11L19 16M5 16v3h2v-1.500h10V19h2v-3M5 16h14"/><circle cx="8" cy="13.500" r=".5"/><circle cx="16" cy="13.500" r=".5"/></svg><span>Trajet</span></span></button></div></div>
     <div class="note" id="libMsg" style="margin-top:8px;min-height:18px">Les modules grisés (« À venir ») sont des emplacements libres : dis-moi lesquels créer.</div>
     <div id="wxV" style="display:none;-webkit-flex:1;flex:1;min-height:0;-webkit-flex-direction:column;flex-direction:column">
      <div class="tile agT"><p class="msg" id="w7Msg">Chargement de la météo de la semaine…</p>
@@ -1509,9 +1515,47 @@ button:focus { outline: none; }
     $("libNote").style.display = lib ? "block" : "none";
     if (wx && W7) { drawW7(); }
     if (st) { drawSet(); }
+    cView = v; demoSync();
+  }
+  /* mode démonstration : infobulles qui expliquent chaque catégorie (Réglages grisé, Idées vidé, Feedback intact) */
+  var cView = "lib", curPage = "home";
+  var DEMOI = {
+    agenda: "Agenda — tes prochains rendez-vous sur 7 jours, repris de ton Google Agenda. Le prochain s'affiche aussi sur l'accueil, avec le temps restant.",
+    wx7: "Météo de la semaine — les prévisions jour par jour : température, pluie, vent. Pour savoir comment s'habiller ou quand sortir le linge.",
+    conso: "Consommation — mesure ce que l'appli demande à la tablette, pour trouver ce qui la fait chauffer ou ramer.",
+    affichage: "Affichage — réglages de fluidité et d'énergie : mode léger, animations, test de fluidité et réglage de la synchro des lumières.",
+    fonds: "Fonds d'écran — choisis un fond fixe ou animé. Tout l'écran prend ses couleurs, les menus se fondent dedans.",
+    histo: "Historique — la liste de tout ce qui a changé dans le tableau de bord, jour par jour, version par version.",
+    volets: "Volets — à venir : ouvrir et fermer les volets de la chambre depuis la tablette.",
+    mails: "Mails — à venir : un aperçu des messages importants, sans ouvrir la boîte mail.",
+    air: "Air — à venir : qualité de l'air et température réelle de la chambre.",
+    trajet: "Trajet — à venir : temps de trajet vers Mérignac, avec la circulation du moment.",
+    home: "Accueil — l'essentiel d'un coup d'œil : heure, météo, prochain rendez-vous, et les raccourcis vers la clim et les lumières.",
+    clim: "Clim — allume, éteins et règle la climatisation de la chambre : température, mode, ventilation.",
+    lum: "Lumières — allume, éteins et règle la couleur de la LED et de la lampe Lego, ou éteins tout d'un appui.",
+    wx: "Météo — les conditions du moment et les prévisions des prochaines heures, pour t'organiser sans sortir le téléphone.",
+    lib: "Autre — la bibliothèque des modules : infos, réglages d'écran et idées à venir. Chaque module a sa propre fenêtre.",
+    veille: "Veille — éteint l'affichage pour la nuit ; un appui le réveille."
+  };
+  function demoBub(t) { var d = document.createElement("div"); d.className = "demoB"; d.innerHTML = '<b>i</b><span>' + esc(t) + '</span>'; return d; }
+  function demoSync() {
+    var o = document.querySelectorAll(".demoB, .demoOv"), i, k, b, sv = $("setV");
+    for (i = o.length - 1; i >= 0; i--) { o[i].parentNode.removeChild(o[i]); }
+    sv.className = sv.className.replace(/ ?demoLock/g, ""); $("xB").style.height = "";
+    if (!DEMO) { return; }
+    if (curPage !== "app") { b = $("p-" + curPage); if (b && DEMOI[curPage]) { b.insertBefore(demoBub(DEMOI[curPage]), b.firstChild); } return; }
+    if (cView === "lib") { $("libV").insertBefore(demoBub(DEMOI.lib), $("libV").firstChild); }
+    else if (cView === "agenda") { $("agV").insertBefore(demoBub(DEMOI.agenda), $("agV").firstChild); }
+    else if (cView === "wx7") { $("wxV").insertBefore(demoBub(DEMOI.wx7), $("wxV").firstChild); }
+    else if (cView === "set") {
+      sv.className += " demoLock"; b = document.createElement("div"); b.className = "demoOv"; b.innerHTML = "<span>Fenêtre masquée<br>en mode démonstration</span>"; sv.appendChild(b);
+    } else if (cView === "x" && xMod !== "feedback") {
+      b = demoBub(DEMOI[xMod] || ""); $("xB").parentNode.insertBefore(b, $("xB")); $("xB").style.height = "calc(100vh - 295px)";
+    }
   }
   function go(p) {
-    if (p === "app") { appView("lib"); }
+    curPage = p;
+    if (p === "app") { appView("lib"); } else { demoSync(); }
     if (p === "lum") { loadLum(); }
     var i, navs = document.querySelectorAll(".nb");
     for (i = 0; i < PAGES.length; i++) { $("p-" + PAGES[i]).className = "page" + (PAGES[i] === p ? " on" : ""); }
@@ -1529,10 +1573,11 @@ button:focus { outline: none; }
           var k = b.getAttribute("data-mod");
           if (k === "agenda") { appView("agenda"); return; }
           if (k === "reglages") { appView("set"); return; }
-          if (k === "affichage" || k === "fonds" || k === "feedback") { xOpen(k); return; }
+          if (k === "affichage" || k === "fonds" || k === "feedback" || k === "histo") { xOpen(k); return; }
           if (k === "meteo7") { appView("wx7"); loadW7(); return; }
           if (k === "conso") { xOpen("conso"); return; }
-          if (k === "veille") { sleepOn(); return; }
+          if (k === "veille") { if (DEMO) { $("libMsg").textContent = DEMOI.veille; } sleepOn(); return; }
+          if (DEMO && DEMOI[k]) { $("libMsg").textContent = DEMOI[k]; if (k === "veille") { sleepOn(); } return; }
           $("libMsg").textContent = "« " + b.getElementsByTagName("span")[0].textContent + " » : emplacement libre, module pas encore créé.";
         };
       })(mods[i]);
@@ -1556,7 +1601,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("4000", 10) || 0, UI_NAME = "4.0 iPad".charAt(0) === "_" ? "?" : "4.0 iPad";
+  var UI_CODE = parseInt("4100", 10) || 0, UI_NAME = "4.0 iPad".charAt(0) === "_" ? "?" : "4.0 iPad";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2233,6 +2278,35 @@ button:focus { outline: none; }
   }
   setInterval(function () { if (!SLEEP) { agHome(); } }, 60000);
   $("hNext").onclick = function () { go("app"); appView("agenda"); };
+  /* mode démonstration : agenda fictif tiré au hasard, lumières et clim restent réelles */
+  var DEMO = xGet("demo", 0), DEMOP = null;
+  function demoAgenda() {
+    var T = ["Cours de marketing", "Salle de sport", "Dentiste", "Repas de famille", "Révisions", "Appel client", "Entretien alternance", "Courses", "Cinéma avec Léo", "Rendez-vous banque", "Match de foot", "Coiffeur", "Anniversaire de Mamie", "Visite d'appartement", "Atelier CV", "Brunch"];
+    var i, k, n, hh, d, evs, days = [], now = new Date(), st, used, tt, j;
+    if (!DEMOP) {
+      DEMOP = [];
+      for (k = 0; k < 7; k++) {
+        n = k === 0 ? 2 + Math.floor(Math.random() * 2) : Math.floor(Math.random() * 4); used = {}; DEMOP[k] = [];
+        for (i = 0; i < n; i++) {
+          do { tt = Math.floor(Math.random() * T.length); } while (used[tt]);
+          used[tt] = 1; DEMOP[k].push([T[tt], 8 + Math.floor(Math.random() * 11) + (Math.random() < 0.5 ? 0 : 0.5), Math.random() < 0.08]);
+        }
+        if (k === 3 && Math.random() < 0.5) { DEMOP[k].push(["Jour férié", 0, 2]); }
+      }
+    }
+    for (k = 0; k < 7; k++) {
+      d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + k, 12, 0, 0); evs = [];
+      for (j = 0; j < DEMOP[k].length; j++) {
+        hh = DEMOP[k][j][1];
+        if (DEMOP[k][j][2]) { evs.push({ time: "Journée", title: DEMOP[k][j][0], startMs: 0, allDay: true }); continue; }
+        st = new Date(now.getFullYear(), now.getMonth(), now.getDate() + k, Math.floor(hh), (hh % 1) * 60).getTime();
+        evs.push({ time: pad(Math.floor(hh)) + ":" + pad((hh % 1) * 60), title: DEMOP[k][j][0], startMs: st, allDay: false });
+      }
+      evs.sort(function (a, b) { return a.startMs - b.startMs; });
+      days.push({ key: d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()), events: evs });
+    }
+    return { configured: true, stale: false, updated: Date.now(), days: days };
+  }
   function drawAgenda(r) {
     var i, k, d, p, evs, h = "", now = Date.now();
     agRaw = r;
@@ -2262,6 +2336,7 @@ button:focus { outline: none; }
     agHome();
   }
   function loadAgenda() {
+    if (DEMO) { drawAgenda(demoAgenda()); OKT.ag = Date.now(); ACT.ag = null; drawErr(); return; }
     call("GET", "/api/agenda", null, function (err, r) {
       if (err) {
         if (!agDays.length) { $("agMsg").style.display = "block"; $("agMsg").className = "msg bad"; $("agMsg").textContent = "Agenda indisponible [" + err.code + "] : " + err.message; $("hnTi").textContent = "Agenda indisponible"; $("hnS").textContent = "Détail dans Autre > Agenda"; }
@@ -2514,7 +2589,7 @@ button:focus { outline: none; }
     for (i = 0; i < tn.length; i++) { k = tn[i].parentNode.clientWidth / 1024; if (k > 0) { tn[i].style.height = Math.ceil(tn[i].parentNode.clientHeight / k) + "px"; tn[i].style.webkitTransform = tn[i].style.transform = "scale(" + k.toFixed(4) + ")"; } }
   }
   var xMod = "affichage";
-  var XNAME = { affichage: "Affichage", fonds: "Fonds d'écran", conso: "Consommation", feedback: "Feedback" };
+  var XNAME = { affichage: "Affichage", fonds: "Fonds d'écran", conso: "Consommation", feedback: "Feedback", histo: "Historique des mises à jour" };
   var consoTm = 0;
   function pfFmt(ms) { return ms < 1000 ? (ms < 10 ? ms.toFixed(1) : Math.round(ms)) + " ms" : (ms / 1000).toFixed(1) + " s"; }
   function consoDraw() {
@@ -2540,7 +2615,7 @@ button:focus { outline: none; }
     $("xB").scrollTop = s1; $("xV").scrollTop = s2;
     if (!consoTm) { consoTm = setInterval(function () { if (xMod !== "conso" || $("xV").style.display === "none") { clearInterval(consoTm); consoTm = 0; return; } consoDraw(); }, 2000); }
   }
-  function xDraw() { if (xMod === "feedback") { fbDraw(); } else if (xMod === "fonds") { wallDraw(); } else if (xMod === "conso") { consoDraw(); } else { dispDraw(); } }
+  function xDraw() { demoSync(); if (xMod === "histo") { histoDraw(); } else if (xMod === "feedback") { fbDraw(); } else if (xMod === "fonds") { wallDraw(); } else if (xMod === "conso") { consoDraw(); } else { dispDraw(); } }
   function xOpen(m) { xMod = m || "affichage"; appView("x"); xDraw(); }
   $("xB").onclick = function (ev) {
     var t = ev.target, a, v;
@@ -2626,7 +2701,7 @@ button:focus { outline: none; }
       navigatorOnLine: navigator.onLine, reseauInaccessible: !!window.NETDOWN, veille: !!SLEEP, modeLeger: !!PERF, batterie: bat, bluetoothDisponible: ble,
       services: sv, clim: { liee: !!S.linked, allumee: !!S.on },
       reglages: { airzone: c.airzone || "(vide)", lumiereBluetooth: c.lum ? "renseignée" : "vide", agenda: c.ical ? "renseigné" : "vide", tuya: c.tyid ? "renseigné" : "vide", miseAJour: c.updurl },
-      feedback: FB, erreurs: err, evenements: ev };
+      feedback: FB, demo: DEMO, erreurs: err, evenements: ev };
   }
   function dgSend(reason, cb) {
     var c = dgCfg();
@@ -2682,6 +2757,40 @@ button:focus { outline: none; }
   $("dbgSend").onclick = function () { var b = $("dbgSend"); b.textContent = "Envoi…"; dgSend("bouton", function (e) { b.textContent = e ? "Échec (voir l'état)" : "Envoyé ✓"; setTimeout(function () { b.textContent = "Envoyer le diagnostic"; if ($("dbg").style.display !== "none") { drawDbg(); } }, 2500); }); };
 
 
+  /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
+  var HIST = [
+    ["13/11/2026", [
+      ["4.0", "Mode démonstration et Historique pour tous", "Le mode démonstration (dans le Diagnostic) et cette liste rejoignent la version principale. Versions principale et de test portent maintenant le même numéro."],
+      ["4.0", "Version stable publiée", "Reprend tout ce qui a été validé ci-dessous (hors modules de test : Idées, barre FPS, Simuler une erreur)."],
+      ["3.40 à 3.44", "Écran de veille", "Au milieu, thermomètre et température de la pièce ; la consigne et le mode de la clim restent à droite. Batterie en haut à droite, verte en charge. Infobulle d'appui long plus lisible. Aucune animation en veille."],
+      ["3.36 à 3.39", "Mode démonstration", "Dans le diagnostic (5 appuis rapides sur le numéro de version) : agenda fictif, infobulles sur chaque page, Réglages masqués. Idées gardées dans Feedback."],
+      ["3.35", "Clim et fonds d'écran", "Correctif de l'erreur E02 (ordres Airzone envoyés un par un, nouvel essai silencieux). Changement de fond instantané."],
+      ["3.34", "Feedback et économie d'énergie", "Module Feedback (remarques dictées, Bien / À améliorer / Idée). Animations en pause après 2 min sans appui. Cadre de sélection des fonds refait."],
+      ["3.30 à 3.33", "Fonds animés", "10 fonds animés (aurore, océan, braise, nuit étoilée, neige, pluie, lucioles, bulles, hyperespace, lave), 5 fonds fixes de plus, vignettes fidèles à la vraie scène. Océan : vagues refaites."],
+      ["3.28 et 3.29", "Harmonie visuelle", "Bandeau « prochain rendez-vous » sur l'accueil. Menu, cartes et boutons fondus dans le fond d'écran choisi."],
+      ["3.27", "Idées (versions test seulement)", "Liste d'idées pour le tableau de bord, tenue à jour par Claude."],
+      ["3.25 et 3.26", "Autre réorganisé", "Modules rangés par thème (Infos, Écran et réglages, À venir). Minuteur, Réveil, Tâches et Prises supprimés."],
+      ["3.24", "Musique supprimée", "Tuile, page et pont Apple Music retirés."]
+    ]],
+    ["12/11/2026", [
+      ["3.20 à 3.23", "Musique (puis retirée le 13/11)", "Apple Music à la place de Spotify, page Musique repensée."],
+      ["3.15 à 3.19", "Erreurs, batterie, lumières", "Bandeau rouge et code E12 quand le Bluetooth est coupé. Batterie verte et animée en charge. Le bouton rond des lumières réagit sur toute sa surface. Boutons d'Autre plus grands."],
+      ["3.15", "Mises à jour sans passer par le PC", "Le bouton « mettre à jour » de la tablette récupère la nouvelle interface, sans signature ni nouvel IPA."],
+      ["Départ", "Application iPad", "Création de l'application iPad à partir du tableau de bord Android."]
+    ]]
+  ];
+  function histoDraw() {
+    var h = '<p class="note" style="margin-bottom:12px">Tout ce qui a changé, du plus récent au plus ancien. Une ligne est ajoutée à chaque nouvelle version.</p>', i, j, d, e;
+    for (i = 0; i < HIST.length; i++) {
+      h += '<div class="note" style="margin:14px 0 8px;font-size:16px;color:#eceff3"><b>' + HIST[i][0] + '</b></div>';
+      for (j = 0; j < HIST[i][1].length; j++) {
+        e = HIST[i][1][j];
+        h += '<div class="fbI"><span class="tg" style="color:#8fb4e8">' + esc(e[0]) + '</span><span class="tx"><b>' + esc(e[1]) + '</b><br>' + esc(e[2]) + '</span></div>';
+      }
+    }
+    $("xB").innerHTML = h;
+  }
+
   /* ---------------- Feedback : remarques dictées (micro du clavier) ou tapées, gardées sur la tablette et jointes au diagnostic ---------------- */
   var FB = xGet("fb", []), fbMsg = "";
   var FBT = { bien: ["Bien", "#5fd08a"], mal: ["À améliorer", "#ff9a8d"], idee: ["Idée", "#e6c35c"] };
@@ -2723,6 +2832,20 @@ button:focus { outline: none; }
   setInterval(idleTick, 5000);
   document.addEventListener("touchstart", function () { lastTouch = Date.now(); if (IDLE) { idleTick(); } }, true);
 
+  /* mode démonstration : bouton dans la fenêtre Diagnostic */
+  (function () {
+    var b = document.createElement("button"), tag = document.createElement("div"), bar = $("dbgClr").parentNode;
+    b.type = "button"; b.id = "dbgDemo"; tag.id = "demoTag"; tag.textContent = "MODE DÉMONSTRATION";
+    document.body.appendChild(tag);
+    function paint() { b.textContent = DEMO ? "Arrêter le mode démonstration" : "Mode démonstration"; tag.style.display = DEMO ? "block" : "none"; }
+    b.onclick = function () {
+      DEMO = DEMO ? 0 : 1; xSet("demo", DEMO); DEMOP = null; paint();
+      appView("lib");
+      loadAgenda();
+      $("dbg").style.display = "none";
+    };
+    bar.insertBefore(b, $("dbgSend")); paint();
+  })();
   /* recharge la page après 6 h, quand personne ne touche l'écran */
   var lastTouch = Date.now();
   document.addEventListener("touchstart", function () { lastTouch = Date.now(); });
