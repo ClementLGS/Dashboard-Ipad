@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:3270 TDBA:211-->
+<!--TDBV:3280 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -89,8 +89,7 @@ button:focus { outline: none; }
 
 /* ---- accueil ---- */
 .hRow { -webkit-flex: 1; flex: 1; min-height: 0; display: -webkit-flex; display: flex; }
-.hRow { -webkit-align-items: flex-end; align-items: flex-end; padding-bottom: 22px; }
-.hClim, .hCast { height: 316px; }
+.hRow { -webkit-align-items: stretch; align-items: stretch; padding-bottom: 14px; }
 .hClim { -webkit-flex: 1 1 0; flex: 1 1 0; margin-right: 14px; padding: 18px; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; text-align: center; }
 .hClim .t { font-size: 84px; line-height: 1; font-weight: bold; color: #b9c2d0; margin: 10px 0; }
 .hClim .t small { font-size: 28px; color: #8f98a5; font-weight: normal; }
@@ -103,7 +102,7 @@ button:focus { outline: none; }
 .hb:disabled { opacity: 0.6; }
 .hCast { -webkit-flex: 1 1 0; flex: 1 1 0; padding: 12px 18px; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; }
 .hCast { -webkit-flex: 1 1 0; flex: 1 1 0; padding: 12px 18px; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; }
-.go { margin-top: 12px; height: 46px; padding: 0 20px; border-radius: 23px; background: #232830; border: 1px solid #2f353e; font-size: 15px; font-weight: bold; }
+.go { margin-top: 12px; color: #eceff3; height: 46px; padding: 0 20px; border-radius: 23px; background: #232830; border: 1px solid #2f353e; font-size: 15px; font-weight: bold; }
 
 /* ---- prévisions ---- */
 .fl { -webkit-flex: 1; flex: 1; min-height: 0; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; }
@@ -224,7 +223,7 @@ button:focus { outline: none; }
 .agN { color: #8f98a5; font-size: 15px; }
 .lib { -webkit-flex: 1; flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; -webkit-align-content: flex-start; align-content: flex-start; margin: 0 -5px; }
 .libH { width: 100%; padding: 12px 6px 2px; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: #8f98a5; }
-.mod { width: 25%; height: 33.3%; min-height: 104px; max-height: 150px; padding: 5px; box-sizing: border-box; display: -webkit-flex; display: flex; }
+.mod { width: 25%; height: 26%; min-height: 96px; max-height: 150px; padding: 5px; box-sizing: border-box; display: -webkit-flex; display: flex; }
 .mi { -webkit-flex: 1; flex: 1; min-width: 0; width: 100%; height: 100%; padding: 0; border-radius: 18px; border: 2px dashed #2f353e; background: transparent; color: #5b636f; display: block; font-size: 16px; font-weight: bold; }
 .mi *, .mi svg * { pointer-events: none; }
 .mi svg { width: 38px; height: 38px; margin-bottom: 8px; display: block; }
@@ -235,9 +234,6 @@ button:focus { outline: none; }
 .ver { position: absolute; right: 12px; bottom: 3px; font-size: 11px; color: #8f98a5; opacity: 0.5; }
 
 /* tablette tenue en portrait : menu en haut */
-  .spB { display: inline-block; margin: 0 8px 8px 0; padding: 10px 16px; border-radius: 12px; border: 1px solid #262b33; background: #1a1e24; color: #d8dde6; font-size: 15px; }
-  .spB.on { border-color: #fa2d48; color: #fa2d48; }
-  .spVol { width: 100%; height: 44px; }
 @media (max-aspect-ratio: 1/1) {
   #app { -webkit-flex-direction: column; flex-direction: column; }
   #nav { width: auto; height: 84px; -webkit-flex-direction: row; flex-direction: row; border-right: 0; border-bottom: 1px solid #232830; }
@@ -360,6 +356,42 @@ button:focus { outline: none; }
 #app { margin-top: 22px; height: -webkit-calc(100% - 22px); height: calc(100% - 22px); }
 #fpsBar.mid { color: #ffd60a; }
 #fpsBar.low { color: #ff7a70; }
+
+/* ---- 3.28 : harmonisation visuelle (mêmes cartes, mêmes états sélectionnés, mêmes titres de section) + animations légères ---- */
+.hNext { -webkit-flex: none; flex: none; width: 100%; height: 86px; margin: 0 0 14px; padding: 0 18px; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; text-align: left; color: #eceff3; }
+.hNext * { pointer-events: none; }
+.hnI { -webkit-flex: none; flex: none; width: 52px; height: 52px; border-radius: 14px; background: #232830; color: #b9c2d0; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; }
+.hnI svg { width: 28px; height: 28px; display: block; }
+.hnT { -webkit-flex: 1; flex: 1; min-width: 0; margin-left: 16px; display: block; }
+.hnL { display: block; font-size: 12px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: #8f98a5; }
+.hnTi { display: block; font-size: 20px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+.hnS { display: block; font-size: 14px; color: #8f98a5; }
+.hnW { -webkit-flex: none; flex: none; margin-left: 14px; font-size: 17px; font-weight: bold; color: #b9c2d0; white-space: nowrap; }
+.hNext:active { background: #262b33; }
+/* titres de section : un seul style partout */
+.libH, .lcap, .hl h3 { font-size: 12px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: #8f98a5; }
+.hl h3 { margin-bottom: 16px; }
+/* cartes : même fond et même bordure que les tuiles */
+.nb { background: #1a1e24; }
+.mi.on { background: #181c22; border: 1px solid #2f353e; }
+/* état sélectionné : partout le même (fond gris + liseré clair), au lieu de trois variantes */
+.wk { border: 2px solid transparent; }
+.wk.sel { background: #262b33; border-color: #b9c2d0; }
+.wk.sel .l { color: #8f98a5; } .wk.sel .n { color: #eceff3; } .wk.sel .d i { background: #d8dde6; }
+.w7k.sel { background: #262b33; border-color: #b9c2d0; color: #eceff3; }
+/* pastille d'état de la clim : une couleur discrète selon ce qu'elle fait */
+.pill.heat { color: #ffb38a; border-color: #8a5a3c; background: rgba(255,140,80,0.10); font-weight: bold; }
+.pill.cool { color: #9fd0ff; border-color: #3f6a8f; background: rgba(90,170,255,0.10); font-weight: bold; }
+/* appui : léger enfoncement, même sensation sur tous les boutons */
+.nb:active, .pw:active, .mb:active, .go:active, .bk:active, .ltab:active, .hb:active, .sb:active, .xbtn:active, .w7k:active, .w7d:active, .wk:active, .mi.on:active, .hNext:active, .sw:active { -webkit-transform: scale(0.96); transform: scale(0.96); }
+/* changement de page : fondu court avec une légère montée (opacité + déplacement seulement, pas coûteux) */
+@-webkit-keyframes pgIn { 0% { opacity: 0; -webkit-transform: translate3d(0,10px,0); } 100% { opacity: 1; -webkit-transform: translate3d(0,0,0); } }
+@keyframes pgIn { 0% { opacity: 0; transform: translate3d(0,10px,0); } 100% { opacity: 1; transform: translate3d(0,0,0); } }
+.page.on { -webkit-animation: pgIn 0.22s ease-out; animation: pgIn 0.22s ease-out; }
+#libV, #agV, #wxV, #setV, #xV { -webkit-animation: pgIn 0.2s ease-out; animation: pgIn 0.2s ease-out; }
+.noanim .page.on, .noanim #libV, .noanim #agV, .noanim #wxV, .noanim #setV, .noanim #xV { -webkit-animation: none; animation: none; }
+
+@media (max-aspect-ratio: 1/1) { .hRow { padding-bottom: 0; } .hClim { padding: 22px 18px; } .hCast { padding: 18px; } }
 </style></head><body><div id="bg"><i class="al" style="left:150px;top:-120px;width:900px;height:700px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(143,163,189,0.37) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(143,163,189,0.37) 0%,rgba(0,0,0,0) 68%)"></i><i class="bl" style="left:700px;top:250px;width:900px;height:700px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(111,127,149,0.34) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(111,127,149,0.34) 0%,rgba(0,0,0,0) 68%)"></i><i class="al" style="left:-200px;top:350px;width:700px;height:600px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(160,173,191,0.24) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(160,173,191,0.24) 0%,rgba(0,0,0,0) 68%)"></i></div>
 <div id="app">
  <div id="nav">
@@ -386,6 +418,7 @@ button:focus { outline: none; }
 
    <section class="page" id="p-home">
     <div class="ttl"><h2>Accueil</h2></div>
+    <button type="button" class="tile hNext" id="hNext"><span class="hnI"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.500 10h17M8 3v4M16 3v4"/></svg></span><span class="hnT"><span class="hnL">Prochain rendez-vous</span><span class="hnTi" id="hnTi">Chargement de l'agenda…</span><span class="hnS" id="hnS">&nbsp;</span></span><span class="hnW" id="hnW"></span></button>
     <div class="hRow">
      <div class="tile hClim">
       <span class="pill" id="hPill">Connexion…</span>
@@ -1339,7 +1372,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("3270", 10) || 0, UI_NAME = "3.27 iPad (beta)".charAt(0) === "_" ? "?" : "3.27 iPad (beta)";
+  var UI_CODE = parseInt("3280", 10) || 0, UI_NAME = "3.28 iPad (beta)".charAt(0) === "_" ? "?" : "3.28 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -1984,8 +2017,31 @@ button:focus { outline: none; }
     }
     $("agD").innerHTML = h;
   }
+  var agRaw = null;
+  function agHome() {
+    var r = agRaw, now = Date.now(), k, i, e, d, p, m, ti = $("hnTi"), su = $("hnS"), w = $("hnW"), n0;
+    if (!ti) { return; }
+    if (!r) { return; }
+    w.textContent = "";
+    for (k = 0; k < r.days.length; k++) {
+      for (i = 0; i < r.days[k].events.length; i++) {
+        e = r.days[k].events[i];
+        if (!e.allDay && e.startMs <= now) { continue; }
+        p = r.days[k].key.split("-"); d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]), 12, 0, 0);
+        ti.textContent = e.title;
+        su.textContent = (k === 0 ? "Aujourd'hui" : (k === 1 ? "Demain" : DAYS[d.getDay()].charAt(0).toUpperCase() + DAYS[d.getDay()].substr(1) + " " + d.getDate() + " " + MONTHS[d.getMonth()])) + (e.allDay ? " · toute la journée" : " · " + e.time);
+        if (!e.allDay) { m = Math.round((e.startMs - now) / 60000); if (m < 60) { w.textContent = "dans " + Math.max(1, m) + " min"; } else if (m < 1440) { w.textContent = "dans " + Math.floor(m / 60) + " h" + (m % 60 ? " " + pad(m % 60) : ""); } }
+        return;
+      }
+    }
+    n0 = r.days.length;
+    ti.textContent = "Rien de prévu"; su.textContent = n0 > 1 ? "Aucun rendez-vous sur les " + n0 + " prochains jours" : "";
+  }
+  setInterval(function () { if (!SLEEP) { agHome(); } }, 60000);
+  $("hNext").onclick = function () { go("app"); appView("agenda"); };
   function drawAgenda(r) {
     var i, k, d, p, evs, h = "", now = Date.now();
+    agRaw = r;
     agDays = [];
     for (k = 0; k < r.days.length; k++) {
       p = r.days[k].key.split("-");
@@ -2009,16 +2065,17 @@ button:focus { outline: none; }
     var u = new Date(r.updated);
     $("agNote").textContent = (r.stale ? "données anciennes · " : "") + "màj " + pad(u.getHours()) + ":" + pad(u.getMinutes());
     showDay();
+    agHome();
   }
   function loadAgenda() {
     call("GET", "/api/agenda", null, function (err, r) {
       if (err) {
-        if (!agDays.length) { $("agMsg").style.display = "block"; $("agMsg").className = "msg bad"; $("agMsg").textContent = "Agenda indisponible [" + err.code + "] : " + err.message; }
+        if (!agDays.length) { $("agMsg").style.display = "block"; $("agMsg").className = "msg bad"; $("agMsg").textContent = "Agenda indisponible [" + err.code + "] : " + err.message; $("hnTi").textContent = "Agenda indisponible"; $("hnS").textContent = "Détail dans Autre > Agenda"; }
         else { $("agNote").textContent = "mise à jour impossible [" + err.code + "]"; }
         return;
       }
       if (!r.configured) {
-        $("agMsg").style.display = "block"; $("agMsg").className = "msg";
+        $("agMsg").style.display = "block"; $("agMsg").className = "msg"; $("hnTi").textContent = "Agenda pas encore relié"; $("hnS").textContent = "À faire dans Autre > Réglages";
         $("agMsg").innerHTML = window.LOCAL ? "Agenda pas encore relié.<br><br>Va dans <b>Autre &gt; Réglages</b> : colle l'adresse secrète iCal de ton Google Agenda (ou dépose <b>ical.txt</b> sur la tablette et appuie sur « Importer »), puis « Enregistrer »." : "Agenda pas encore relié.<br><br>Colle l'adresse secrète iCal de ton Google Agenda dans le fichier <b>ical.txt</b> (à côté de relay.py), puis relance le relais. Les étapes sont dans LISEZ-MOI.md.";
         return;
       }
@@ -2073,7 +2130,7 @@ button:focus { outline: none; }
     var txt, cls, i, ps = [$("cPill"), $("hPill")];
     if (!S.linked) { txt = "Injoignable"; cls = "pill bad"; }
     else if (!S.on) { txt = "Éteinte"; cls = "pill"; }
-    else if (S.act) { txt = ACTT[S.act]; cls = "pill" + (S.act === "comfort" ? "" : " on"); }
+    else if (S.act) { txt = ACTT[S.act]; cls = "pill" + (S.act === "heat" ? " heat" : (S.act === "cool" || S.act === "dry" ? " cool" : (S.act === "comfort" ? "" : " on"))); }
     else { txt = "Allumée"; cls = "pill on"; }
     for (i = 0; i < 2; i++) { ps[i].textContent = txt; ps[i].className = cls; }
     $("pw").className = $("pw2").className = "pw" + (S.on ? " on" : "");
@@ -2375,7 +2432,6 @@ button:focus { outline: none; }
   /* ---------------- Idées (versions TEST seulement) : liste tenue à jour par Claude, à chaque version ---------------- */
   var IDEES = { maj: "13/11/2026", l: [
     ["Pluie dans l'heure", "Facile", "Un bandeau « il va pleuvoir dans 20 min » sur l'accueil, à partir des prévisions déjà utilisées (Open-Meteo, pas de 15 min). Utile pour le linge, la fenêtre, la sortie.", "Mise à jour seule"],
-    ["Prochain rendez-vous", "Facile", "Sur l'accueil : « Dentiste dans 1 h 20 » avec compte à rebours, au lieu d'ouvrir l'agenda. L'agenda est déjà lu par la tablette.", "Mise à jour seule"],
     ["Scène « Réveil »", "Facile", "Un bouton (ou une heure) qui allume les lumières en douceur, affiche météo et agenda du jour en grand. Le pendant de « Bonne nuit ».", "Mise à jour seule"],
     ["Scène « Cinéma »", "Facile", "Un appui : lumières tamisées, chaudes, clim inchangée. Les lumières se pilotent déjà, c'est un préréglage.", "Mise à jour seule"],
     ["Conseil clim", "Facile", "Si dehors fait 16° et la clim est en Confort, un message discret : « dehors est déjà frais, tu peux l'éteindre ». Compare la météo et l'état de l'Airzone.", "Mise à jour seule"],
