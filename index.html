@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:3340 TDBA:211-->
+<!--TDBV:3350 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -538,11 +538,13 @@ button:focus { outline: none; }
 .wfx .lav { border-radius: 50%; -webkit-animation: fxLava 7s ease-in-out infinite alternate; animation: fxLava 7s ease-in-out infinite alternate; }
 
 /* ---- 3.34 : cadre de sélection des fonds (dessiné par-dessus, coins nets), module Feedback, économie d'énergie ---- */
-.wpi .wp { border: 0; -webkit-mask-image: -webkit-radial-gradient(white, black); }
+.wpi .wp { border: 0; }
+.wpi .wp:first-child:not([class*="w-"]) { -webkit-mask-image: -webkit-radial-gradient(white, black); }
 .wpi .wp:after { content: ""; position: absolute; left: 0; top: 0; right: 0; bottom: 0; border-radius: 14px; border: 2px solid rgba(255,255,255,0.14); }
 .wpi.sel .wp:after { border: 3px solid #fff; }
 .wpi .wp[class*="w-"] { position: relative; }
 /* économie : sans appui depuis 2 min, toutes les animations se figent (fond, icônes météo, batterie) ; un appui les relance */
+.frz *, .frz *:before, .frz *:after { -webkit-animation-play-state: paused !important; animation-play-state: paused !important; }
 .idle *, .idle *:before, .idle *:after { -webkit-animation-play-state: paused !important; animation-play-state: paused !important; }
 /* dans un fond animé, les halos de couleur ne bougent plus : la scène porte le mouvement, et trois grands calques en moins à recomposer */
 #bg[class*="w-a-"] b { -webkit-animation: none; animation: none; will-change: auto; }
@@ -1363,9 +1365,9 @@ button:focus { outline: none; }
   var pfT = 0;
   document.addEventListener("click", function () { pfT = pfNow(); }, true);
   document.addEventListener("click", function () { if (pfT) { pfAdd("Touches (interface)", pfNow() - pfT); pfT = 0; } }, false);
-  function call(method, url, body, cb) {
+  function callRaw(method, url, body, cb, quiet) {
     var x, done = false, what = url.replace("/api/", ""), timer = null, t0 = pfNow();
-    function end(err, data) { if (!done) { done = true; if (timer) { clearTimeout(timer); } var t1 = pfNow(); pfWait(pfKey(what), t1 - t0); if (err) { noteErr(err, what); } cb(err, data); pfAdd(pfKey(what), pfNow() - t1); } }
+    function end(err, data) { if (!done) { done = true; if (timer) { clearTimeout(timer); } var t1 = pfNow(); pfWait(pfKey(what), t1 - t0); if (err && !quiet) { noteErr(err, what); } cb(err, data); pfAdd(pfKey(what), pfNow() - t1); } }
     function reply(status, j) {
       var code, msg;
       if (status >= 200 && status < 300) {
@@ -1402,6 +1404,25 @@ button:focus { outline: none; }
       x.ontimeout = function () { end(mk("E01", "pas de réponse du relais")); };
       x.send(body ? JSON.stringify(body) : null);
     } catch (e) { end(mk("E08", String(e && e.message || e))); }
+  }
+
+  /* Airzone : le boîtier ne traite qu'une requête à la fois et répond parfois « request malformed » quand il est occupé.
+     On envoie donc les ordres de la clim un par un, et on réessaie une fois en silence avant d'afficher E02. */
+  var CQ = [], CQB = false;
+  function cnext() {
+    var o;
+    if (CQB || !CQ.length) { return; }
+    o = CQ.shift(); CQB = true;
+    callRaw(o.m, o.u, o.b, function (err, data) {
+      if (err && err.code === "E02") {
+        setTimeout(function () { callRaw(o.m, o.u, o.b, function (e2, d2) { CQB = false; o.cb(e2, d2); cnext(); }, false); }, 1800);
+      } else { CQB = false; o.cb(err, data); cnext(); }
+    }, true);
+  }
+  function call(method, url, body, cb) {
+    if (url !== "/api/clim") { return callRaw(method, url, body, cb, false); }
+    if (method === "GET" && CQ.length) { return; }   /* un seul relevé en attente suffit */
+    CQ.push({ m: method, u: url, b: body, cb: cb }); cnext();
   }
 
   /* ---------------- fenêtre de diagnostic ---------------- */
@@ -1482,6 +1503,7 @@ button:focus { outline: none; }
     $("libMsg").style.display = lib ? "block" : "none";
     if ($("simErr")) { $("simErr").style.display = lib ? "block" : "none"; }
     $("agBack").style.display = lib ? "none" : "block";
+    $("bg").className = $("bg").className.replace(/ frz/g, "") + ((x && xMod === "fonds") ? " frz" : "");
     $("appT").textContent = ag ? "Agenda" : (wx ? "Météo de la semaine" : (st ? "Réglages" : (x ? XNAME[xMod] : "Autre")));
     $("libNote").style.display = lib ? "block" : "none";
     if (wx && W7) { drawW7(); }
@@ -1533,7 +1555,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("3340", 10) || 0, UI_NAME = "3.34 iPad (beta)".charAt(0) === "_" ? "?" : "3.34 iPad (beta)";
+  var UI_CODE = parseInt("3350", 10) || 0, UI_NAME = "3.35 iPad (beta)".charAt(0) === "_" ? "?" : "3.35 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2460,7 +2482,7 @@ button:focus { outline: none; }
     return h;
   }
   function wallFx() { $("bgA").innerHTML = /^a-/.test(WALL) ? wallScene(WALL, false) : ""; }
-  function wallApply() { $("bg").className = "w-" + WALL; wallFx(); }
+  function wallApply() { $("bg").className = "w-" + WALL + (/ frz/.test($("bg").className) ? " frz" : ""); wallFx(); }
   wallApply();
   function wallDraw() {
     var h = "", tn, k, i;
@@ -2473,7 +2495,8 @@ button:focus { outline: none; }
       }
       h += '</div>';
     }
-    grp("Animés", WALLA, true); grp("Fixes", WALLS, false);
+    if (!wallDraw.cache) { grp("Animés", WALLA, true); grp("Fixes", WALLS, false); wallDraw.cache = h; } else { h = wallDraw.cache; }
+    h = h.replace(/ sel"/g, '"').replace('<div class="wpi"><button type="button" data-x="wall" data-a="' + WALL + '"', '<div class="wpi sel"><button type="button" data-x="wall" data-a="' + WALL + '"');
     h += '<p class="note" style="margin-top:8px">Les vignettes des fonds animés sont une image figée de la vraie scène. Les fonds animés s\'arrêtent pendant la veille. Si la tablette rame avec l\'un d\'eux, choisis-en un autre ou un fond fixe.</p>';
     $("xB").innerHTML = h;
     tn = $("xB").querySelectorAll(".wpS");
@@ -2518,7 +2541,12 @@ button:focus { outline: none; }
     else if (a === "lab") { labRun(); }
     else if (a === "synm" || a === "synp") { xSet("sync", Math.max(-1000, Math.min(1000, xGet("sync", 0) + (a === "synp" ? 50 : -50)))); dispDraw(); }
     else if (a === "consoZ") { PF = {}; PWAIT = {}; PZ = pfNow(); consoDraw(); }
-    else if (a === "wall") { WALL = v; xSet("wall", WALL); wallApply(); wallDraw(); }
+    else if (a === "wall") {
+      var ws = $("xB").querySelectorAll(".wpi"), wi;
+      WALL = v; xSet("wall", WALL);
+      for (wi = 0; wi < ws.length; wi++) { ws[wi].className = "wpi" + (ws[wi].firstChild.getAttribute("data-a") === v ? " sel" : ""); }
+      wallApply();
+    }
     else if (a === "eco") { ECO = ECO ? 0 : 1; xSet("eco", ECO); idleTick(); dispDraw(); }
     else if (a === "fbAdd") { fbAdd(v); }
     else if (a === "fbDel") { fbDel(Number(v)); }
