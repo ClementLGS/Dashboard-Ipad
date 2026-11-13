@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:4400 TDBA:211-->
+<!--TDBV:4500 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -1548,7 +1548,7 @@ button:focus { outline: none; }
   function demoSync() {
     var o = document.querySelectorAll(".demoB, .demoOv"), i, k, b, sv = $("setV");
     for (i = o.length - 1; i >= 0; i--) { o[i].parentNode.removeChild(o[i]); }
-    sv.className = sv.className.replace(/ ?demoLock/g, ""); $("xB").style.height = "";
+    sv.className = sv.className.replace(/ ?demoLock/g, ""); $("xB").style.height = "calc(100vh - 215px)";
     if (!DEMO) { return; }
     if (curPage !== "app") { b = $("p-" + curPage); if (b && DEMOI[curPage]) { b.insertBefore(demoBub(DEMOI[curPage]), b.firstChild); } return; }
     if (cView === "lib") { $("libV").insertBefore(demoBub(DEMOI.lib), $("libV").firstChild); }
@@ -1608,7 +1608,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("4400", 10) || 0, UI_NAME = "4.4 iPad (beta)".charAt(0) === "_" ? "?" : "4.4 iPad (beta)";
+  var UI_CODE = parseInt("4500", 10) || 0, UI_NAME = "4.5 iPad (beta)".charAt(0) === "_" ? "?" : "4.5 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2643,6 +2643,7 @@ button:focus { outline: none; }
     else if (a === "eco") { ECO = ECO ? 0 : 1; xSet("eco", ECO); idleTick(); dispDraw(); }
     else if (a === "fbAdd") { fbAdd(v); }
     else if (a === "fbDel") { fbDel(Number(v)); }
+    else if (a === "ideaDone") { ideeToggle(decodeURIComponent(v)); }
     
     else if (a === "fbSend") { fbSend(); }
   };
@@ -2784,29 +2785,34 @@ button:focus { outline: none; }
   /* 3.38 : plus de saisie ici. Les idées de Clément se notent dans Feedback (bouton Idée) puis « Envoyer à Claude » ; Claude les ajoute à IDEES.u.
      Les idées déjà saisies dans la 3.36/3.37 (clé tdb_im) sont recopiées dans Feedback, une seule fois, pour partir avec l'envoi. */
   var IM = xGet("im", []);
-  function ideesDraw() {
-    var h0 = "", j;
+  /* une idée peut être marquée « Réalisée » (mémorisé sur la tablette, par titre) ; « Catégorie bug » l'est d'office (Bug dans Feedback, Bugs dans Autre) */
+  var IDONE = xGet("ideeDone", {});
+  function ideeIsDone(t) { return IDONE[t] !== undefined ? !!IDONE[t] : (t === "Catégorie bug"); }
+  function ideeToggle(t) { IDONE[t] = ideeIsDone(t) ? 0 : 1; xSet("ideeDone", IDONE); ideesDraw(true); }
+  function ideeBtn(t) { return '<button type="button" class="xbtn sm" data-x="ideaDone" data-a="' + encodeURIComponent(t) + '" style="-webkit-flex:none;flex:none;margin-left:10px;align-self:center">' + (ideeIsDone(t) ? "Remettre" : "Réalisée ✓") + '</button>'; }
+  function ideesDraw(keep) {
+    var h = "", j, it, col, d, y = keep && $("xB") ? $("xB").scrollTop : 0;
     if (IDEES.u && IDEES.u.length) {
-      h0 += '<div class="note" style="margin-bottom:8px;font-size:16px;color:#eceff3"><b>Tes idées</b></div>';
-      for (j = 0; j < IDEES.u.length; j++) { h0 += '<div class="fbI"><span class="tg" style="color:#e6c35c">Idée</span><span class="tx">' + esc(IDEES.u[j][0]) + '<small>' + esc(IDEES.u[j][1]) + '</small></span></div>'; }
-      h0 += '<div class="note" style="margin:16px 0 8px;font-size:16px;color:#eceff3"><b>Idées de Claude</b></div>';
+      h += '<div class="note" style="margin-bottom:8px;font-size:16px;color:#eceff3"><b>Tes idées</b></div>';
+      for (j = 0; j < IDEES.u.length; j++) {
+        d = ideeIsDone(IDEES.u[j][0]);
+        h += '<div class="fbI" style="' + (d ? "opacity:0.55" : "") + '"><span class="tg" style="color:' + (d ? "#5fd08a" : "#e6c35c") + '">' + (d ? "Réalisée" : "Idée") + '</span><span class="tx"' + (d ? ' style="text-decoration:line-through"' : "") + '>' + esc(IDEES.u[j][0]) + '<small>' + esc(IDEES.u[j][1]) + '</small></span>' + ideeBtn(IDEES.u[j][0]) + '</div>';
+      }
+      h += '<div class="note" style="margin:16px 0 8px;font-size:16px;color:#eceff3"><b>Idées de Claude</b></div>';
     }
-    h0 += '<p class="note" style="margin-bottom:10px">Pour ajouter une idée : Autre &gt; Feedback, tape ou dicte-la, appuie sur « Idée », puis « Envoyer à Claude ». Claude la range ici à la prochaine version.</p>';
-    ideesClaude(h0, "");
-  }
-  function ideesClaude(pre, t) {
-    var h = '<p class="note" style="margin-bottom:12px">Mises à jour à chaque version test. Dernière mise à jour : ' + IDEES.maj + '. Dis-moi lesquelles te plaisent.</p>', i, it, col;
-    for (i = 0; i < IDEES.l.length; i++) {
-      it = IDEES.l[i]; col = it[1] === "Facile" ? "#5fd08a" : (it[1] === "Moyen" ? "#e6c35c" : "#ff9a8d");
-      h += '<div style="padding:12px 14px;margin-bottom:10px;border:1px solid #2f353e;border-radius:14px;background:#1a1e24"><div style="font-size:19px;font-weight:bold">' + esc(it[0]) + ' <span style="font-size:12px;font-weight:bold;color:' + col + ';border:1px solid ' + col + ';border-radius:8px;padding:1px 7px;margin-left:6px;white-space:nowrap">' + esc(it[1]) + '</span></div><div style="font-size:15px;color:#b9c2d0;margin-top:6px">' + esc(it[2]) + '</div><div class="note" style="margin-top:6px">' + esc(it[3]) + '</div></div>';
+    h += '<p class="note" style="margin-bottom:10px">Pour ajouter une idée : Autre &gt; Feedback, tape ou dicte-la, appuie sur « Idée », puis « Envoyer à Claude ». Claude la range ici à la prochaine version.</p>';
+    h += '<p class="note" style="margin-bottom:12px">Mises à jour à chaque version test. Dernière mise à jour : ' + IDEES.maj + '. Dis-moi lesquelles te plaisent.</p>';
+    for (j = 0; j < IDEES.l.length; j++) {
+      it = IDEES.l[j]; d = ideeIsDone(it[0]); col = it[1] === "Facile" ? "#5fd08a" : (it[1] === "Moyen" ? "#e6c35c" : "#ff9a8d");
+      h += '<div style="display:-webkit-flex;display:flex;padding:12px 14px;margin-bottom:10px;border:1px solid #2f353e;border-radius:14px;background:#1a1e24;' + (d ? "opacity:0.55" : "") + '"><div style="-webkit-flex:1;flex:1;min-width:0"><div style="font-size:19px;font-weight:bold' + (d ? ";text-decoration:line-through" : "") + '">' + esc(it[0]) + ' <span style="font-size:12px;font-weight:bold;color:' + (d ? "#5fd08a" : col) + ';border:1px solid ' + (d ? "#5fd08a" : col) + ';border-radius:8px;padding:1px 7px;margin-left:6px;white-space:nowrap">' + (d ? "Réalisée" : esc(it[1])) + '</span></div><div style="font-size:15px;color:#b9c2d0;margin-top:6px">' + esc(it[2]) + '</div><div class="note" style="margin-top:6px">' + esc(it[3]) + '</div></div>' + ideeBtn(it[0]) + '</div>';
     }
-    $("xB").innerHTML = pre + h;
+    $("xB").innerHTML = h; if (y) { $("xB").scrollTop = y; }
   }
 
   /* ---------------- Bugs (versions TEST seulement) : bugs notés dans Feedback > Bug, rangés ici par Claude avec leur état ---------------- */
   var BUGS = { maj: "13/11/2026", l: [
     /* ["Titre", "Détail", "À corriger" | "Corrigé en 4.x", "jj/mm"] */
-    ["Idées : écran non défilable", "L'écran Idées ne défile pas, et il n'est pas possible de marquer une idée comme réalisée.", "À corriger", "13/11"]
+    ["Idées : écran non défilable", "L'écran Idées ne défilait pas (hauteur de la zone effacée par erreur, vrai aussi pour Historique et Feedback), et on ne pouvait pas marquer une idée comme réalisée.", "Corrigé en 4.5", "13/11"]
   ] };
   function bugsDraw() {
     var h = '<p class="note" style="margin-bottom:12px">Les bugs que tu notes dans Feedback (bouton « Bug ») puis envoies à Claude sont rangés ici, avec leur état. Dernière mise à jour : ' + BUGS.maj + '.</p>', i, b, ok;
@@ -2821,6 +2827,7 @@ button:focus { outline: none; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.5", "Défilement et idées réalisées", "Correctif : les écrans longs (Idées, Historique, Feedback) défilent de nouveau. Dans Idées, bouton « Réalisée » pour barrer une idée."],
       ["4.4", "Bug et idée rangés (test)", "Le bug « Idées non défilable » est dans Bugs ; l'idée « Feedback s'envoie tout seul » est dans Idées. Ils disparaissent de Feedback."],
       ["4.3", "Catégorie Bugs (test)", "Autre > Bugs : la liste de tous les bugs notés dans Feedback, avec leur état. Visible seulement dans les versions test."],
       ["4.2", "Catégorie Bug dans Feedback", "Un quatrième bouton, « Bug », pour noter un souci (affichage, lenteur, erreur) : il part avec les autres remarques vers Claude."],
