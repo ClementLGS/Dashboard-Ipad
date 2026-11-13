@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:4102 TDBA:211-->
+<!--TDBV:4200 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -1601,7 +1601,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("4102", 10) || 0, UI_NAME = "4.1 iPad".charAt(0) === "_" ? "?" : "4.1 iPad";
+  var UI_CODE = parseInt("4200", 10) || 0, UI_NAME = "4.2 iPad".charAt(0) === "_" ? "?" : "4.2 iPad";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2760,6 +2760,7 @@ button:focus { outline: none; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.2", "Catégorie Bug dans Feedback", "Un quatrième bouton, « Bug », pour noter un souci (affichage, lenteur, erreur) : il part avec les autres remarques vers Claude."],
       ["4.1", "Feedback allégé", "Une idée notée dans Feedback disparaît de la liste dès que Claude l'a rangée."],
       ["4.0", "Mode démonstration et Historique pour tous", "Le mode démonstration (dans le Diagnostic) et cette liste rejoignent la version principale. Versions principale et de test portent maintenant le même numéro."],
       ["4.0", "Version stable publiée", "Reprend tout ce qui a été validé ci-dessous (hors modules de test : Idées, barre FPS, Simuler une erreur)."],
@@ -2801,11 +2802,11 @@ button:focus { outline: none; }
     for (i = 0; i < FB.length; i++) { if (!(FB[i].k === "idee" && FBDONE.indexOf(FB[i].t) >= 0)) { keep.push(FB[i]); } }
     if (keep.length !== FB.length) { FB = keep; xSet("fb", FB); }
   })();
-  var FBT = { bien: ["Bien", "#5fd08a"], mal: ["À améliorer", "#ff9a8d"], idee: ["Idée", "#e6c35c"] };
+  var FBT = { bien: ["Bien", "#5fd08a"], mal: ["À améliorer", "#ff9a8d"], idee: ["Idée", "#e6c35c"], bug: ["Bug", "#ff6b6b"] };
   function fbDraw(keep) {
     var h, i, it, d, t = keep && $("fbT") ? $("fbT").value : "";
     h = '<textarea id="fbT" placeholder="Appuie ici, puis sur le micro du clavier pour dicter une remarque…"></textarea>'
-      + '<div class="xrow2" style="margin-top:10px"><span class="note" style="margin-right:10px">Ranger la remarque dans :</span><button type="button" class="xbtn sm" data-x="fbAdd" data-a="bien">Bien</button><button type="button" class="xbtn sm" data-x="fbAdd" data-a="mal">À améliorer</button><button type="button" class="xbtn sm" data-x="fbAdd" data-a="idee">Idée</button></div>'
+      + '<div class="xrow2" style="margin-top:10px"><span class="note" style="margin-right:10px">Ranger la remarque dans :</span><button type="button" class="xbtn sm" data-x="fbAdd" data-a="bien">Bien</button><button type="button" class="xbtn sm" data-x="fbAdd" data-a="mal">À améliorer</button><button type="button" class="xbtn sm" data-x="fbAdd" data-a="idee">Idée</button><button type="button" class="xbtn sm" data-x="fbAdd" data-a="bug">Bug</button></div>'
       + '<div class="xrow2"><button type="button" class="xbtn sm" data-x="fbSend">Envoyer à Claude (' + FB.length + ')</button><span class="note" id="fbM">' + esc(fbMsg || "Les remarques restent sur la tablette tant que tu ne les envoies pas.") + '</span></div>';
     if (!FB.length) { h += '<p class="note" style="margin-top:6px">Aucune remarque pour l\'instant.</p>'; }
     for (i = FB.length - 1; i >= 0; i--) {
