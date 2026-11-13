@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:6900 TDBA:211-->
+<!--TDBV:7000 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -827,22 +827,26 @@ button:focus { outline: none; }
       cb(null, j.data[0]);
     });
   }
+  function actOf(z, dem) {
+    /* l'Airzone dit lui-même si la zone demande (heat_demand / cold_demand / air_demand…) ; on s'y fie, et on ne compare consigne/pièce qu'en dernier recours */
+    function on(ks) { var i, v, seen = false, yes = false; for (i = 0; i < ks.length; i++) { v = dem ? dem[ks[i]] : undefined; if (v !== undefined && v !== null) { seen = true; if (Number(v) > 0 || v === true) { yes = true; } } } return seen ? yes : null; }
+    var h = on(["heat_demand", "heatStage"]), c = on(["cold_demand", "coldStage"]), d = parseFloat(z.setpoint) - parseFloat(z.roomTemp);
+    if (h === null) { h = on(["air_demand", "floor_demand"]); } if (c === null) { c = on(["air_demand"]); }
+    if (!z.on) { return ""; }
+    if (z.mode === 4) { return "fan"; }
+    if (z.mode === 3) { if (h === null) { if (isNaN(d)) { return ""; } h = d > 0; } return h ? "heat" : "comfort"; }
+    if (z.mode === 2) { if (c === null) { if (isNaN(d)) { return ""; } c = d < 0; } return c ? "cool" : "comfort"; }
+    if (z.mode === 5) { if (c === null) { if (isNaN(d)) { return ""; } c = d < 0; } return c ? "dry" : "comfort"; }
+    if (z.mode === 7) { if (h === null && c === null) { if (isNaN(d)) { return ""; } return d > 0 ? "heat" : (d < 0 ? "cool" : "comfort"); } return h ? "heat" : (c ? "cool" : "comfort"); }
+    return "";
+  }
   function view(z) {
     if (z.zoneID !== undefined && z.master_zoneID) { MASTERC[z.zoneID] = z.master_zoneID; }
     /* « tourne vraiment » : l'Airzone indique la demande de la zone (air_demand, floor_demand, cold/heat_demand, étages) ; null si le boîtier ne le dit pas */
     var keys = ["air_demand", "floor_demand", "cold_demand", "heat_demand", "coldStage", "heatStage"], dem = {}, has = false, i, run = null, any = false;
     for (i = 0; i < keys.length; i++) { if (z[keys[i]] !== undefined && z[keys[i]] !== null) { dem[keys[i]] = z[keys[i]]; has = true; if (Number(z[keys[i]]) > 0 || z[keys[i]] === true) { any = true; } } }
     if (has) { run = any; }
-    /* même règle que l'appli Airzone : en chauffage, « Chauffage » seulement si la consigne dépasse la température de la pièce, sinon « Confort » (idem en froid) */
-    var d = parseFloat(z.setpoint) - parseFloat(z.roomTemp), act = "";
-    if (z.on) {
-      if (z.mode === 4) { act = "fan"; }
-      else if (z.mode === 5) { act = d < 0 ? "dry" : "comfort"; }
-      else if (isNaN(d)) { act = ""; }
-      else if (z.mode === 3) { act = d > 0 ? "heat" : "comfort"; }
-      else if (z.mode === 2) { act = d < 0 ? "cool" : "comfort"; }
-      else if (z.mode === 7) { act = d > 0 ? "heat" : (d < 0 ? "cool" : "comfort"); }
-    }
+    var act = actOf(z, has ? dem : null);
     return { name: z.name, on: !!z.on, mode: z.mode, setpoint: z.setpoint, roomTemp: z.roomTemp, humidity: z.humidity,
              minTemp: z.minTemp, maxTemp: z.maxTemp, master: z.master_zoneID, run: run, act: act, dem: has ? dem : null };
   }
@@ -1713,7 +1717,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("6900", 10) || 0, UI_NAME = "4.29 iPad (beta)".charAt(0) === "_" ? "?" : "4.29 iPad (beta)";
+  var UI_CODE = parseInt("7000", 10) || 0, UI_NAME = "4.30 iPad (beta)".charAt(0) === "_" ? "?" : "4.30 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2514,7 +2518,8 @@ button:focus { outline: none; }
   var CZ = 0, SZ = null;   /* CZ : zone affichée dans la page Clim (0 = la chambre, état normal) ; SZ : copie de l'état de la chambre */
   var S = { mode: -1, temp: 22, on: false, linked: false, lo: 18, hi: 30, run: null, dem: null, act: "", rt: null };
   var ACTT = { heat: "Chauffage", cool: "Refroidissement", comfort: "Confort", fan: "Ventilation", dry: "Déshumidification" };
-  var lastUser = 0, sendTimer = 0, busy = false, modeBusy = false, modeAt = 0;
+  var lastUser = 0, sendTimer = 0, busy = false, modeBusy = false, modeAt = 0, modeHold = false, holdTm = 0;
+  function modePend() { return modeBusy || modeHold; }
 
   function say(t, bad) { var m = $("info"); m.textContent = t; m.style.color = bad ? "#ff7a70" : ""; }
   function modeIndex(code) { for (var i = 0; i < MODES.length; i++) { if (MODES[i].az === code) { return i; } } return -1; }
@@ -2532,10 +2537,10 @@ button:focus { outline: none; }
     var bs = $("modes").getElementsByTagName("button"), i;
     var st = S.linked && S.on && S.mode >= 0 && MODES[S.mode].az !== 1 ? (S.act || "comfort") : "", sv;
     for (i = 0; i < bs.length; i++) {
-      bs[i].className = "mb" + (i === S.mode ? " sel" + (st ? " st-" + st : "") + (modeBusy ? " pend" : "") : ""); bs[i].disabled = !S.linked;
+      bs[i].className = "mb" + (i === S.mode ? " sel" + (st ? " st-" + st : "") + (modePend() ? " pend" : "") : ""); bs[i].disabled = !S.linked;
       sv = bs[i].getElementsByTagName("svg")[0]; if (sv) { sv.setAttribute("class", i === S.mode && st && st !== "comfort" ? "an-" + st : ""); }
     }
-    if (modeBusy) { say("Changement de mode en cours…", false); }
+    if (modePend()) { say("Changement de mode en cours…", false); }
     navDraw();
     if (!CZ && $("zoneV").style.display !== "none" && typeof zoneDraw === "function") { zoneDraw(); }   /* la barre de modes de la vue zones suit toujours S.mode */
     if (CZ) { return; }
@@ -2567,7 +2572,7 @@ button:focus { outline: none; }
   /* relève la zone mémorisée quand on n'est pas sur la page Clim, pour que l'onglet reste à jour */
   function nzPull() {
     clearTimeout(nzTm); nzTm = setTimeout(nzPull, 45000);
-    if (document.hidden || CZ || !ZMEM || ZMEM === 1 || modeBusy || isIdle()) { return; }
+    if (document.hidden || CZ || !ZMEM || ZMEM === 1 || modePend() || isIdle()) { return; }
     var asked = ZMEM;
     call("GET", "/api/clim?zone=" + asked, null, function (err, z) {
       if (err || !z || asked !== ZMEM || CZ) { return; }
@@ -2636,7 +2641,8 @@ button:focus { outline: none; }
     if (!S.linked) { say("Clim injoignable pour l'instant, réessaie dans un instant.", true); return; }
     if (modeBusy) { if (i !== S.mode) { modeWant = i; S.mode = i; drawMode(); } return; }   /* un changement est déjà en cours : le dernier clic sera appliqué ensuite */
     if (i === S.mode) { return; }
-    var prev = S.mode;
+    var prev = S.mode, t0 = Date.now();
+    clearTimeout(holdTm); modeHold = false;
     modeBusy = true; modeWant = -1; S.mode = i; drawMode(); lastUser = Date.now();
     call("POST", "/api/clim", CZ ? { zone: CZ, mode: MODES[i].az } : { mode: MODES[i].az }, function (err) {
       var w = modeWant, applied = err ? prev : i;
@@ -2644,8 +2650,9 @@ button:focus { outline: none; }
       if (err) { say("Mode refusé [" + err.code + "] : " + err.message, true); }
       else { say("Mode : " + MODES[i].t, false); }
       if (w >= 0 && w !== applied) { S.mode = applied; return setMode(w, done); }
-      S.mode = applied; drawMode(); lastUser = Date.now() - 4500;   /* le boîtier met un instant à appliquer : relecture dans ~1,5 s */
-      setTimeout(function () { lastUser = 0; pull(); if (done) { done(err); } }, 1500);
+      /* le boîtier met un instant à appliquer : « changement en cours » reste affiché 5 s au total, puis tout est relu */
+      S.mode = applied; modeHold = true; drawMode(); lastUser = Date.now();
+      holdTm = setTimeout(function () { modeHold = false; lastUser = 0; modeAt = Date.now() - 3000; pull(); if (done) { done(err); } else { drawMode(); } }, Math.max(300, 5000 - (Date.now() - t0)));
     });
   }
   function power() {
@@ -3052,25 +3059,31 @@ button:focus { outline: none; }
     var t = zState(z);
     return '<svg class="' + (t.an ? "an-" + t.an : "") + '" viewBox="0 0 24 24" width="' + size + '" height="' + size + '" fill="none" stroke="' + t.ico + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block">' + (t.m ? t.m.svg : '<circle cx="12" cy="12" r="8"/>') + '</svg>';
   }
-  function zAct(z) {
-    var d = parseFloat(z.setpoint) - parseFloat(z.roomTemp), a = "";
-    if (z.on) {
-      if (z.mode === 4) { a = "fan"; } else if (z.mode === 5) { a = d < 0 ? "dry" : "comfort"; } else if (isNaN(d)) { a = ""; }
-      else if (z.mode === 3) { a = d > 0 ? "heat" : "comfort"; } else if (z.mode === 2) { a = d < 0 ? "cool" : "comfort"; }
-    }
-    return a;
+  function actOfUI(z, dem) {
+    /* l'Airzone dit lui-même si la zone demande (heat_demand / cold_demand / air_demand…) ; on s'y fie, et on ne compare consigne/pièce qu'en dernier recours */
+    function on(ks) { var i, v, seen = false, yes = false; for (i = 0; i < ks.length; i++) { v = dem ? dem[ks[i]] : undefined; if (v !== undefined && v !== null) { seen = true; if (Number(v) > 0 || v === true) { yes = true; } } } return seen ? yes : null; }
+    var h = on(["heat_demand", "heatStage"]), c = on(["cold_demand", "coldStage"]), d = parseFloat(z.setpoint) - parseFloat(z.roomTemp);
+    if (h === null) { h = on(["air_demand", "floor_demand"]); } if (c === null) { c = on(["air_demand"]); }
+    if (!z.on) { return ""; }
+    if (z.mode === 4) { return "fan"; }
+    if (z.mode === 3) { if (h === null) { if (isNaN(d)) { return ""; } h = d > 0; } return h ? "heat" : "comfort"; }
+    if (z.mode === 2) { if (c === null) { if (isNaN(d)) { return ""; } c = d < 0; } return c ? "cool" : "comfort"; }
+    if (z.mode === 5) { if (c === null) { if (isNaN(d)) { return ""; } c = d < 0; } return c ? "dry" : "comfort"; }
+    if (z.mode === 7) { if (h === null && c === null) { if (isNaN(d)) { return ""; } return d > 0 ? "heat" : (d < 0 ? "cool" : "comfort"); } return h ? "heat" : (c ? "cool" : "comfort"); }
+    return "";
   }
+  function zAct(z) { return actOfUI(z, z.dem); }
   function zoneOptim(az) { var k; for (k = 0; k < ZD.length; k++) { if (ZD[k] && !ZD[k].err) { ZD[k].mode = az; ZD[k].act = zAct(ZD[k]); } } }
   function zoneDraw() {
     var h, n, z, p, i, t, mb = "", ra = "";
     for (n = 0; n < ZD.length; n++) { if (ZD[n] && !ZD[n].err && (ZD[n].act === "heat" || ZD[n].act === "cool" || ZD[n].act === "fan" || ZD[n].act === "dry")) { ra = ZD[n].act; break; } }
     for (i = 0; i < MODES.length; i++) {
-      mb += '<button type="button" class="zmb' + (modeBusy && i === S.mode ? " pend" : "") + '" data-zm="' + i + '" aria-label="Mode ' + MODES[i].t + '" style="display:block;text-align:center;background:' + (i === S.mode ? "#2e3540" : "transparent") + ';border:1px solid ' + (i === S.mode ? "#d8dde6" : "transparent") + ';border-radius:12px;padding:5px 9px;margin-left:4px;color:#eceff3;font-size:12px;font-weight:bold;line-height:14px;' + (S.linked ? "" : "opacity:0.45") + '">'
+      mb += '<button type="button" class="zmb' + (modePend() && i === S.mode ? " pend" : "") + '" data-zm="' + i + '" aria-label="Mode ' + MODES[i].t + '" style="display:block;text-align:center;background:' + (i === S.mode ? "#2e3540" : "transparent") + ';border:1px solid ' + (i === S.mode ? "#d8dde6" : "transparent") + ';border-radius:12px;padding:5px 9px;margin-left:4px;color:#eceff3;font-size:12px;font-weight:bold;line-height:14px;' + (S.linked ? "" : "opacity:0.45") + '">'
         + '<svg class="' + (i === S.mode && ra && MODES[i].az !== 1 ? "an-" + ra : "") + '" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="' + MODES[i].c + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block">' + MODES[i].svg + '</svg><div>' + MODES[i].t + '</div></button>';
     }
     h = '<div style="display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:space-between;justify-content:space-between;margin:0 0 6px">'
       + '<div style="-webkit-flex:1;flex:1">' + (ZMEM ? '<button type="button" class="xbtn sm" data-z="back">← Retour : ' + esc(ZLAB[ZMEM - 1]) + '</button>' : '') + '</div>'
-      + '<div style="-webkit-flex:1;flex:1;margin-top:22px"><div style="display:-webkit-flex;display:flex;-webkit-justify-content:flex-end;justify-content:flex-end">' + mb + '</div>' + (modeBusy ? '<div style="text-align:right;font-size:12px;color:#b4bcc9;margin:2px 4px 0 0">Changement de mode en cours…</div>' : '') + '</div></div>';
+      + '<div style="-webkit-flex:1;flex:1;margin-top:22px"><div style="display:-webkit-flex;display:flex;-webkit-justify-content:flex-end;justify-content:flex-end">' + mb + '</div>' + (modePend() ? '<div style="text-align:right;font-size:12px;color:#b4bcc9;margin:2px 4px 0 0">Changement de mode en cours…</div>' : '') + '</div></div>';
     if (ZVIEW === "liste") {
       h += '<div style="display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;margin:14px -6px 0">';
       for (n = 1; n <= 5; n++) {
@@ -3104,7 +3117,7 @@ button:focus { outline: none; }
       var k, bad = 0, mi, v;
       zBusy = false;
       if (!err && t0 < modeAt + 1800) { setTimeout(zoneLoad, 1200); return; }   /* lecture partie avant la fin d'un changement de mode : périmée, on relit */
-      if (!err && d && d.length && !modeBusy) {
+      if (!err && d && d.length && !modePend()) {
         for (k = 0; k < d.length; k++) { if (d[k] && d[k].err) { bad++; if (ZD[k] && !ZD[k].err) { d[k] = ZD[k]; } } }   /* une zone muette garde ses dernières valeurs */
         ZD = d;
         if (!CZ && Date.now() - modeAt > 3000) {   /* le mode est commun : la barre suit celui lu sur les zones */
@@ -3120,7 +3133,7 @@ button:focus { outline: none; }
   function zonePoll() {
     clearTimeout(zTm); zTm = 0;
     if ($("zoneV").style.display === "none") { return; }
-    if (!modeBusy) { zoneLoad(); }
+    if (!modePend()) { zoneLoad(); }
     zTm = setTimeout(zonePoll, 30000);
   }
   function zoneShow(on) {
@@ -3161,7 +3174,7 @@ button:focus { outline: none; }
       t = t.parentNode;
     }
     if (m !== null) {
-      m = parseInt(m, 10); zoneOptim(MODES[m].az); setMode(m, function () { zoneDraw(); setTimeout(zoneLoad, 2200); }); zoneDraw(); return;
+      m = parseInt(m, 10); zoneOptim(MODES[m].az); setMode(m, function () { zoneDraw(); zoneLoad(); }); zoneDraw(); return;
     }
     if (!z) { return; }
     if (z === "back") { zoneOpen(ZMEM || 1); }
@@ -3171,6 +3184,7 @@ button:focus { outline: none; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.30", "Clim : « chauffage » seulement si l'Airzone le demande (test)", "Une zone n'est plus affichée en chauffage juste parce que la consigne dépasse de 0,1° la température : on suit la demande réellement envoyée par l'Airzone, sinon « confort ». Le message « changement de mode en cours » reste 5 secondes, puis tout est relu."],
       ["4.29", "Vrais rayons de soleil dans l'encadré Météo (test)", "Quand il fait beau : un soleil lumineux en haut de l'encadré, des faisceaux de lumière qui s'ouvrent en éventail et scintillent doucement, un halo qui respire, et quelques particules de lumière qui montent. Fini les traits qui tournent."],
       ["4.28", "Réparation : clim injoignable et zones vides (test)", "Cause : un relevé de clim pouvait être abandonné sans réponse quand un autre attendait (apparu avec le suivi de zone de l'onglet Clim) : la page restait sur « injoignable » ou les zones restaient vides. Maintenant les relevés identiques se partagent la même réponse, une zone muette garde ses dernières valeurs, et un échec isolé est retenté avant d'afficher « injoignable »."],
       ["4.27", "Changement de mode plus fiable, onglet Clim par zone (test)", "Les boutons de mode ne se bloquent plus pendant un changement (le dernier appui compte), un « changement de mode en cours… » clignote, et le changement ne fait plus qu'une requête au boîtier. L'onglet Clim de la barre de gauche affiche le mode et la température de la zone sélectionnée."],
