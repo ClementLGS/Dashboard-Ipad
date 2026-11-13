@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:3370 TDBA:211-->
+<!--TDBV:3380 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -554,7 +554,7 @@ button:focus { outline: none; }
 #setV.demoLock > *:not(.demoOv) { visibility: hidden; }
 .demoOv { background: rgba(255,255,255,0.05); border-radius: 18px; position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index: 5; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; text-align: center; font-size: 24px; font-weight: bold; color: #ffd27a; }
 #demoTag { display: none; position: fixed; right: 8px; bottom: 6px; z-index: 50; padding: 3px 9px; border-radius: 8px; font-size: 11px; font-weight: bold; letter-spacing: 0.08em; color: #ffd27a; background: rgba(0,0,0,0.45); border: 1px solid rgba(255,210,122,0.5); pointer-events: none; }
-#fbT, #imT { display: block; width: 100%; height: 96px; padding: 10px 12px; font: inherit; font-size: 18px; color: #eceff3; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.14); border-radius: 12px; resize: none; -webkit-user-select: text; user-select: text; -webkit-appearance: none; }
+#fbT { display: block; width: 100%; height: 96px; padding: 10px 12px; font: inherit; font-size: 18px; color: #eceff3; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.14); border-radius: 12px; resize: none; -webkit-user-select: text; user-select: text; -webkit-appearance: none; }
 .fbI { display: -webkit-flex; display: flex; -webkit-align-items: flex-start; align-items: flex-start; padding: 10px 12px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.10); border-radius: 12px; background: rgba(255,255,255,0.045); }
 .fbI .tg { -webkit-flex: none; flex: none; min-width: 96px; margin-right: 12px; font-size: 12px; font-weight: bold; letter-spacing: 0.06em; text-transform: uppercase; padding-top: 3px; }
 .fbI .tx { -webkit-flex: 1; flex: 1; min-width: 0; font-size: 16px; word-wrap: break-word; -webkit-user-select: text; user-select: text; }
@@ -1591,7 +1591,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("3370", 10) || 0, UI_NAME = "3.37 iPad (beta)".charAt(0) === "_" ? "?" : "3.37 iPad (beta)";
+  var UI_CODE = parseInt("3380", 10) || 0, UI_NAME = "3.38 iPad (beta)".charAt(0) === "_" ? "?" : "3.38 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2616,8 +2616,7 @@ button:focus { outline: none; }
     else if (a === "eco") { ECO = ECO ? 0 : 1; xSet("eco", ECO); idleTick(); dispDraw(); }
     else if (a === "fbAdd") { fbAdd(v); }
     else if (a === "fbDel") { fbDel(Number(v)); }
-    else if (a === "imAdd") { imAdd(); }
-    else if (a === "imDel") { imDel(Number(v)); }
+    
     else if (a === "fbSend") { fbSend(); }
   };
 
@@ -2739,7 +2738,7 @@ button:focus { outline: none; }
 
 
   /* ---------------- Idées (versions TEST seulement) : liste tenue à jour par Claude, à chaque version ---------------- */
-  var IDEES = { maj: "13/11/2026", l: [
+  var IDEES = { maj: "13/11/2026", u: [], l: [
     ["Pluie dans l'heure", "Facile", "Un bandeau « il va pleuvoir dans 20 min » sur l'accueil, à partir des prévisions déjà utilisées (Open-Meteo, pas de 15 min). Utile pour le linge, la fenêtre, la sortie.", "Mise à jour seule"],
     ["Scène « Réveil »", "Facile", "Un bouton (ou une heure) qui allume les lumières en douceur, affiche météo et agenda du jour en grand. Le pendant de « Bonne nuit ».", "Mise à jour seule"],
     ["Scène « Cinéma »", "Facile", "Un appui : lumières tamisées, chaudes, clim inchangée. Les lumières se pilotent déjà, c'est un préréglage.", "Mise à jour seule"],
@@ -2749,27 +2748,19 @@ button:focus { outline: none; }
     ["Écran qui se réveille quand tu entres", "Gros chantier", "Détection de présence avec la caméra de l'iPad (rien n'est enregistré, tout reste dans l'appli). Cool mais touche à la vie privée et demande une nouvelle autorisation iOS.", "Nécessite l'IPA"],
     ["Capteur température/humidité de la chambre", "Gros chantier", "Un petit capteur radio (Zigbee) pour connaître l'air réel de la chambre, pas seulement celui de l'Airzone. Matériel à acheter.", "IPA + matériel"]
   ] };
-  var IM = xGet("im", []), imMsg = "";
-  function ideesDraw(keep) {
-    var t = keep && $("imT") ? $("imT").value : "", j, d, h0;
-    h0 = '<div class="note" style="margin-bottom:6px;font-size:16px;color:#eceff3"><b>Tes idées</b></div><textarea id="imT" placeholder="Une idée pour le tableau de bord ? Écris-la ou dicte-la avec le micro du clavier…"></textarea>'
-      + '<div class="xrow2" style="margin-top:10px"><button type="button" class="xbtn sm" data-x="imAdd">Ajouter l\'idée</button><span class="note" style="margin-left:10px">' + esc(imMsg || "Elles restent sur la tablette et partent avec « Envoyer le diagnostic ».") + '</span></div>';
-    if (!IM.length) { h0 += '<p class="note" style="margin-top:6px">Aucune idée notée pour l\'instant.</p>'; }
-    for (j = IM.length - 1; j >= 0; j--) {
-      d = new Date(IM[j].t);
-      h0 += '<div class="fbI"><span class="tg" style="color:#e6c35c">Idée</span><span class="tx">' + esc(IM[j].m) + '<small>' + pad(d.getDate()) + "/" + pad(d.getMonth() + 1) + " à " + pad(d.getHours()) + ":" + pad(d.getMinutes()) + '</small></span><button type="button" class="rm" data-x="imDel" data-a="' + j + '" aria-label="Supprimer">\u2715</button></div>';
+  /* 3.38 : plus de saisie ici. Les idées de Clément se notent dans Feedback (bouton Idée) puis « Envoyer à Claude » ; Claude les ajoute à IDEES.u.
+     Les idées déjà saisies dans la 3.36/3.37 (clé tdb_im) sont recopiées dans Feedback, une seule fois, pour partir avec l'envoi. */
+  var IM = xGet("im", []);
+  function ideesDraw() {
+    var h0 = "", j;
+    if (IDEES.u && IDEES.u.length) {
+      h0 += '<div class="note" style="margin-bottom:8px;font-size:16px;color:#eceff3"><b>Tes idées</b></div>';
+      for (j = 0; j < IDEES.u.length; j++) { h0 += '<div class="fbI"><span class="tg" style="color:#e6c35c">Idée</span><span class="tx">' + esc(IDEES.u[j][0]) + '<small>' + esc(IDEES.u[j][1]) + '</small></span></div>'; }
+      h0 += '<div class="note" style="margin:16px 0 8px;font-size:16px;color:#eceff3"><b>Idées de Claude</b></div>';
     }
-    h0 += '<div class="note" style="margin:16px 0 8px;font-size:16px;color:#eceff3"><b>Idées de Claude</b></div>';
-    ideesClaude(h0, t);
+    h0 += '<p class="note" style="margin-bottom:10px">Pour ajouter une idée : Autre &gt; Feedback, tape ou dicte-la, appuie sur « Idée », puis « Envoyer à Claude ». Claude la range ici à la prochaine version.</p>';
+    ideesClaude(h0, "");
   }
-  function imAdd() {
-    var e = $("imT"), m = e ? String(e.value).replace(/^\s+|\s+$/g, "") : "";
-    if (!m) { imMsg = "Écris ou dicte d'abord ton idée."; ideesDraw(); return; }
-    IM.push({ t: Date.now(), m: m.substr(0, 1500) }); if (IM.length > 200) { IM.shift(); }
-    xSet("im", IM); imMsg = "Idée ajoutée."; try { e.blur(); } catch (e1) { }
-    ideesDraw();
-  }
-  function imDel(i) { if (i >= 0 && i < IM.length) { IM.splice(i, 1); xSet("im", IM); imMsg = "Idée supprimée."; ideesDraw(true); } }
   function ideesClaude(pre, t) {
     var h = '<p class="note" style="margin-bottom:12px">Mises à jour à chaque version test. Dernière mise à jour : ' + IDEES.maj + '. Dis-moi lesquelles te plaisent.</p>', i, it, col;
     for (i = 0; i < IDEES.l.length; i++) {
@@ -2777,11 +2768,16 @@ button:focus { outline: none; }
       h += '<div style="padding:12px 14px;margin-bottom:10px;border:1px solid #2f353e;border-radius:14px;background:#1a1e24"><div style="font-size:19px;font-weight:bold">' + esc(it[0]) + ' <span style="font-size:12px;font-weight:bold;color:' + col + ';border:1px solid ' + col + ';border-radius:8px;padding:1px 7px;margin-left:6px;white-space:nowrap">' + esc(it[1]) + '</span></div><div style="font-size:15px;color:#b9c2d0;margin-top:6px">' + esc(it[2]) + '</div><div class="note" style="margin-top:6px">' + esc(it[3]) + '</div></div>';
     }
     $("xB").innerHTML = pre + h;
-    if (t) { $("imT").value = t; }
   }
 
   /* ---------------- Feedback : remarques dictées (micro du clavier) ou tapées, gardées sur la tablette et jointes au diagnostic ---------------- */
   var FB = xGet("fb", []), fbMsg = "";
+  (function () {
+    var i, ok = xGet("imMig", 0);
+    if (ok || !IM.length) { return; }
+    for (i = 0; i < IM.length; i++) { FB.push({ t: IM[i].t, k: "idee", m: IM[i].m, v: "3.36 iPad (beta)" }); }
+    FB.sort(function (a, b) { return a.t - b.t; }); xSet("fb", FB); xSet("imMig", 1);
+  })();
   var FBT = { bien: ["Bien", "#5fd08a"], mal: ["À améliorer", "#ff9a8d"], idee: ["Idée", "#e6c35c"] };
   function fbDraw(keep) {
     var h, i, it, d, t = keep && $("fbT") ? $("fbT").value : "";
