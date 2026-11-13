@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:3280 TDBA:211-->
+<!--TDBV:3290 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -392,6 +392,26 @@ button:focus { outline: none; }
 .noanim .page.on, .noanim #libV, .noanim #agV, .noanim #wxV, .noanim #setV, .noanim #xV { -webkit-animation: none; animation: none; }
 
 @media (max-aspect-ratio: 1/1) { .hRow { padding-bottom: 0; } .hClim { padding: 22px 18px; } .hCast { padding: 18px; } }
+
+/* ---- 3.29 : tout se fond dans le fond d'écran choisi (menu, bandeau, cartes, boutons = voiles translucides, plus d'aplats gris opaques) ---- */
+#nav { background: transparent; border-right-color: rgba(255,255,255,0.06); }
+#top { border-bottom-color: rgba(255,255,255,0.06); }
+.tile, .perf .tile, .nb, .mi.on, .mb, .ltab, .w7k, .hb, .sw { border-color: rgba(255,255,255,0.10); }
+.tile, .perf .tile, .nb, .mi.on { background: rgba(255,255,255,0.045); }
+.nb { border-width: 1px; }
+.pw, .go, .bk, .xbtn, .sb, .hnI, .sgb, #dbg button { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.10); }
+.mb, .ltab, .w7k, .hb { background: rgba(255,255,255,0.03); }
+.nb.sel, .mb.sel, .ltab.sel, .w7d.sel, .w7k.sel, .wk.sel { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.75); }
+.nb.sel { border-width: 1px; }
+.nb:active, .mi.on:active, .hNext:active { background: rgba(255,255,255,0.12); }
+.pw.on, .xbtn.on, .sgb.o { background: #d8dde6; border-color: #d8dde6; }
+.mi { border-color: rgba(255,255,255,0.12); }
+.fr, .agD, .w7C { border-color: rgba(255,255,255,0.08); }
+.fb { background: rgba(255,255,255,0.10); }
+.sf input { background: rgba(0,0,0,0.25); border-color: rgba(255,255,255,0.10); }
+#sw { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.10); }
+#err { background: rgba(255,255,255,0.08); }
+@media (max-aspect-ratio: 1/1) { #nav { border-bottom-color: rgba(255,255,255,0.06); } }
 </style></head><body><div id="bg"><i class="al" style="left:150px;top:-120px;width:900px;height:700px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(143,163,189,0.37) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(143,163,189,0.37) 0%,rgba(0,0,0,0) 68%)"></i><i class="bl" style="left:700px;top:250px;width:900px;height:700px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(111,127,149,0.34) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(111,127,149,0.34) 0%,rgba(0,0,0,0) 68%)"></i><i class="al" style="left:-200px;top:350px;width:700px;height:600px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(160,173,191,0.24) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(160,173,191,0.24) 0%,rgba(0,0,0,0) 68%)"></i></div>
 <div id="app">
  <div id="nav">
@@ -1372,7 +1392,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("3280", 10) || 0, UI_NAME = "3.28 iPad (beta)".charAt(0) === "_" ? "?" : "3.28 iPad (beta)";
+  var UI_CODE = parseInt("3290", 10) || 0, UI_NAME = "3.29 iPad (beta)".charAt(0) === "_" ? "?" : "3.29 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
