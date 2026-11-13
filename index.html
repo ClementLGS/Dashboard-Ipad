@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:8300 TDBA:211-->
+<!--TDBV:8400 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -65,7 +65,8 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 .nf-bg { left: 50%; top: 0; width: 800px; height: 800px; margin-left: -400px; will-change: opacity; animation: nfShimmer 7s ease-in-out infinite; }
 .nf-bg svg { position: absolute; left: 0; top: 0; width: 800px; height: 800px; -webkit-transform-origin: 400px 0; transform-origin: 400px 0; will-change: transform; animation: nfSway 11s ease-in-out infinite alternate; }
 .nf-halo, .nf-core, .nf-mote { will-change: transform, opacity; }
-#fxTest { margin-top: 14px; }
+#fxTest { display: none; position: fixed; left: 128px; right: 0; bottom: 0; z-index: 60; padding: 8px 10px 6px; background: rgba(0,0,0,0.86); }
+#fxBtn { -webkit-flex: none; flex: none; margin-left: 12px; margin-right: auto; padding: 4px 11px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.25); background: rgba(255,255,255,0.06); color: #9aa3b0; font-size: 13px; }
 #fxTest h4 { font-size: 15px; color: #9aa3b0; margin: 0 0 4px; font-weight: normal; }
 #fxTag { display: none; position: fixed; right: 8px; bottom: 6px; z-index: 50; padding: 4px 10px; border-radius: 8px; font-size: 13px; font-weight: bold; color: #ffd27a; background: rgba(0,0,0,0.6); border: 1px solid rgba(255,210,122,0.5); }
 #fxTest button { margin: 3px 6px 3px 0; padding: 8px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.25); background: rgba(255,255,255,0.08); color: #eceff3; font-size: 15px; }
@@ -1750,7 +1751,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("8300", 10) || 0, UI_NAME = "4.43 iPad (beta)".charAt(0) === "_" ? "?" : "4.43 iPad (beta)";
+  var UI_CODE = parseInt("8400", 10) || 0, UI_NAME = "4.44 iPad (beta)".charAt(0) === "_" ? "?" : "4.44 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -3089,6 +3090,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Bugs (versions TEST seulement) : bugs notés dans Feedback > Bug, rangés ici par Claude avec leur état ---------------- */
   var BUGS = { maj: "13/11/2026", l: [
     /* ["Titre", "Détail", "À corriger" | "Corrigé en 4.x", "jj/mm"] */
+    ["Autre : Historique et autres écrans non défilables jusqu'en bas", "Introduit en 4.42 : le testeur de météos posé en bas d'Autre décalait les écrans (Historique, Feedback, Idées, Bugs, Affichage, Fonds, Consommation) d'environ 110 px, leur bas dépassait de l'écran. Testeur déplacé dans la page Météo (4.44) : toutes les listes redéfilent. (Signalé en direct)", "Corrigé en 4.44", "13/11"],
     ["Batterie : niveau trop lent à se mettre à jour", "Le niveau n'était relu qu'une fois par minute. Maintenant toutes les 10 secondes et à chaque toucher. (Noté dans Feedback)", "Corrigé en 4.37", "13/11"],
     ["Météo : chute de FPS avec un fond animé", "Les 22 rayons de soleil (clip-path animés, redessinés à chaque image) sont remplacés par 3 calques SVG qui n'animent que opacité et rotation, et 5 poussières au lieu de 9 : même rendu, bien moins de calcul. Non mesuré sur iPad : à confirmer par toi. Testeur d'ambiances dans Autre > Tester les météos (avec « Soleil (ancien) » pour comparer). (Signalé en direct)", "Corrigé en 4.41", "13/11"],
     ["Menu : « Clim injoignable » furtif", "En changeant de page ou de zone, le menu de gauche affichait « injoignable » une demi-seconde avant les bonnes valeurs. Il affiche « … » pendant la lecture. (Signalé en direct)", "Corrigé en 4.34", "13/11"],
@@ -3279,6 +3281,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.44", "Correctif : écrans défilables + testeur météo dans Météo (test)", "Le testeur de météos, ajouté en bas d'Autre en 4.42, poussait les pages Historique, Feedback, Idées, Bugs, Affichage, Fonds et Consommation vers le bas : leur bas sortait de l'écran et on ne pouvait plus défiler jusqu'au bout. Il est retiré d'Autre et devient un petit bouton « Tester » à côté du titre de la page Météo (panneau en bas, visible seulement sur Météo)."],
       ["4.43", "Idée « Alerte météo » notée (test)", "Vigilance Météo-France (orages, pluie-inondation…) et crues (Vigicrues) pour la Gironde, ajoutée dans Autre > Idées. Elle demandera une clé gratuite du portail API de Météo-France."],
       ["4.42", "Météo : 3 niveaux de pluie + testeur dans Autre (test)", "Bruine, pluie et forte pluie ont chacune leur ambiance (nombre, épaisseur et vitesse des gouttes, ciel plus sombre). Le niveau vient du code Open-Meteo, affiné par les mm/h de l'heure en cours. Le testeur de météos n'est plus qu'en bas de la page Autre (chips Bruine, Pluie, Forte pluie…), avec un badge pour arrêter la simulation sur la page Météo.", "13/11"],
       ["4.41", "Météo : animation ensoleillée allégée + testeur (test)", "Les rayons de soleil passent de 22 éléments animés à 3 calques SVG légers (rendu quasi identique), poussières 9 → 5, accélération matérielle forcée. Nouveau bouton « Tester les météos » dans Autre : barre pour afficher chaque ambiance (Soleil, Soleil ancien, Éclaircies, Nuageux, Pluie, Orage, Neige, Brouillard, Nuit…) et comparer les FPS avec la barre verte du haut.", "13/11"],
@@ -3458,19 +3461,20 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     lib.parentNode.insertBefore(b, lib.nextSibling);
   })();
 
-  /* testeur d'ambiances météo (versions TEST seulement, jamais dans main) : en bas de la page Autre */
+  /* testeur d'ambiances météo (versions TEST seulement, jamais dans main) : petit bouton « Tester » dans la page Météo (jamais ailleurs) */
   (function () {
-    var box = document.createElement("div"), tag = document.createElement("div"), lib = $("libMsg"),
-      L = [["", "Auto (météo réelle)"], ["sun", "Soleil"], ["sunOld", "Soleil (ancien)"], ["partly", "Éclaircies"], ["cloud", "Nuageux"], ["rain0", "Bruine"], ["rain1", "Pluie"], ["rain2", "Forte pluie"], ["storm", "Orage"], ["snow", "Neige"], ["fog", "Brouillard"], ["moon", "Nuit"], ["partlyNight", "Nuit nuageuse"]], i, h = '<h4>Tester les ambiances météo (puis va sur Météo)</h4>', names = {};
+    var box = document.createElement("div"), tag = document.createElement("div"), btn = document.createElement("button"), open = false,
+      L = [["", "Auto (météo réelle)"], ["sun", "Soleil"], ["sunOld", "Soleil (ancien)"], ["partly", "Éclaircies"], ["cloud", "Nuageux"], ["rain0", "Bruine"], ["rain1", "Pluie"], ["rain2", "Forte pluie"], ["storm", "Orage"], ["snow", "Neige"], ["fog", "Brouillard"], ["moon", "Nuit"], ["partlyNight", "Nuit nuageuse"]], i, h = '<h4>Ambiances météo : touche pour comparer</h4>', names = {};
     box.id = "fxTest"; tag.id = "fxTag";
     for (i = 0; i < L.length; i++) { h += '<button type="button" data-k="' + L[i][0] + '">' + L[i][1] + '</button>'; names[L[i][0]] = L[i][1]; }
     box.innerHTML = h; document.body.appendChild(tag);
     function paint() { var bs = box.querySelectorAll("button"), j; for (j = 0; j < bs.length; j++) { bs[j].className = bs[j].getAttribute("data-k") === NFOVR ? "on" : ""; } window.fxTagSync(); }
-    window.fxTagSync = function () { tag.style.display = NFOVR && curPage === "wx" ? "block" : "none"; tag.textContent = "Météo simulée : " + (names[NFOVR] || "") + " (toucher = arrêter)"; };
+    window.fxTagSync = function () { box.style.display = open && curPage === "wx" ? "block" : "none"; tag.style.display = NFOVR && curPage === "wx" ? "block" : "none"; tag.textContent = "Météo simulée : " + (names[NFOVR] || "") + " (toucher = arrêter)"; };
     function apply() { if (wxLast) { drawWeather(wxLast); } else { nowFx(NFOVR || "cloud"); } paint(); }
     box.onclick = function (ev) { var k = ev.target && ev.target.getAttribute ? ev.target.getAttribute("data-k") : null; if (k === null) { return; } NFOVR = k; apply(); };
     tag.onclick = function () { NFOVR = ""; apply(); };
-    lib.parentNode.insertBefore(box, lib.nextSibling); paint();
+    btn.type = "button"; btn.id = "fxBtn"; btn.textContent = "Tester"; btn.onclick = function () { open = !open; window.fxTagSync(); };
+    document.body.appendChild(box); $("wxNote").parentNode.insertBefore(btn, $("wxNote")); paint();
   })();
 
   /* barre de FPS permanente (versions TEST seulement) */
