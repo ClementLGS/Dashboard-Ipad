@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:8000 TDBA:211-->
+<!--TDBV:8100 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -37,7 +37,7 @@ button:focus { outline: none; }
 html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 #nowFx { position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; border-radius: 20px; pointer-events: none; }
 #nowFx i { position: absolute; display: block; }
-#nowFx.k-sun { background: linear-gradient(180deg, rgba(70,170,230,.34), rgba(20,90,160,.22) 55%, rgba(8,40,90,.30)); }
+#nowFx.k-sun, #nowFx.k-sunOld { background: linear-gradient(180deg, rgba(70,170,230,.34), rgba(20,90,160,.22) 55%, rgba(8,40,90,.30)); }
 #nowFx.k-partly { background: linear-gradient(180deg, rgba(70,160,220,.24), rgba(20,80,150,.16) 60%, rgba(8,40,90,.22)); }
 #nowFx.k-cloud { background: linear-gradient(180deg, rgba(140,155,180,.22), rgba(140,155,180,.05) 75%); }
 #nowFx.k-rain { background: linear-gradient(180deg, rgba(70,110,170,.20), rgba(70,110,170,.03)); }
@@ -60,6 +60,13 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 .nf-halo { left: 50%; top: -120px; width: 620px; height: 620px; margin-left: -310px; border-radius: 50%; background: radial-gradient(closest-side, rgba(200,240,255,.45), rgba(120,200,255,.14) 55%, rgba(120,200,255,0)); animation: nfBreath 9s ease-in-out infinite alternate; }
 .nf-core { left: 50%; top: -92px; width: 200px; height: 200px; margin-left: -100px; border-radius: 50%; background: radial-gradient(closest-side, #ffffff 0%, #eafaff 24%, rgba(190,235,255,.9) 40%, rgba(120,200,255,.35) 62%, rgba(100,190,255,0)); animation: nfBreath 6s ease-in-out infinite alternate; }
 .nf-bw { left: 50%; top: 0; width: 0; height: 0; }
+.nf-bg { left: 50%; top: 0; width: 800px; height: 800px; margin-left: -400px; will-change: opacity; animation: nfShimmer 7s ease-in-out infinite; }
+.nf-bg svg { position: absolute; left: 0; top: 0; width: 800px; height: 800px; -webkit-transform-origin: 400px 0; transform-origin: 400px 0; will-change: transform; animation: nfSway 11s ease-in-out infinite alternate; }
+.nf-halo, .nf-core, .nf-mote { will-change: transform, opacity; }
+#fxTest { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 8px 8px 6px; background: rgba(0,0,0,0.82); text-align: center; }
+#fxTest button { margin: 3px; padding: 9px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.25); background: rgba(255,255,255,0.08); color: #eceff3; font-size: 16px; }
+#fxTest button.on { background: #ffd27a; color: #14181e; font-weight: bold; }
+
 .nf-beam { top: 0; transform-origin: 50% 0; -webkit-clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%); clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%); animation: nfShimmer 7s ease-in-out infinite, nfSway 11s ease-in-out infinite alternate; }
 @keyframes nfSway { 0% { transform: rotate(-3.5deg); } 100% { transform: rotate(3.5deg); } }
 .nf-mote { width: 3px; height: 3px; border-radius: 50%; background: #e6f8ff; animation: nfMote 14s linear infinite; }
@@ -1736,7 +1743,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("8000", 10) || 0, UI_NAME = "4.40 iPad (beta)".charAt(0) === "_" ? "?" : "4.40 iPad (beta)";
+  var UI_CODE = parseInt("8100", 10) || 0, UI_NAME = "4.41 iPad (beta)".charAt(0) === "_" ? "?" : "4.41 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2235,7 +2242,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     fog: wl(line("M9 16h30", FOG, 3), "wdp8", ad(12)) + wl(line("M6 24h36", FOG, 3), "wdm8", ad(14)) + wl(line("M10 32h28", FOG, 3), "wdp8", ad(16)) + wl(line("M15 40h18", FOG, 3), "wdm6", ad(10))
   };
   /* ---------------- ambiance animée de l'encadré « météo actuelle » ---------------- */
-  var NFK = "";
+  var NFK = "", NFOVR = "";
   function nowFx(k) {
     if (NFK === k) { return; } NFK = k;
     var h = "", i, r = function (a, b) { return a + Math.random() * (b - a); }, e = $("nowFx");
@@ -2246,16 +2253,32 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     function flakes(n) { for (i = 0; i < n; i++) { var z = r(3, 7); h += '<i class="nf-flake" style="left:' + r(0, 98).toFixed(1) + '%;width:' + z.toFixed(1) + 'px;height:' + z.toFixed(1) + 'px;animation-duration:' + r(6, 11).toFixed(1) + 's;animation-delay:-' + r(0, 10).toFixed(1) + 's"></i>'; } }
     function stars(n) { for (i = 0; i < n; i++) { h += '<i class="nf-star" style="left:' + r(3, 96).toFixed(1) + '%;top:' + r(3, 70).toFixed(1) + '%;animation-delay:-' + r(0, 3.6).toFixed(1) + 's"></i>'; } }
     function sunny(n, amp) {
+      var a, w, l, d, al, g, G = 3, sv = [], z, id;
+      h += '<i class="nf-halo"></i>';
+      for (g = 0; g < G; g++) { sv.push(""); }
+      for (i = 0; i < n; i++) {
+        a = -70 + i * (140 / (n - 1)) + r(-4, 4); w = r(18, 70); l = r(520, 780); al = r(0.09, 0.22) * amp;
+        sv[i % G] += '<polygon transform="rotate(' + a.toFixed(1) + ')" fill="url(#nfg)" fill-opacity="' + al.toFixed(2) + '" points="' + (-w * 0.06).toFixed(1) + ',0 ' + (w * 0.06).toFixed(1) + ',0 ' + (w / 2).toFixed(1) + ',' + l.toFixed(0) + ' ' + (-w / 2).toFixed(1) + ',' + l.toFixed(0) + '"/>';
+      }
+      for (g = 0; g < G; g++) {
+        d = 6 + g * 1.7; z = 9 + g * 2.3;
+        h += '<i class="nf-bg" style="animation-duration:' + d.toFixed(1) + 's;animation-delay:-' + (g * 2.1).toFixed(1) + 's"><svg viewBox="-400 0 800 800" style="animation-duration:' + z.toFixed(1) + 's;animation-delay:-' + (g * 3.4).toFixed(1) + 's' + (g === 1 ? ';animation-direction:alternate-reverse' : '') + '"><defs><linearGradient id="nfg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e1f8ff" stop-opacity="1"/><stop offset="1" stop-color="#96d7ff" stop-opacity="0"/></linearGradient></defs>' + sv[g] + '</svg></i>';
+      }
+      h += '<i class="nf-core"></i>';
+      for (i = 0; i < 5; i++) { h += '<i class="nf-mote" style="left:' + r(8, 92).toFixed(0) + '%;top:' + r(55, 100).toFixed(0) + '%;animation-duration:' + r(10, 18).toFixed(0) + 's;animation-delay:-' + r(0, 16).toFixed(0) + 's"></i>'; }
+    }
+    function sunnyOld(n, amp) {
       var a, w, l, d, al;
       h += '<i class="nf-halo"></i>';
       for (i = 0; i < n; i++) {
         a = -70 + i * (140 / (n - 1)) + r(-4, 4); w = r(18, 70); l = r(520, 780); d = r(5, 9); al = r(0.09, 0.22) * amp;
-        h += '<i class="nf-bw" style="-webkit-transform:rotate(' + a.toFixed(1) + 'deg);transform:rotate(' + a.toFixed(1) + 'deg)"><i class="nf-beam" style="left:-' + (w / 2).toFixed(0) + 'px;width:' + w.toFixed(0) + 'px;height:' + l.toFixed(0) + 'px;background:linear-gradient(to bottom,rgba(225,248,255,' + al.toFixed(2) + '),rgba(150,215,255,0));animation-duration:' + d.toFixed(1) + 's;animation-delay:-' + r(0, d).toFixed(1) + 's"></i></i>';
+        h += '<i class="nf-bw" style="-webkit-transform:rotate(' + a.toFixed(1) + 'deg);transform:rotate(' + a.toFixed(1) + 'deg)"><i class="nf-beam" style="left:-' + (w / 2).toFixed(0) + 'px;width:' + w.toFixed(0) + 'px;height:' + l.toFixed(0) + 'px;background:linear-gradient(to bottom,rgba(225,248,255,' + al.toFixed(2) + '),rgba(150,215,255,0));animation-duration:' + d.toFixed(1) + 's,' + (d * 1.8).toFixed(1) + 's;animation-delay:-' + r(0, d).toFixed(1) + 's,-' + r(0, 11).toFixed(1) + 's"></i></i>';
       }
       h += '<i class="nf-core"></i>';
       for (i = 0; i < 9; i++) { h += '<i class="nf-mote" style="left:' + r(8, 92).toFixed(0) + '%;top:' + r(55, 100).toFixed(0) + '%;animation-duration:' + r(10, 18).toFixed(0) + 's;animation-delay:-' + r(0, 16).toFixed(0) + 's"></i>'; }
     }
-    if (k === "sun") { sunny(22, 0.9); }
+    if (k === "sunOld") { sunnyOld(22, 0.9); }
+    else     if (k === "sun") { sunny(22, 0.9); }
     else if (k === "partly") { sunny(14, 0.7); cld(3, "#ffffff", 0.16); }
     else if (k === "cloud") { cld(8, "#dfe6f0", 0.2); }
     else if (k === "rain") { cld(2, "#8d9bb3", 0.20); drops(26); }
@@ -2298,7 +2321,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     $("nowD").innerHTML = p1.join(" · ") + (p2.length ? "<br>" + p2.join(" · ") : "");
     $("nowMsg").style.display = "none"; $("nowBox").style.display = "block";
     $("hIco").innerHTML = ICO ? ICONS_A[m.k] : ICONS[m.k];
-    nowFx(m.k);
+    nowFx(NFOVR || m.k);
     $("hT").textContent = rnd(n.temp) + "°";
     $("hP").innerHTML = m.t + "<br>" + rnd(t.hi) + "° / " + rnd(t.lo) + "°";
 
@@ -3047,7 +3070,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var BUGS = { maj: "13/11/2026", l: [
     /* ["Titre", "Détail", "À corriger" | "Corrigé en 4.x", "jj/mm"] */
     ["Batterie : niveau trop lent à se mettre à jour", "Le niveau n'était relu qu'une fois par minute. Maintenant toutes les 10 secondes et à chaque toucher. (Noté dans Feedback)", "Corrigé en 4.37", "13/11"],
-    ["Météo : chute de FPS avec un fond animé", "Le fond d'écran animé et l'animation de l'encadré météo tournent ensemble (voulu). L'encadré passe devant le fond, plus opaque (4.38, 4.40). Si ça rame encore, on allège l'animation de l'encadré. (Signalé en direct)", "À corriger", "13/11"],
+    ["Météo : chute de FPS avec un fond animé", "Les 22 rayons de soleil (clip-path animés, redessinés à chaque image) sont remplacés par 3 calques SVG qui n'animent que opacité et rotation, et 5 poussières au lieu de 9 : même rendu, bien moins de calcul. Non mesuré sur iPad : à confirmer par toi. Testeur d'ambiances dans Autre > Tester les météos (avec « Soleil (ancien) » pour comparer). (Signalé en direct)", "Corrigé en 4.41", "13/11"],
     ["Menu : « Clim injoignable » furtif", "En changeant de page ou de zone, le menu de gauche affichait « injoignable » une demi-seconde avant les bonnes valeurs. Il affiche « … » pendant la lecture. (Signalé en direct)", "Corrigé en 4.34", "13/11"],
     ["Zones toutes en « chauffage » à tort", "L'appli affichait chauffage alors que l'Airzone disait confort (consigne 22°, pièce 21,9°). Elle suit maintenant la demande réelle de l'Airzone. (Signalé en direct)", "Corrigé en 4.31", "13/11"],
     ["Barre de modes pas à jour", "Après un changement de mode, la barre de sélection pouvait rester sur l'ancien mode alors que les zones affichaient le bon. (Signalé en direct)", "Corrigé en 4.29", "13/11"],
@@ -3236,6 +3259,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.41", "Météo : animation ensoleillée allégée + testeur (test)", "Les rayons de soleil passent de 22 éléments animés à 3 calques SVG légers (rendu quasi identique), poussières 9 → 5, accélération matérielle forcée. Nouveau bouton « Tester les météos » dans Autre : barre pour afficher chaque ambiance (Soleil, Soleil ancien, Éclaircies, Nuageux, Pluie, Orage, Neige, Brouillard, Nuit…) et comparer les FPS avec la barre verte du haut.", "13/11"],
       ["4.40", "Météo : les deux animations tournent à nouveau (test)", "Le fond d'écran animé n'est plus figé sur la page Météo : fond et encadré animés tournent ensemble, l'encadré de gauche passe devant. Le bug de FPS est remis « à corriger » dans Bugs, en attendant ton ressenti."],
       ["4.39", "Historique des bugs et du feedback rangés (test)", "Tous les bugs corrigés aujourd'hui sont dans Bugs > Historique (y compris ceux repérés en direct). Feedback traité : batterie trop lente (corrigé en 4.37) et encadré météo animé devant le fond d'écran (réalisé en 4.38, rangé dans Idées > Historique)."],
       ["4.38", "Météo plus fluide avec un fond animé (test)", "Sur la page Météo, le fond d'écran animé est figé et l'encadré de gauche passe devant, plus opaque : une seule animation tourne à la fois, donc moins de chute de FPS. Feedback de la 4.33 traité : « Encadré animé de la météo superpose le fond écran »."],
@@ -3409,6 +3433,25 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
       if (window.TSIM) { noteErr(mk("E99", "Simulation lancée depuis Autre"), "sim"); $("fpsBar").style.display = "none"; }
       else { ACT.sim = ""; drawErr(); }
     };
+    lib.parentNode.insertBefore(b, lib.nextSibling);
+  })();
+
+  /* testeur d'ambiances météo (versions TEST seulement, jamais dans main) */
+  (function () {
+    var bar = document.createElement("div"), b = document.createElement("button"), lib = $("libMsg"),
+      L = [["", "Auto"], ["sun", "Soleil"], ["sunOld", "Soleil (ancien)"], ["partly", "Éclaircies"], ["cloud", "Nuageux"], ["rain", "Pluie"], ["storm", "Orage"], ["snow", "Neige"], ["fog", "Brouillard"], ["moon", "Nuit"], ["partlyNight", "Nuit nuageuse"], ["x", "Fermer"]], i, h = "";
+    bar.id = "fxTest";
+    for (i = 0; i < L.length; i++) { h += '<button type="button" data-k="' + L[i][0] + '">' + L[i][1] + '</button>'; }
+    bar.innerHTML = h; document.body.appendChild(bar);
+    function paint() { var bs = bar.querySelectorAll("button"), j; for (j = 0; j < bs.length; j++) { bs[j].className = bs[j].getAttribute("data-k") === NFOVR && bs[j].getAttribute("data-k") !== "x" ? "on" : ""; } }
+    bar.onclick = function (ev) {
+      var t = ev.target, k = t && t.getAttribute ? t.getAttribute("data-k") : null;
+      if (k === null) { return; }
+      if (k === "x") { NFOVR = ""; bar.style.display = "none"; if (wxLast) { drawWeather(wxLast); } return; }
+      NFOVR = k; paint(); if (wxLast) { drawWeather(wxLast); } else { nowFx(k || "cloud"); }
+    };
+    b.type = "button"; b.id = "fxTestBtn"; b.className = "xbtn sm"; b.style.marginTop = "12px"; b.style.marginLeft = "10px"; b.textContent = "Tester les météos";
+    b.onclick = function () { go("wx"); bar.style.display = "block"; paint(); };
     lib.parentNode.insertBefore(b, lib.nextSibling);
   })();
 
