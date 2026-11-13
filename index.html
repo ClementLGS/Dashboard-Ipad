@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:5000 TDBA:211-->
+<!--TDBV:5100 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -1667,7 +1667,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     lum: "Lumières — allume, éteins et règle la couleur de la LED et de la lampe Lego, ou éteins tout d'un appui.",
     wx: "Météo — les conditions du moment et les prévisions des prochaines heures, pour t'organiser sans sortir le téléphone.",
     lib: "Autre — la bibliothèque des modules : infos, réglages d'écran et idées à venir. Chaque module a sa propre fenêtre.",
-    veille: "Veille — éteint l'affichage pour la nuit ; un appui le réveille."
+    veille: "Veille — éteint l'affichage pour la nuit ; un simple toucher le réveille, et il se met en veille seul après 2 min sans toucher."
   };
   function demoBub(t) { var d = document.createElement("div"); d.className = "demoB"; d.innerHTML = '<b>i</b><span>' + esc(t) + '</span>'; return d; }
   function demoSync() {
@@ -1737,7 +1737,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("5000", 10) || 0, UI_NAME = "5.0 iPad".charAt(0) === "_" ? "?" : "5.0 iPad";
+  var UI_CODE = parseInt("5100", 10) || 0, UI_NAME = "5.1 iPad".charAt(0) === "_" ? "?" : "5.1 iPad";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2141,19 +2141,29 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     $("slp").style.display = "none"; $("app").style.display = ""; $("bg").style.display = "";
     for (i = 0; i < IVS.length; i++) { IVS[i].id = _si.call(window, IVS[i].f, IVS[i].ms); }
     lastMin = -1; tick(); batDraw(); pull(); loadLum(); loadWeather(); loadAgenda();
+    try { if (window.veilleArm) { window.veilleArm(); } } catch (e) { }
   }
+  /* réveil : un simple toucher de l'écran suffit */
   (function () {
-    var p = $("slp"), bar = $("slP"), t0 = 0, tm = 0;
-    function cancel() { clearTimeout(tm); t0 = 0; bar.style.display = "none"; bar.style.width = "0"; }
-    function tick() {
-      var e = Date.now() - t0;
-      bar.style.width = Math.min(100, e / 30) + "%";
-      if (e >= 3000) { cancel(); sleepOff(); } else { tm = setTimeout(tick, 100); }
+    var p = $("slp"), bar = $("slP");
+    function wake(ev) {
+      if (!SLEEP) { return; }
+      if (ev && ev.preventDefault && ev.cancelable !== false) { ev.preventDefault(); }
+      bar.style.display = "none"; bar.style.width = "0";
+      sleepOff();
     }
-    function start(ev) { if (!SLEEP || t0) { return; } if (ev.preventDefault) { ev.preventDefault(); } t0 = Date.now(); bar.style.display = "block"; tick(); }
-    p.addEventListener("touchstart", start); p.addEventListener("mousedown", start);
-    p.addEventListener("touchend", cancel); p.addEventListener("touchcancel", cancel); p.addEventListener("mouseup", cancel); p.addEventListener("mouseleave", cancel);
+    p.addEventListener("touchstart", wake); p.addEventListener("mousedown", wake);
     p.addEventListener("contextmenu", function (ev) { ev.preventDefault(); });
+  })();
+  /* veille automatique : après 2 min sans aucun toucher, l'écran passe en veille */
+  (function () {
+    var IDLE = 120000, tm = 0;
+    function arm() { clearTimeout(tm); if (!SLEEP) { tm = setTimeout(function () { if (!SLEEP) { sleepOn(); } }, IDLE); } }
+    function touch() { if (!SLEEP) { arm(); } }
+    document.addEventListener("touchstart", touch, true); document.addEventListener("touchmove", touch, true);
+    document.addEventListener("mousedown", touch, true); document.addEventListener("keydown", touch, true);
+    window.veilleArm = arm;
+    arm();
   })();
 
   loadLum(); setInterval(slow(pw("Lumières", loadLum)), 30000);
@@ -3168,6 +3178,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["5.1", "Veille automatique après 2 min", "Sans aucun toucher pendant 2 minutes, l’écran passe en veille tout seul ; un simple toucher le réveille (plus besoin de maintenir 3 secondes)."],
       ["5.0", "Version 5.0 : Clim par zone et météo animée (stable)", "Clim : plan de la maison avec une pastille par zone, page Clim réglable zone par zone (double toucher = allume / éteint), mode Stop à la place d'Auto, « chauffage » seulement quand l'Airzone le demande, barre de progression pendant un changement de mode, relevés plus réactifs. Météo : ambiance animée dans l'encadré « météo actuelle » (soleil avec rayons, nuages, bruine / pluie / forte pluie selon l'intensité, orage, neige, brouillard, nuit), page Météo plus fluide. Batterie relue toutes les 10 secondes, Feedback envoyé automatiquement à Claude, mode démonstration avec pop-up. Les outils de test (barre FPS, simulation d'erreur, testeur de météos, Idées, Bugs) restent réservés à la version test."],
       ["4.2", "Catégorie Bug dans Feedback", "Un quatrième bouton, « Bug », pour noter un souci (affichage, lenteur, erreur) : il part avec les autres remarques vers Claude."],
       ["4.1", "Idées rangées, Feedback allégé", "Tes idées notées dans Feedback (Carte des zones de Clim, Mode première fois, Intégration de Claude, Catégorie bug) sont rangées dans Idées. Une idée déjà rangée disparaît de Feedback."],
