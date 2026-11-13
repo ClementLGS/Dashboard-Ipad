@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:3290 TDBA:211-->
+<!--TDBV:3300 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -412,7 +412,46 @@ button:focus { outline: none; }
 #sw { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.10); }
 #err { background: rgba(255,255,255,0.08); }
 @media (max-aspect-ratio: 1/1) { #nav { border-bottom-color: rgba(255,255,255,0.06); } }
-</style></head><body><div id="bg"><i class="al" style="left:150px;top:-120px;width:900px;height:700px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(143,163,189,0.37) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(143,163,189,0.37) 0%,rgba(0,0,0,0) 68%)"></i><i class="bl" style="left:700px;top:250px;width:900px;height:700px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(111,127,149,0.34) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(111,127,149,0.34) 0%,rgba(0,0,0,0) 68%)"></i><i class="al" style="left:-200px;top:350px;width:700px;height:600px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(160,173,191,0.24) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(160,173,191,0.24) 0%,rgba(0,0,0,0) 68%)"></i></div>
+
+/* ---- 3.30 : fonds animés. Trois grands halos qui dérivent lentement (déplacement seul, calculé par la puce graphique) ---- */
+#bg b { position: absolute; display: none; border-radius: 50%; will-change: transform; }
+#bg.w-a-aurore b, #bg.w-a-ocean b, #bg.w-a-braise b, #bg.w-a-nebuleuse b, #bg.w-a-brume b { display: block; }
+#bg .h1 { left: -15%; top: -25%; width: 75%; height: 85%; -webkit-animation: wa1 46s ease-in-out infinite; animation: wa1 46s ease-in-out infinite; }
+#bg .h2 { left: 45%; top: 20%; width: 80%; height: 90%; -webkit-animation: wa2 58s ease-in-out infinite; animation: wa2 58s ease-in-out infinite; }
+#bg .h3 { left: 10%; top: 55%; width: 70%; height: 75%; -webkit-animation: wa3 70s ease-in-out infinite; animation: wa3 70s ease-in-out infinite; }
+@-webkit-keyframes wa1 { 0% { -webkit-transform: translate3d(0,0,0); } 50% { -webkit-transform: translate3d(34%,22%,0); } 100% { -webkit-transform: translate3d(0,0,0); } }
+@keyframes wa1 { 0% { transform: translate3d(0,0,0); } 50% { transform: translate3d(34%,22%,0); } 100% { transform: translate3d(0,0,0); } }
+@-webkit-keyframes wa2 { 0% { -webkit-transform: translate3d(0,0,0); } 50% { -webkit-transform: translate3d(-42%,-18%,0); } 100% { -webkit-transform: translate3d(0,0,0); } }
+@keyframes wa2 { 0% { transform: translate3d(0,0,0); } 50% { transform: translate3d(-42%,-18%,0); } 100% { transform: translate3d(0,0,0); } }
+@-webkit-keyframes wa3 { 0% { -webkit-transform: translate3d(0,0,0); } 50% { -webkit-transform: translate3d(30%,-32%,0); } 100% { -webkit-transform: translate3d(0,0,0); } }
+@keyframes wa3 { 0% { transform: translate3d(0,0,0); } 50% { transform: translate3d(30%,-32%,0); } 100% { transform: translate3d(0,0,0); } }
+.w-a-aurore { background: radial-gradient(ellipse at 20% 10%, rgba(52,190,140,.28), rgba(0,0,0,0) 55%), radial-gradient(ellipse at 85% 60%, rgba(130,90,220,.24), rgba(0,0,0,0) 55%), #071015; }
+#bg.w-a-aurore { background: #071015; }
+#bg.w-a-aurore .h1 { background: radial-gradient(closest-side, rgba(52,200,145,.36), rgba(0,0,0,0)); }
+#bg.w-a-aurore .h2 { background: radial-gradient(closest-side, rgba(130,90,225,.32), rgba(0,0,0,0)); }
+#bg.w-a-aurore .h3 { background: radial-gradient(closest-side, rgba(40,150,200,.26), rgba(0,0,0,0)); }
+.w-a-ocean { background: radial-gradient(ellipse at 25% 20%, rgba(30,120,190,.34), rgba(0,0,0,0) 55%), radial-gradient(ellipse at 80% 80%, rgba(20,170,170,.24), rgba(0,0,0,0) 55%), #06111a; }
+#bg.w-a-ocean { background: #06111a; }
+#bg.w-a-ocean .h1 { background: radial-gradient(closest-side, rgba(30,120,200,.40), rgba(0,0,0,0)); }
+#bg.w-a-ocean .h2 { background: radial-gradient(closest-side, rgba(20,175,175,.28), rgba(0,0,0,0)); }
+#bg.w-a-ocean .h3 { background: radial-gradient(closest-side, rgba(60,90,210,.30), rgba(0,0,0,0)); }
+.w-a-braise { background: radial-gradient(ellipse at 30% 90%, rgba(220,90,30,.36), rgba(0,0,0,0) 55%), radial-gradient(ellipse at 80% 30%, rgba(190,50,60,.22), rgba(0,0,0,0) 55%), #110908; }
+#bg.w-a-braise { background: #110908; }
+#bg.w-a-braise .h1 { background: radial-gradient(closest-side, rgba(190,55,60,.30), rgba(0,0,0,0)); }
+#bg.w-a-braise .h2 { background: radial-gradient(closest-side, rgba(225,100,30,.34), rgba(0,0,0,0)); }
+#bg.w-a-braise .h3 { background: radial-gradient(closest-side, rgba(240,150,50,.22), rgba(0,0,0,0)); }
+.w-a-nebuleuse { background: radial-gradient(ellipse at 25% 25%, rgba(200,70,160,.28), rgba(0,0,0,0) 55%), radial-gradient(ellipse at 80% 70%, rgba(80,90,230,.30), rgba(0,0,0,0) 55%), #0a0814; }
+#bg.w-a-nebuleuse { background: #0a0814; }
+#bg.w-a-nebuleuse .h1 { background: radial-gradient(closest-side, rgba(205,70,165,.32), rgba(0,0,0,0)); }
+#bg.w-a-nebuleuse .h2 { background: radial-gradient(closest-side, rgba(80,95,235,.34), rgba(0,0,0,0)); }
+#bg.w-a-nebuleuse .h3 { background: radial-gradient(closest-side, rgba(150,80,230,.26), rgba(0,0,0,0)); }
+.w-a-brume { background: radial-gradient(ellipse at 25% 25%, rgba(150,165,190,.26), rgba(0,0,0,0) 55%), radial-gradient(ellipse at 80% 70%, rgba(110,125,150,.24), rgba(0,0,0,0) 55%), #101317; }
+#bg.w-a-brume { background: #101317; }
+#bg.w-a-brume .h1 { background: radial-gradient(closest-side, rgba(150,168,195,.30), rgba(0,0,0,0)); }
+#bg.w-a-brume .h2 { background: radial-gradient(closest-side, rgba(112,128,152,.30), rgba(0,0,0,0)); }
+#bg.w-a-brume .h3 { background: radial-gradient(closest-side, rgba(165,178,198,.20), rgba(0,0,0,0)); }
+.wpT { font-size: 12px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: #8f98a5; margin: 4px 0 4px; }
+</style></head><body><div id="bg"><b class="h1"></b><b class="h2"></b><b class="h3"></b><i class="al" style="left:150px;top:-120px;width:900px;height:700px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(143,163,189,0.37) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(143,163,189,0.37) 0%,rgba(0,0,0,0) 68%)"></i><i class="bl" style="left:700px;top:250px;width:900px;height:700px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(111,127,149,0.34) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(111,127,149,0.34) 0%,rgba(0,0,0,0) 68%)"></i><i class="al" style="left:-200px;top:350px;width:700px;height:600px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(160,173,191,0.24) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(160,173,191,0.24) 0%,rgba(0,0,0,0) 68%)"></i></div>
 <div id="app">
  <div id="nav">
   <button type="button" class="nb" data-p="home"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8M5 9.5V21h5v-6h4v6h5V9.5"/></svg>Accueil</span></button>
@@ -1392,7 +1431,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("3290", 10) || 0, UI_NAME = "3.29 iPad (beta)".charAt(0) === "_" ? "?" : "3.29 iPad (beta)";
+  var UI_CODE = parseInt("3300", 10) || 0, UI_NAME = "3.30 iPad (beta)".charAt(0) === "_" ? "?" : "3.30 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -1768,7 +1807,7 @@ button:focus { outline: none; }
   }
   function sleepOn() {
     var i;
-    SLEEP = 1;
+    SLEEP = 1; $("bg").style.display = "none";
     for (i = 0; i < IVS.length; i++) { _ci.call(window, IVS[i].id); }
     $("app").style.display = "none"; $("bg").style.display = "none";
     $("slp").style.display = "-webkit-flex"; $("slp").style.display = "flex";
@@ -1779,7 +1818,7 @@ button:focus { outline: none; }
   function sleepOff() {
     var i;
     if (!SLEEP) { return; }
-    SLEEP = 0; clearTimeout(slTm);
+    SLEEP = 0; $("bg").style.display = ""; clearTimeout(slTm);
     try { if (window.Native && window.Native.setSleep) { window.Native.setSleep(false); } } catch (e) { }
     $("slp").style.display = "none"; $("app").style.display = ""; $("bg").style.display = "";
     for (i = 0; i < IVS.length; i++) { IVS[i].id = _si.call(window, IVS[i].f, IVS[i].ms); }
@@ -2281,13 +2320,19 @@ button:focus { outline: none; }
     raf(f);
   }
   var WALLS = [["nuit", "Nuit"], ["aurore", "Aurore"], ["crepuscule", "Crépuscule"], ["ocean", "Océan"], ["foret", "Forêt"], ["braise", "Braise"], ["brume", "Brume"], ["etoiles", "Étoiles"], ["minuit", "Minuit"]];
+  var WALLA = [["a-aurore", "Aurore"], ["a-ocean", "Océan"], ["a-braise", "Braise"], ["a-nebuleuse", "Nébuleuse"], ["a-brume", "Brume"]];
   var WALL = xGet("wall", "nuit");
   function wallApply() { $("bg").className = "w-" + WALL; }
   wallApply();
   function wallDraw() {
-    var h = '<div class="wpg">', i;
-    for (i = 0; i < WALLS.length; i++) { h += '<div class="wpi' + (WALL === WALLS[i][0] ? " sel" : "") + '"><button type="button" data-x="wall" data-a="' + WALLS[i][0] + '"><div class="wp w-' + WALLS[i][0] + '"></div>' + WALLS[i][1] + '</button></div>'; }
-    h += '</div><p class="note" style="margin-top:8px">En mode léger (Autre > Affichage) les cartes sont unies : le fond ne se voit qu\'entre elles. Désactive le mode léger pour le voir à travers.</p>';
+    var h = "";
+    function grp(t, L) {
+      var i; h += '<div class="wpT">' + t + '</div><div class="wpg">';
+      for (i = 0; i < L.length; i++) { h += '<div class="wpi' + (WALL === L[i][0] ? " sel" : "") + '"><button type="button" data-x="wall" data-a="' + L[i][0] + '"><div class="wp w-' + L[i][0] + '"></div>' + L[i][1] + '</button></div>'; }
+      h += '</div>';
+    }
+    grp("Animés", WALLA); grp("Fixes", WALLS);
+    h += '<p class="note" style="margin-top:8px">Les fonds animés bougent très lentement (un aller-retour en une minute environ) et s\'arrêtent pendant la veille. Si la tablette rame, reviens à un fond fixe.</p>';
     $("xB").innerHTML = h;
   }
   var xMod = "affichage";
