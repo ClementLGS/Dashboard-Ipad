@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:5900 TDBA:211-->
+<!--TDBV:6100 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -84,7 +84,6 @@ button:focus { outline: none; }
 .mb:last-child { margin-right: 0; }
 .mb svg { width: 24px; height: 24px; display: block; margin-bottom: 2px; }
 .mb.sel { background: #262b33; border-color: #b9c2d0; }
-.mb.sel.st-comfort { border-color: #4fbf7a; }
 .mb.sel.st-heat { border-color: #e58a5e; }
 .mb.sel.st-cool { border-color: #6fb3d9; }
 .mb.sel.st-fan, .mb.sel.st-dry { border-color: #d8dde6; }
@@ -784,6 +783,7 @@ button:focus { outline: none; }
     });
   }
   function view(z) {
+    if (z.zoneID !== undefined && z.master_zoneID) { MASTERC[z.zoneID] = z.master_zoneID; }
     /* « tourne vraiment » : l'Airzone indique la demande de la zone (air_demand, floor_demand, cold/heat_demand, étages) ; null si le boîtier ne le dit pas */
     var keys = ["air_demand", "floor_demand", "cold_demand", "heat_demand", "coldStage", "heatStage"], dem = {}, has = false, i, run = null, any = false;
     for (i = 0; i < keys.length; i++) { if (z[keys[i]] !== undefined && z[keys[i]] !== null) { dem[keys[i]] = z[keys[i]]; has = true; if (Number(z[keys[i]]) > 0 || z[keys[i]] === true) { any = true; } } }
@@ -806,9 +806,16 @@ button:focus { outline: none; }
     for (k in cmd) { if (cmd.hasOwnProperty(k)) { if (k !== "zone") { n++; } if (!ok[k]) { return cb(E(400, "commande inconnue")); } } }
     if (!n) { return cb(E(400, "commande inconnue")); }
     if (cmd.zone !== undefined) { zid = parseInt(cmd.zone, 10); if (!(zid >= 1 && zid <= 8)) { return cb(E(400, "zone inconnue")); } }
+    if (n === 1 && ("mode" in cmd) && MODES.indexOf(cmd.mode) >= 0 && MASTERC[zid]) {   /* changement de mode seul : maître déjà connu, une lecture de moins */
+      return az("PUT", { systemID: sys, zoneID: MASTERC[zid], mode: cmd.mode }, function (e1) {
+        if (e1) { return cb(e1); }
+        readZone(zid, function (e3, z3) { if (e3) { return cb(e3); } cb(null, view(z3)); });
+      });
+    }
     readZone(zid, function (err, z) {
       var clean = {}, has = false, sp, lo, hi, step2, body, master;
       if (err) { return cb(err); }
+      MASTERC[zid] = z.master_zoneID || zid;
       if ("mode" in cmd && MODES.indexOf(cmd.mode) < 0) { return cb(E(400, "mode inconnu")); }
       if ("setpoint" in cmd) {
         sp = parseFloat(cmd.setpoint);
@@ -833,15 +840,29 @@ button:focus { outline: none; }
   }
 
   /* toutes les zones d'un coup (plan de la maison) : relevés un par un, le boîtier n'aime pas les requêtes en parallèle */
+  var ALLONE_BAD = false, MASTERC = {};
   function allZones(cb) {
     var out = [], n = 1, bad = 0;
-    (function next() {
+    function slow() { out = []; n = 1; bad = 0; next(); }
+    if (!ALLONE_BAD) {
+      az("POST", { systemID: parseInt(cfg().system, 10) || 1, zoneID: 0 }, function (e0, j0) {
+        var d = (!e0 && j0 && j0.data) || [], k, byId = {}, ok = 0, v;
+        for (k = 0; k < d.length; k++) { if (d[k] && d[k].zoneID !== undefined) { byId[d[k].zoneID] = d[k]; } }
+        for (k = 1; k <= 5; k++) { if (byId[k]) { ok++; } }
+        if (ok < 1) { ALLONE_BAD = true; return slow(); }
+        for (k = 1; k <= 5; k++) { if (byId[k]) { v = view(byId[k]); v.n = k; out.push(v); } else { out.push({ n: k, err: 1 }); } }
+        cb(null, out);
+      });
+      return;
+    }
+    slow();
+    function next() {
       if (n > 5) { return cb(bad === 5 ? E(502, "aucune zone ne répond") : null, out); }
       readZone(n, function (err, z) {
         if (err) { bad++; out.push({ n: n, err: 1 }); } else { var v = view(z); v.n = n; out.push(v); }
         n++; next();
       });
-    })();
+    }
   }
 
   /* ---------- Météo ---------- */
@@ -1466,7 +1487,8 @@ button:focus { outline: none; }
   function call(method, url, body, cb) {
     if (url.split("?")[0] !== "/api/clim" && url !== "/api/zones") { return callRaw(method, url, body, cb, false); }
     if (method === "GET" && CQ.length) { return; }   /* un seul relevé en attente suffit */
-    CQ.push({ m: method, u: url, b: body, cb: cb }); cnext();
+    if (method === "GET") { CQ.push({ m: method, u: url, b: body, cb: cb }); } else { CQ.unshift({ m: method, u: url, b: body, cb: cb }); }   /* un ordre passe devant les relevés en attente */
+    cnext();
   }
 
   /* ---------------- fenêtre de diagnostic ---------------- */
@@ -1642,7 +1664,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("5900", 10) || 0, UI_NAME = "4.19 iPad (beta)".charAt(0) === "_" ? "?" : "4.19 iPad (beta)";
+  var UI_CODE = parseInt("6100", 10) || 0, UI_NAME = "4.21 iPad (beta)".charAt(0) === "_" ? "?" : "4.21 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2497,15 +2519,21 @@ button:focus { outline: none; }
       });
     }, 450);
   }
-  function setMode(i) {
-    if (!S.linked || modeBusy || i === S.mode) { return; }
+  var modeWant = -1;
+  function setMode(i, done) {
+    if (!S.linked) { say("Clim injoignable pour l'instant, réessaie dans un instant.", true); return; }
+    if (modeBusy) { if (i !== S.mode) { modeWant = i; S.mode = i; drawMode(); } return; }   /* un changement est déjà en cours : le dernier clic sera appliqué ensuite */
+    if (i === S.mode) { return; }
     var prev = S.mode;
-    modeBusy = true; S.mode = i; drawMode(); lastUser = Date.now();
+    modeBusy = true; modeWant = -1; S.mode = i; drawMode(); lastUser = Date.now();
     call("POST", "/api/clim", CZ ? { zone: CZ, mode: MODES[i].az } : { mode: MODES[i].az }, function (err) {
-      modeBusy = false;
-      if (err) { S.mode = prev; say("Mode refusé [" + err.code + "] : " + err.message, true); }
+      var w = modeWant, applied = err ? prev : i;
+      modeBusy = false; modeWant = -1;
+      if (err) { say("Mode refusé [" + err.code + "] : " + err.message, true); }
       else { say("Mode : " + MODES[i].t, false); }
-      drawMode(); lastUser = 0; pull();
+      if (w >= 0 && w !== applied) { S.mode = applied; return setMode(w, done); }
+      S.mode = applied; drawMode(); lastUser = 0; pull();
+      if (done) { done(err); }
     });
   }
   function power() {
@@ -2902,23 +2930,33 @@ button:focus { outline: none; }
     if (z && z.mode === 1) { k = "stop"; col = "#ff7a70"; }
     else if (z && z.on) {
       if (z.act === "heat" || z.act === "cool" || z.act === "fan" || z.act === "dry") { k = "run"; col = m ? m.c : "#d8dde6"; an = z.act; }
-      else { k = "comfort"; col = "#4fbf7a"; }
+      else { k = "comfort"; col = "#d8dde6"; }
     }
-    return { k: k, col: col, an: an, m: m, ico: z && z.on && m ? m.c : (k === "stop" ? "#ff7a70" : "#5b6270"), bg: k === "run" ? col : (k === "comfort" ? "#4fbf7a" : "") };
+    return { k: k, col: col, an: an, m: m, ico: z && z.on && m ? m.c : (k === "stop" ? "#ff7a70" : "#5b6270"), bg: k === "run" ? col : "" };
   }
   function zRgba(hex, a) { var n = parseInt(hex.substr(1), 16); return "rgba(" + (n >> 16) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + ")"; }
   function zIco(z, size) {
     var t = zState(z);
     return '<svg class="' + (t.an ? "an-" + t.an : "") + '" viewBox="0 0 24 24" width="' + size + '" height="' + size + '" fill="none" stroke="' + t.ico + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block">' + (t.m ? t.m.svg : '<circle cx="12" cy="12" r="8"/>') + '</svg>';
   }
+  function zAct(z) {
+    var d = parseFloat(z.setpoint) - parseFloat(z.roomTemp), a = "";
+    if (z.on) {
+      if (z.mode === 4) { a = "fan"; } else if (z.mode === 5) { a = d < 0 ? "dry" : "comfort"; } else if (isNaN(d)) { a = ""; }
+      else if (z.mode === 3) { a = d > 0 ? "heat" : "comfort"; } else if (z.mode === 2) { a = d < 0 ? "cool" : "comfort"; }
+    }
+    return a;
+  }
+  function zoneOptim(az) { var k; for (k = 0; k < ZD.length; k++) { if (ZD[k] && !ZD[k].err) { ZD[k].mode = az; ZD[k].act = zAct(ZD[k]); } } }
   function zoneDraw() {
-    var h, n, z, p, i, t, mb = "";
+    var h, n, z, p, i, t, mb = "", ra = "";
+    for (n = 0; n < ZD.length; n++) { if (ZD[n] && !ZD[n].err && (ZD[n].act === "heat" || ZD[n].act === "cool" || ZD[n].act === "fan" || ZD[n].act === "dry")) { ra = ZD[n].act; break; } }
     for (i = 0; i < MODES.length; i++) {
       mb += '<button type="button" data-zm="' + i + '" aria-label="Mode ' + MODES[i].t + '" style="display:block;text-align:center;background:' + (i === S.mode ? "#2e3540" : "transparent") + ';border:1px solid ' + (i === S.mode ? "#d8dde6" : "transparent") + ';border-radius:12px;padding:5px 9px;margin-left:4px;color:#eceff3;font-size:12px;font-weight:bold;line-height:14px;' + (S.linked ? "" : "opacity:0.45") + '">'
-        + '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="' + MODES[i].c + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + MODES[i].svg + '</svg><div>' + MODES[i].t + '</div></button>';
+        + '<svg class="' + (i === S.mode && ra && MODES[i].az !== 1 ? "an-" + ra : "") + '" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="' + MODES[i].c + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block">' + MODES[i].svg + '</svg><div>' + MODES[i].t + '</div></button>';
     }
     h = '<div style="display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:space-between;justify-content:space-between;margin:0 0 6px"><div>'
-      + '<div style="display:-webkit-flex;display:flex"><button type="button" class="xbtn sm" data-z="view">' + (ZVIEW === "plan" ? "Afficher en liste" : "Afficher le plan") + '</button>'
+      + '<div style="display:-webkit-flex;display:flex">'
       + (ZMEM ? '<button type="button" class="xbtn sm" data-z="back">← Retour : ' + esc(ZLAB[ZMEM - 1]) + '</button>' : '') + '</div></div>'
       + '<div style="display:-webkit-flex;display:flex;margin-top:22px">' + mb + '</div></div>';
     if (ZVIEW === "liste") {
@@ -2933,9 +2971,9 @@ button:focus { outline: none; }
           + '<div style="font-size:20px;font-weight:bold;margin-top:6px;color:' + (t.k === "off" ? "#8a93a1" : "#d8dde6") + '">' + (t.k === "stop" ? "arrêt" : t.k === "off" ? "éteinte" : (t.k === "comfort" ? "Confort · " : "") + zNum(z.setpoint)) + '</div></div>'
           + '<div style="width:96px;height:96px;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;opacity:' + (t.k === "off" ? "0.55" : "1") + '">' + zIco(z, 84) + '</div></button>';
       }
-      h += '</div>';
+      h += '</div><div style="margin-top:10px">' + '<button type="button" data-z="view" aria-label="' + (ZVIEW === "plan" ? "Afficher en liste" : "Afficher le plan") + '" style="width:50px;height:50px;border-radius:25px;background:#232830;border:1px solid #2f353e;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;padding:0">' + (ZVIEW === "plan" ? '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#eceff3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>' : '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#eceff3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4zM4 11h8M12 4v10M12 17v3M16 11h4"/></svg>') + '</button>' + '</div>';
     } else {
-    h += '<div style="position:relative;width:100%;max-width:760px;margin:0 auto"><img src="' + PLAN + '" style="width:100%;display:block" alt="">';
+    h += '<div style="position:relative;width:100%;max-width:760px;margin:0 auto"><img src="' + PLAN + '" style="width:100%;display:block" alt=""><div style="position:absolute;left:0;bottom:6%">' + '<button type="button" data-z="view" aria-label="' + (ZVIEW === "plan" ? "Afficher en liste" : "Afficher le plan") + '" style="width:50px;height:50px;border-radius:25px;background:#232830;border:1px solid #2f353e;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;padding:0">' + (ZVIEW === "plan" ? '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#eceff3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>' : '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#eceff3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4zM4 11h8M12 4v10M12 17v3M16 11h4"/></svg>') + '</button>' + '</div>';
     for (n = 1; n <= 5; n++) {
       z = ZD[n - 1] || {}; p = ZPOS[n - 1]; t = zState(z);
       h += '<button type="button" data-z="' + n + '" style="position:absolute;left:' + p[0] + '%;top:' + p[1] + '%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%);display:block;text-align:center;background:' + (t.bg ? zRgba(t.bg, 0.22) : "rgba(26,30,36,0.6)") + ';border:1px solid ' + (t.bg ? zRgba(t.bg, 0.8) : "rgba(110,120,135,0.4)") + ';border-radius:14px;padding:5px 8px;color:#eceff3;min-width:70px">'
@@ -2949,13 +2987,14 @@ button:focus { outline: none; }
     if (zBusy) { return; } zBusy = true;
     call("GET", "/api/zones", null, function (err, d) {
       zBusy = false;
-      if (!err && d && d.length) { ZD = d; if ($("zoneV").style.display !== "none" && !zSend) { zoneDraw(); } }
+      if (!err && d && d.length && !modeBusy) { ZD = d; if ($("zoneV").style.display !== "none" && !zSend) { zoneDraw(); } }
     });
   }
   function zonePoll() {
     clearTimeout(zTm); zTm = 0;
     if ($("zoneV").style.display === "none") { return; }
-    zoneLoad(); zTm = setTimeout(zonePoll, 30000);
+    if (!modeBusy) { zoneLoad(); }
+    zTm = setTimeout(zonePoll, 30000);
   }
   function zoneShow(on) {
     var ids = ["cBox", "modes", "info"], i;
@@ -2993,7 +3032,9 @@ button:focus { outline: none; }
       if (t.getAttribute && t.getAttribute("data-z")) { z = t.getAttribute("data-z"); break; }
       t = t.parentNode;
     }
-    if (m !== null) { setMode(parseInt(m, 10)); zoneDraw(); setTimeout(zoneLoad, 2500); return; }
+    if (m !== null) {
+      m = parseInt(m, 10); zoneOptim(MODES[m].az); setMode(m, function () { setTimeout(zoneLoad, 600); }); zoneDraw(); return;
+    }
     if (!z) { return; }
     if (z === "view") { ZVIEW = ZVIEW === "plan" ? "liste" : "plan"; zoneDraw(); }
     else if (z === "back") { zoneOpen(ZMEM || 1); }
@@ -3003,6 +3044,8 @@ button:focus { outline: none; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.21", "Changement de mode plus fiable, bouton liste en icône (test)", "Sur le plan, le changement de mode ne se perd plus : plusieurs clics de suite = le dernier est appliqué, et les ordres passent devant les relevés en attente. Les 5 zones se lisent en une seule requête au boîtier (sinon zone par zone). Le bouton liste devient une icône en bas à gauche du plan, et le mode choisi s'anime quand ça tourne."],
+      ["4.20", "Plus d'encadré vert en confort (test)", "Une zone en confort garde l'encadré neutre (comme avant) ; seule une zone qui tourne prend la couleur de son mode."],
       ["4.19", "Couleurs et animations par mode (test)", "Zones et page Clim : encadré vert quand la zone est en confort, couleur du mode quand elle chauffe/refroidit/ventile/déshumidifie, gris « éteinte » sinon. Les logos s'animent quand ça tourne (soleil qui tourne, flocon, ventilateur, goutte). En liste, le gros logo du mode occupe la droite de chaque carte."],
       ["4.18", "Zone Clément, vue en liste (test)", "La zone 1 s'appelle désormais « Clément » et sa pastille est relevée sur le plan. Un bouton permet d'afficher les zones en liste (nom, température, humidité, consigne), à la manière de l'appli Airzone ; le plan reste l'affichage par défaut."],
       ["4.17", "Stop au milieu des modes (test)", "Le bouton Stop passe en 3e position, au centre des 5 modes, avec un logo de panneau stop (octogone)."],
