@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:5600 TDBA:211-->
+<!--TDBV:5700 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -1627,7 +1627,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("5600", 10) || 0, UI_NAME = "4.16 iPad (beta)".charAt(0) === "_" ? "?" : "4.16 iPad (beta)";
+  var UI_CODE = parseInt("5700", 10) || 0, UI_NAME = "4.17 iPad (beta)".charAt(0) === "_" ? "?" : "4.17 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2386,10 +2386,10 @@ button:focus { outline: none; }
   var MODES = [
     { t: "Froid", az: 2, c: "#6fb3d9", svg: '<path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9M9 4.5l3 2.5 3-2.5M9 19.5l3-2.5 3 2.5"/>' },
     { t: "Chaud", az: 3, c: "#e58a5e", svg: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>' },
+    { t: "Stop", az: 1, c: "#ff7a70", svg: '<path d="M8.6 3h6.8L21 8.6v6.8L15.4 21H8.6L3 15.4V8.6z"/><path d="M8 12h8" stroke-width="2.2"/>' },
     { t: "Déshum.", az: 5, c: "#d8dde6", svg: '<path d="M12 3C8.5 8 6.5 11 6.5 14a5.5 5.5 0 0 0 11 0C17.5 11 15.5 8 12 3z"/>' },
-    { t: "Ventil.", az: 4, c: "#d8dde6", svg: '<path d="M12 12c0-4 1-7 4-7s3 4-4 7zM12 12c4 0 7 1 7 4s-4 3-7-4zM12 12c0 4-1 7-4 7s-3-4 4-7zM12 12c-4 0-7-1-7-4s4-3 7 4z"/>' },
-    { t: "Stop", az: 1, c: "#ff7a70", svg: '<rect x="6" y="6" width="12" height="12" rx="2.5"/>' }
-  ];
+    { t: "Ventil.", az: 4, c: "#d8dde6", svg: '<path d="M12 12c0-4 1-7 4-7s3 4-4 7zM12 12c4 0 7 1 7 4s-4 3-7-4zM12 12c0 4-1 7-4 7s-3-4 4-7zM12 12c-4 0-7-1-7-4s4-3 7 4z"/>' }
+];
   var ZREADY = false;
   var CZ = 0, SZ = null;   /* CZ : zone affichée dans la page Clim (0 = la chambre, état normal) ; SZ : copie de l'état de la chambre */
   var S = { mode: -1, temp: 22, on: false, linked: false, lo: 18, hi: 30, run: null, dem: null, act: "", rt: null };
@@ -2956,6 +2956,7 @@ button:focus { outline: none; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.17", "Stop au milieu des modes (test)", "Le bouton Stop passe en 3e position, au centre des 5 modes, avec un logo de panneau stop (octogone)."],
       ["4.16", "Mode Auto remplacé par Stop (test)", "Le mode Auto disparaît de toute l'interface. À sa place, « Stop » : met le système Airzone à l'arrêt (mode Stop), donc les 5 zones, sans aucun mode sélectionné. Choisir un autre mode relance la clim."],
       ["4.15", "Modes du plan sans encadré (test)", "Sur le plan, les modes n'ont plus d'encadré (fond transparent) et sont descendus un peu."],
       ["4.14", "Modes sur le plan, bouton Sélection pièce (test)", "Sur le plan de la maison, un encadré en haut à droite regroupe les modes (froid, chaud, auto, déshum., ventil.) ; ils valent pour toute la maison. Sur la page d'une zone, le bouton est devenu « Sélection pièce », centré en bas."],
