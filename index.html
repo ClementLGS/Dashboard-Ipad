@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:5500 TDBA:211-->
+<!--TDBV:5600 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -687,7 +687,7 @@ button:focus { outline: none; }
   "use strict";
   if (!window.Native) { return; }
   var N = window.Native, cbs = {}, seq = 0, START = Date.now();
-  var TMIN = 18, TMAX = 30, MODES = [2, 3, 4, 5, 7];
+  var TMIN = 18, TMAX = 30, MODES = [1, 2, 3, 4, 5];
   var AG_TTL = 300000, WX_TTL = 900000, LUM_UUID_NOTE = "fff3";
 
   window.__nat = function (id, status, body, err) { var f = cbs[id]; if (f) { delete cbs[id]; f(status, body, err); } };
@@ -1627,7 +1627,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("5500", 10) || 0, UI_NAME = "4.15 iPad (beta)".charAt(0) === "_" ? "?" : "4.15 iPad (beta)";
+  var UI_CODE = parseInt("5600", 10) || 0, UI_NAME = "4.16 iPad (beta)".charAt(0) === "_" ? "?" : "4.16 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2386,9 +2386,9 @@ button:focus { outline: none; }
   var MODES = [
     { t: "Froid", az: 2, c: "#6fb3d9", svg: '<path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9M9 4.5l3 2.5 3-2.5M9 19.5l3-2.5 3 2.5"/>' },
     { t: "Chaud", az: 3, c: "#e58a5e", svg: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>' },
-    { t: "Auto", az: 7, c: "#d8dde6", svg: '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>' },
     { t: "Déshum.", az: 5, c: "#d8dde6", svg: '<path d="M12 3C8.5 8 6.5 11 6.5 14a5.5 5.5 0 0 0 11 0C17.5 11 15.5 8 12 3z"/>' },
-    { t: "Ventil.", az: 4, c: "#d8dde6", svg: '<path d="M12 12c0-4 1-7 4-7s3 4-4 7zM12 12c4 0 7 1 7 4s-4 3-7-4zM12 12c0 4-1 7-4 7s-3-4 4-7zM12 12c-4 0-7-1-7-4s4-3 7 4z"/>' }
+    { t: "Ventil.", az: 4, c: "#d8dde6", svg: '<path d="M12 12c0-4 1-7 4-7s3 4-4 7zM12 12c4 0 7 1 7 4s-4 3-7-4zM12 12c0 4-1 7-4 7s-3-4 4-7zM12 12c-4 0-7-1-7-4s4-3 7 4z"/>' },
+    { t: "Stop", az: 1, c: "#ff7a70", svg: '<rect x="6" y="6" width="12" height="12" rx="2.5"/>' }
   ];
   var ZREADY = false;
   var CZ = 0, SZ = null;   /* CZ : zone affichée dans la page Clim (0 = la chambre, état normal) ; SZ : copie de l'état de la chambre */
@@ -2427,7 +2427,9 @@ button:focus { outline: none; }
   }
   function drawClim() {
     var txt, cls, i, ps = [$("cPill"), $("hPill")];
+    var stopped = S.linked && S.mode >= 0 && MODES[S.mode].az === 1;
     if (!S.linked) { txt = "Injoignable"; cls = "pill bad"; }
+    else if (stopped) { txt = "Arrêt"; cls = "pill"; }
     else if (!S.on) { txt = "Éteinte"; cls = "pill"; }
     else if (S.act) { txt = ACTT[S.act]; cls = "pill" + (S.act === "heat" ? " heat" : (S.act === "cool" || S.act === "dry" ? " cool" : (S.act === "comfort" ? "" : " on"))); }
     else { txt = "Allumée"; cls = "pill on"; }
@@ -2435,7 +2437,7 @@ button:focus { outline: none; }
     if (CZ) { $("pw").className = "pw" + (S.on ? " on" : ""); $("pwt").textContent = S.on ? "Éteindre" : "Allumer"; return; }
     $("pw").className = $("pw2").className = "pw" + (S.on ? " on" : "");
     $("pwt").textContent = $("pw2t").textContent = S.on ? "Éteindre" : "Allumer";
-    $("navSub").textContent = S.linked ? fmt(S.temp) + "° · " + (!S.on ? "éteinte" : (S.act ? ACTT[S.act].toLowerCase() : "allumée")) : "injoignable";
+    $("navSub").textContent = S.linked ? fmt(S.temp) + "° · " + (stopped ? "arrêt" : !S.on ? "éteinte" : (S.act ? ACTT[S.act].toLowerCase() : "allumée")) : "injoignable";
   }
   function pull() {
     if (Date.now() - lastUser < 6000) { return; }
@@ -2892,7 +2894,7 @@ button:focus { outline: none; }
     for (n = 1; n <= 5; n++) {
       z = ZD[n - 1] || {}; p = ZPOS[n - 1];
       h += '<button type="button" data-z="' + n + '" style="position:absolute;left:' + p[0] + '%;top:' + p[1] + '%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%);display:block;text-align:center;background:rgba(26,30,36,0.6);border:1px solid rgba(110,120,135,0.4);border-radius:14px;padding:5px 8px;color:#eceff3;min-width:70px">'
-        + zIco(z, 30) + '<div style="font-size:16px;font-weight:bold;line-height:18px">' + (z.err ? "!" : zNum(z.roomTemp)) + '</div><div style="font-size:12px;color:#b4bcc9;line-height:14px">' + (z.on ? "→ " + zNum(z.setpoint) : "éteinte") + '</div></button>';
+        + zIco(z, 30) + '<div style="font-size:16px;font-weight:bold;line-height:18px">' + (z.err ? "!" : zNum(z.roomTemp)) + '</div><div style="font-size:12px;color:#b4bcc9;line-height:14px">' + (z.mode === 1 ? "arrêt" : z.on ? "→ " + zNum(z.setpoint) : "éteinte") + '</div></button>';
     }
     h += '</div><p class="note" style="margin-top:8px;text-align:center">Sous chaque logo : température de la pièce, puis consigne. Touche une zone pour la régler ; l\'onglet Clim s\'ouvrira ensuite sur elle.</p>';
     $("zoneV").innerHTML = h;
@@ -2954,6 +2956,7 @@ button:focus { outline: none; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.16", "Mode Auto remplacé par Stop (test)", "Le mode Auto disparaît de toute l'interface. À sa place, « Stop » : met le système Airzone à l'arrêt (mode Stop), donc les 5 zones, sans aucun mode sélectionné. Choisir un autre mode relance la clim."],
       ["4.15", "Modes du plan sans encadré (test)", "Sur le plan, les modes n'ont plus d'encadré (fond transparent) et sont descendus un peu."],
       ["4.14", "Modes sur le plan, bouton Sélection pièce (test)", "Sur le plan de la maison, un encadré en haut à droite regroupe les modes (froid, chaud, auto, déshum., ventil.) ; ils valent pour toute la maison. Sur la page d'une zone, le bouton est devenu « Sélection pièce », centré en bas."],
       ["4.13", "Clim s'ouvre sur le plan (test)", "L'onglet Clim s'ouvre sur le plan de la maison. Une fois une zone choisie, elle est mémorisée : en revenant sur Clim, tu retrouves directement sa température et ses modes, avec « ← Plan de la maison » pour changer de zone."],
