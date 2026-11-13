@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:4300 TDBA:211-->
+<!--TDBV:4400 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -1608,7 +1608,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("4300", 10) || 0, UI_NAME = "4.3 iPad (beta)".charAt(0) === "_" ? "?" : "4.3 iPad (beta)";
+  var UI_CODE = parseInt("4400", 10) || 0, UI_NAME = "4.4 iPad (beta)".charAt(0) === "_" ? "?" : "4.4 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2769,7 +2769,8 @@ button:focus { outline: none; }
     ["Carte des zones de Clim", "13/11 · notée dans Feedback"],
     ["Mode première fois", "13/11 · notée dans Feedback"],
     ["Intégration de Claude", "13/11 · notée dans Feedback"],
-    ["Catégorie bug", "13/11 · notée dans Feedback"]
+    ["Catégorie bug", "13/11 · notée dans Feedback"],
+    ["Feedback s'envoie tout seul à Claude", "13/11 · notée dans Feedback"]
   ], l: [
     ["Pluie dans l'heure", "Facile", "Un bandeau « il va pleuvoir dans 20 min » sur l'accueil, à partir des prévisions déjà utilisées (Open-Meteo, pas de 15 min). Utile pour le linge, la fenêtre, la sortie.", "Mise à jour seule"],
     ["Scène « Réveil »", "Facile", "Un bouton (ou une heure) qui allume les lumières en douceur, affiche météo et agenda du jour en grand. Le pendant de « Bonne nuit ».", "Mise à jour seule"],
@@ -2805,6 +2806,7 @@ button:focus { outline: none; }
   /* ---------------- Bugs (versions TEST seulement) : bugs notés dans Feedback > Bug, rangés ici par Claude avec leur état ---------------- */
   var BUGS = { maj: "13/11/2026", l: [
     /* ["Titre", "Détail", "À corriger" | "Corrigé en 4.x", "jj/mm"] */
+    ["Idées : écran non défilable", "L'écran Idées ne défile pas, et il n'est pas possible de marquer une idée comme réalisée.", "À corriger", "13/11"]
   ] };
   function bugsDraw() {
     var h = '<p class="note" style="margin-bottom:12px">Les bugs que tu notes dans Feedback (bouton « Bug ») puis envoies à Claude sont rangés ici, avec leur état. Dernière mise à jour : ' + BUGS.maj + '.</p>', i, b, ok;
@@ -2819,6 +2821,7 @@ button:focus { outline: none; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.4", "Bug et idée rangés (test)", "Le bug « Idées non défilable » est dans Bugs ; l'idée « Feedback s'envoie tout seul » est dans Idées. Ils disparaissent de Feedback."],
       ["4.3", "Catégorie Bugs (test)", "Autre > Bugs : la liste de tous les bugs notés dans Feedback, avec leur état. Visible seulement dans les versions test."],
       ["4.2", "Catégorie Bug dans Feedback", "Un quatrième bouton, « Bug », pour noter un souci (affichage, lenteur, erreur) : il part avec les autres remarques vers Claude."],
       ["4.1", "Idées rangées, Feedback allégé", "Tes idées notées dans Feedback (Carte des zones de Clim, Mode première fois, Intégration de Claude, Catégorie bug) sont rangées dans Idées. Une idée déjà rangée disparaît de Feedback."],
@@ -2856,7 +2859,7 @@ button:focus { outline: none; }
   /* ---------------- Feedback : remarques dictées (micro du clavier) ou tapées, gardées sur la tablette et jointes au diagnostic ---------------- */
   var FB = xGet("fb", []), fbMsg = "";
   /* idées déjà rangées par Claude (horodatages) : elles disparaissent de Feedback ; Claude ajoute ici celles qu'il vient de ranger */
-  var FBDONE = [1794533678099, 1794533703784, 1794534632421, 1794535801195];
+  var FBDONE = [1794533678099, 1794533703784, 1794534632421, 1794535801195, 1794536261960, 1794536503757, 1794536529782];
   (function () {
     var keep = [], i;
     for (i = 0; i < FB.length; i++) { if (!((FB[i].k === "idee" || FB[i].k === "bug") && FBDONE.indexOf(FB[i].t) >= 0)) { keep.push(FB[i]); } }
