@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:6100 TDBA:211-->
+<!--TDBV:6500 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -29,9 +29,84 @@ button { font: inherit; color: inherit; -webkit-appearance: none; appearance: no
 button, .nb, .mi, .lbulb { outline: none; -webkit-tap-highlight-color: rgba(0,0,0,0); }
 button:focus { outline: none; }
 
+/* ---- ambiance météo dans le bandeau du haut ---- */
+#topFx { position: absolute; left: 0; top: 0; right: 0; bottom: 0; z-index: -1; overflow: hidden; pointer-events: none; opacity: 0.6; }
+#topFx i { position: absolute; display: block; }
+.fxc { top: 2px; left: -260px; width: 240px; height: 62px; background: radial-gradient(ellipse at 50% 55%, rgba(200,210,225,0.55), rgba(200,210,225,0) 68%); animation: fxdrift 46s linear infinite; }
+.fxc.d { background: radial-gradient(ellipse at 50% 55%, rgba(95,105,125,0.8), rgba(95,105,125,0) 68%); }
+@keyframes fxdrift { from { transform: translate3d(0,0,0); } to { transform: translate3d(1360px,0,0); } }
+.fxr { top: -18px; width: 2px; height: 18px; border-radius: 1px; background: linear-gradient(to bottom, rgba(74,168,255,0), rgba(110,185,255,0.9)); transform: rotate(14deg); animation: fxrain 0.9s linear infinite; }
+@keyframes fxrain { 0% { transform: translate3d(0,0,0) rotate(14deg); opacity: 0; } 15% { opacity: 1; } 100% { transform: translate3d(-18px,96px,0) rotate(14deg); opacity: 0.2; } }
+.fxs { top: -8px; width: 5px; height: 5px; border-radius: 50%; background: #e4f1ff; animation: fxsnow 5s linear infinite; }
+@keyframes fxsnow { 0% { transform: translate3d(0,0,0); opacity: 0; } 12% { opacity: 1; } 50% { transform: translate3d(10px,40px,0); } 100% { transform: translate3d(-8px,84px,0); opacity: 0.1; } }
+.fxt { width: 3px; height: 3px; border-radius: 50%; background: #fff; animation: fxtw 3.4s ease-in-out infinite; }
+@keyframes fxtw { 0%, 100% { opacity: 0.15; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.4); } }
+.fxg { top: -18px; margin-left: -60px; width: 340px; height: 110px; border-radius: 50%; background: radial-gradient(ellipse closest-side, rgba(255,197,51,0.5), rgba(255,197,51,0)); animation: fxpulse 9s ease-in-out infinite; }
+.fxg.m { background: radial-gradient(ellipse closest-side, rgba(247,233,168,0.32), rgba(247,233,168,0)); }
+@keyframes fxpulse { 0%, 100% { transform: scale(0.92); opacity: 0.7; } 50% { transform: scale(1.1); opacity: 1; } }
+.fxf { height: 20px; width: 62%; border-radius: 10px; background: linear-gradient(to right, rgba(180,191,204,0), rgba(180,191,204,0.26), rgba(180,191,204,0)); animation: fxfog 24s ease-in-out infinite alternate; }
+@keyframes fxfog { from { transform: translate3d(-12%,0,0); } to { transform: translate3d(48%,0,0); } }
+.fxl { left: 0; top: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.55); opacity: 0; animation: fxflash 7s linear infinite; }
+@keyframes fxflash { 0%, 42% { opacity: 0; } 43% { opacity: 0.9; } 46% { opacity: 0.1; } 48% { opacity: 0.7; } 52%, 100% { opacity: 0; } }
+.noico #topFx { display: none; }
+.ico2 .fxr, .ico2 .fxs { animation-timing-function: steps(6); }
+.ico2 .fxc, .ico2 .fxf { animation-timing-function: steps(60); }
+
+/* ---- fond animé « Météo dynamique » : la scène suit la météo du moment ---- */
+#bg.w-a-meteo, .wpS.w-a-meteo { background: #0c1626; }
+#bg.wm-sun, .wpS.wm-sun { background: #0b1c34; }
+.wm-sun .h1 { background: radial-gradient(closest-side, rgba(255,190,70,.30), rgba(0,0,0,0)); }
+.wm-sun .h2 { background: radial-gradient(closest-side, rgba(70,150,235,.26), rgba(0,0,0,0)); }
+.wm-sun .h3 { background: radial-gradient(closest-side, rgba(255,150,60,.16), rgba(0,0,0,0)); }
+#bg.wm-partly, .wpS.wm-partly { background: #0d1a2c; }
+.wm-partly .h1 { background: radial-gradient(closest-side, rgba(240,180,80,.22), rgba(0,0,0,0)); }
+.wm-partly .h2 { background: radial-gradient(closest-side, rgba(90,130,190,.26), rgba(0,0,0,0)); }
+.wm-partly .h3 { background: radial-gradient(closest-side, rgba(150,165,190,.16), rgba(0,0,0,0)); }
+#bg.wm-cloud, .wpS.wm-cloud { background: #10161f; }
+.wm-cloud .h1 { background: radial-gradient(closest-side, rgba(120,135,160,.26), rgba(0,0,0,0)); }
+.wm-cloud .h2 { background: radial-gradient(closest-side, rgba(90,105,130,.26), rgba(0,0,0,0)); }
+.wm-cloud .h3 { background: radial-gradient(closest-side, rgba(140,150,170,.16), rgba(0,0,0,0)); }
+#bg.wm-rain, .wpS.wm-rain { background: #0a1018; }
+.wm-rain .h1 { background: radial-gradient(closest-side, rgba(70,100,150,.30), rgba(0,0,0,0)); }
+.wm-rain .h2 { background: radial-gradient(closest-side, rgba(50,80,120,.28), rgba(0,0,0,0)); }
+.wm-rain .h3 { background: radial-gradient(closest-side, rgba(90,110,140,.20), rgba(0,0,0,0)); }
+#bg.wm-storm, .wpS.wm-storm { background: #0a0912; }
+.wm-storm .h1 { background: radial-gradient(closest-side, rgba(100,70,160,.30), rgba(0,0,0,0)); }
+.wm-storm .h2 { background: radial-gradient(closest-side, rgba(50,60,110,.30), rgba(0,0,0,0)); }
+.wm-storm .h3 { background: radial-gradient(closest-side, rgba(120,90,170,.18), rgba(0,0,0,0)); }
+#bg.wm-snow, .wpS.wm-snow { background: #0b1220; }
+.wm-snow .h1 { background: radial-gradient(closest-side, rgba(110,145,205,.30), rgba(0,0,0,0)); }
+.wm-snow .h2 { background: radial-gradient(closest-side, rgba(80,105,170,.28), rgba(0,0,0,0)); }
+.wm-snow .h3 { background: radial-gradient(closest-side, rgba(150,170,215,.18), rgba(0,0,0,0)); }
+#bg.wm-fog, .wpS.wm-fog { background: #12161b; }
+.wm-fog .h1 { background: radial-gradient(closest-side, rgba(170,180,195,.10), rgba(0,0,0,0)); }
+.wm-fog .h2 { background: radial-gradient(closest-side, rgba(140,150,165,.10), rgba(0,0,0,0)); }
+.wm-fog .h3 { background: radial-gradient(closest-side, rgba(190,198,210,.12), rgba(0,0,0,0)); }
+#bg.wm-moon, .wpS.wm-moon { background: #070b18; }
+.wm-moon .h1 { background: radial-gradient(closest-side, rgba(60,80,160,.28), rgba(0,0,0,0)); }
+.wm-moon .h2 { background: radial-gradient(closest-side, rgba(110,90,190,.20), rgba(0,0,0,0)); }
+.wm-moon .h3 { background: radial-gradient(closest-side, rgba(40,70,130,.22), rgba(0,0,0,0)); }
+#bg.wm-partlyNight, .wpS.wm-partlyNight { background: #080c19; }
+.wm-partlyNight .h1 { background: radial-gradient(closest-side, rgba(60,80,150,.24), rgba(0,0,0,0)); }
+.wm-partlyNight .h2 { background: radial-gradient(closest-side, rgba(90,100,150,.20), rgba(0,0,0,0)); }
+.wm-partlyNight .h3 { background: radial-gradient(closest-side, rgba(50,70,120,.20), rgba(0,0,0,0)); }
+@keyframes fxDrift { from { transform: translate3d(0,0,0); } to { transform: translate3d(2000px,0,0); } }
+.wfx .cld { left: -700px; border-radius: 50%; background: radial-gradient(closest-side, rgba(190,205,225,.34), rgba(190,205,225,.12) 60%, rgba(0,0,0,0)); animation: fxDrift 100s linear infinite; }
+.wfx .cld.d { background: radial-gradient(closest-side, rgba(80,92,115,.58), rgba(80,92,115,.22) 60%, rgba(0,0,0,0)); }
+@keyframes fxPulseS { from { opacity: 0.75; transform: scale(0.94); } to { opacity: 1; transform: scale(1.06); } }
+.wfx .sun { border-radius: 50%; background: radial-gradient(closest-side, rgba(255,214,110,.5), rgba(255,170,60,.16) 55%, rgba(0,0,0,0)); animation: fxPulseS 8s ease-in-out infinite alternate; }
+@keyframes fxRay { from { opacity: 0.12; } to { opacity: 0.5; } }
+.wfx .ray { left: 80%; top: 8%; width: 950px; height: 64px; margin-top: -32px; -webkit-transform-origin: 0 50%; transform-origin: 0 50%; background: linear-gradient(90deg, rgba(255,226,140,.26), rgba(255,226,140,0)); animation: fxRay 6s ease-in-out infinite alternate; }
+@keyframes fxFlash { 0%, 38% { opacity: 0; } 39% { opacity: 1; } 42% { opacity: 0.15; } 44% { opacity: 0.9; } 48%, 100% { opacity: 0; } }
+.wfx .lgt { left: 0; top: 0; right: 0; bottom: 0; opacity: 0; background: radial-gradient(ellipse at 60% 0%, rgba(215,205,255,.7), rgba(150,140,225,.28) 42%, rgba(0,0,0,0) 78%); animation: fxFlash 9s linear infinite; }
+.wfx .bolt { left: 58%; top: -2%; width: 170px; height: 430px; opacity: 0; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 260'%3E%3Cpath fill='none' stroke='%23f2edff' stroke-width='5' stroke-linejoin='round' stroke-linecap='round' d='M62 0L38 96L66 100L28 190L52 194L24 260'/%3E%3C/svg%3E") no-repeat center / contain; animation: fxFlash 9s linear infinite; }
+@keyframes fxFog { from { transform: translate3d(-8%,0,0); } to { transform: translate3d(8%,0,0); } }
+.wfx .fog { left: -20%; width: 140%; height: 330px; border-radius: 165px; background: linear-gradient(90deg, rgba(0,0,0,0), rgba(185,195,208,.14), rgba(0,0,0,0)); animation: fxFog 26s ease-in-out infinite alternate; }
+.wfx .moon { width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle at 38% 38%, #fffbe8, #efe3a6 60%, #d9cd90); box-shadow: 0 0 90px rgba(247,233,168,.35); animation: fxPulseS 10s ease-in-out infinite alternate; }
+
 /* ---- contenu ---- */
 #main { -webkit-flex: 1; flex: 1; min-width: 0; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; }
-#top { -webkit-flex: none; flex: none; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; padding: 8px 20px; border-bottom: 1px solid #232830; min-height: 72px; }
+#top { position: relative; z-index: 0; -webkit-flex: none; flex: none; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; padding: 8px 20px; border-bottom: 1px solid #232830; min-height: 72px; }
 #clock { font-size: 50px; line-height: 1; font-weight: bold; color: #d8dde6; letter-spacing: 0.02em; }
 #date { margin-left: 18px; font-size: 17px; color: #8f98a5; }
 #bat { position: relative; left: 0; margin-left: auto; margin-right: 22px; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; color: #b9c2d0; font-size: 18px; font-weight: bold; }
@@ -586,7 +661,7 @@ button:focus { outline: none; }
 <div id="app">
  <div id="nav">
   <button type="button" class="nb" data-p="home"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8M5 9.5V21h5v-6h4v6h5V9.5"/></svg>Accueil</span></button>
-  <button type="button" class="nb" data-p="clim"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/></svg>Clim<small id="navSub">--</small></span></button>
+  <button type="button" class="nb" data-p="clim"><span class="bw"><svg id="navIco" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/></svg>Clim<small id="navSub">--</small></span></button>
   <button type="button" class="nb" data-p="lum"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>Lumières</span></button>
   <button type="button" class="nb" data-p="wx"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .4-8A6 6 0 0 0 6 11a3.5 3.500 0 0 0 1 7z"/></svg>Météo</span></button>
   <button type="button" class="nb" data-p="app"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Autre</span></button>
@@ -595,7 +670,7 @@ button:focus { outline: none; }
  <div id="main">
   <div id="ban" style="display:none" role="alert"></div>
   <div id="edL" class="ed"></div><div id="edR" class="ed"></div><div id="edT" class="ed"></div><div id="edB" class="ed"></div><div id="errBar"></div>
-  <div id="top">
+  <div id="top"><div id="topFx" aria-hidden="true"></div>
    <div id="clock">--:--</div><div id="date">&nbsp;</div><button type="button" class="pill bad" id="err" aria-label="Voir le diagnostic des erreurs"></button>
    
    <div id="sw" aria-label="Glisser vers la droite pour lancer Bonne nuit"><div id="swF"></div><svg id="swH" viewBox="0 0 48 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5M20 3l5 5-5 5M34 3l5 5-5 5"/></svg><div id="swK"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></div></div>
@@ -1664,7 +1739,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("6100", 10) || 0, UI_NAME = "4.21 iPad (beta)".charAt(0) === "_" ? "?" : "4.21 iPad (beta)";
+  var UI_CODE = parseInt("6500", 10) || 0, UI_NAME = "4.25 iPad (beta)".charAt(0) === "_" ? "?" : "4.25 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2109,7 +2184,8 @@ button:focus { outline: none; }
       }
       if (e.cancelable) { e.preventDefault(); }
       if (el.nodeType !== 1) { el = el.parentNode; }
-      if (el.click) { el.click(); }
+      while (el && typeof el.click !== "function") { el = el.parentNode; }   /* un logo SVG n'a pas de click() : on remonte jusqu'au bouton */
+      if (el && el.click) { el.click(); }
     }, false);
   })();
 
@@ -2160,6 +2236,24 @@ button:focus { outline: none; }
     snow: wl(cloud("translate(0 -3)"), "wdp3", ad(12)) + wdot("wfk", "left:33.3%;" + ad(4.8)) + wdot("wfk", "left:50%;" + ad(4.8, 1.6)) + wdot("wfk", "left:66.7%;" + ad(4.8, 3.2)),
     fog: wl(line("M9 16h30", FOG, 3), "wdp8", ad(12)) + wl(line("M6 24h36", FOG, 3), "wdm8", ad(14)) + wl(line("M10 32h28", FOG, 3), "wdp8", ad(16)) + wl(line("M15 40h18", FOG, 3), "wdm6", ad(10))
   };
+  /* ---------------- ambiance météo dans le bandeau du haut ---------------- */
+  function topFx(k) {
+    var h = "", i, r = function (a, b) { return Math.round(a + Math.random() * (b - a)); }, night = (k === "moon" || k === "partlyNight");
+    var cl = function (n, d) { for (i = 0; i < n; i++) { h += '<i class="fxc' + (d ? " d" : "") + '" style="top:' + r(-8, 10) + 'px;animation-duration:' + r(38, 62) + 's;animation-delay:-' + r(0, 55) + 's"></i>'; } };
+    var rain = function (n) { for (i = 0; i < n; i++) { h += '<i class="fxr" style="left:' + r(2, 98) + '%;animation-duration:' + (r(70, 110) / 100) + 's;animation-delay:-' + (r(0, 100) / 100) + 's"></i>'; } };
+    var snow = function (n) { for (i = 0; i < n; i++) { h += '<i class="fxs" style="left:' + r(2, 98) + '%;animation-duration:' + r(40, 70) / 10 + 's;animation-delay:-' + r(0, 60) / 10 + 's"></i>'; } };
+    var stars = function (n) { for (i = 0; i < n; i++) { h += '<i class="fxt" style="left:' + r(2, 98) + '%;top:' + r(6, 62) + 'px;animation-delay:-' + r(0, 34) / 10 + 's"></i>'; } };
+    if (k === "sun") { h += '<i class="fxg" style="left:64%"></i>'; }
+    else if (k === "moon") { h += '<i class="fxg m" style="left:64%"></i>'; stars(10); }
+    else if (k === "partly") { h += '<i class="fxg" style="left:64%"></i>'; cl(2); }
+    else if (k === "partlyNight") { h += '<i class="fxg m" style="left:64%"></i>'; stars(7); cl(2); }
+    else if (k === "cloud") { cl(5); }
+    else if (k === "rain") { cl(3, true); rain(16); }
+    else if (k === "storm") { cl(4, true); rain(18); h += '<i class="fxl"></i>'; }
+    else if (k === "snow") { cl(2); snow(14); }
+    else if (k === "fog") { for (i = 0; i < 4; i++) { h += '<i class="fxf" style="top:' + (6 + i * 15) + 'px;left:' + r(-10, 30) + '%;animation-duration:' + r(18, 30) + 's;animation-delay:-' + r(0, 20) + 's"></i>'; } }
+    if ($("topFx").getAttribute("data-k") !== k) { $("topFx").innerHTML = h; $("topFx").setAttribute("data-k", k); }
+  }
   function wmo(code, day) {
     var n = Number(code), night = (day === 0);
     if (n === 0) { return { k: night ? "moon" : "sun", t: night ? "Ciel dégagé" : "Ensoleillé" }; }
@@ -2192,6 +2286,7 @@ button:focus { outline: none; }
     $("nowD").innerHTML = p1.join(" · ") + (p2.length ? "<br>" + p2.join(" · ") : "");
     $("nowMsg").style.display = "none"; $("nowBox").style.display = "block";
     $("hIco").innerHTML = ICO ? ICONS_A[m.k] : ICONS[m.k];
+    topFx(m.k); wallWx(m.k);
     $("hT").textContent = rnd(n.temp) + "°";
     $("hP").innerHTML = m.t + "<br>" + rnd(t.hi) + "° / " + rnd(t.lo) + "°";
 
@@ -2466,6 +2561,13 @@ button:focus { outline: none; }
     if (parseFloat(r.value) !== S.temp) { r.value = S.temp; }
     $("trL").textContent = S.lo + "°"; $("trH").textContent = S.hi + "°";
   }
+  /* l'icône de l'onglet Clim suit le mode en cours (de la chambre), et s'anime quand ça tourne */
+  function navIcoDraw() {
+    var nm = CZ && SZ ? SZ : S, e = $("navIco"), ok = nm.linked && nm.mode >= 0 && MODES[nm.mode], a = ok && nm.on && MODES[nm.mode].az !== 1 && /^(heat|cool|fan|dry)$/.test(nm.act || "") ? nm.act : "";
+    if (!e) { return; }
+    e.innerHTML = ok ? MODES[nm.mode].svg : '<path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/>';
+    e.setAttribute("class", a ? "an-" + a : "");
+  }
   function drawClim() {
     var txt, cls, i, ps = [$("cPill"), $("hPill")];
     var stopped = S.linked && S.mode >= 0 && MODES[S.mode].az === 1;
@@ -2478,6 +2580,7 @@ button:focus { outline: none; }
     if (CZ) { $("pw").className = "pw" + (S.on ? " on" : ""); $("pwt").textContent = S.on ? "Éteindre" : "Allumer"; return; }
     $("pw").className = $("pw2").className = "pw" + (S.on ? " on" : "");
     $("pwt").textContent = $("pw2t").textContent = S.on ? "Éteindre" : "Allumer";
+    navIcoDraw();
     $("navSub").textContent = S.linked ? fmt(S.temp) + "° · " + (stopped ? "arrêt" : !S.on ? "éteinte" : (S.act ? ACTT[S.act].toLowerCase() : "allumée")) : "injoignable";
   }
   function pull() {
@@ -2613,8 +2716,8 @@ button:focus { outline: none; }
     raf(f);
   }
   var WALLS = [["nuit", "Nuit"], ["aurore", "Aurore"], ["crepuscule", "Crépuscule"], ["ocean", "Océan"], ["foret", "Forêt"], ["braise", "Braise"], ["brume", "Brume"], ["etoiles", "Étoiles"], ["minuit", "Minuit"], ["sunset", "Coucher de soleil"], ["lagon", "Lagon"], ["lavande", "Lavande"], ["bordeaux", "Bordeaux"], ["cuivre", "Cuivre"]];
-  var WALLA = [["a-aurore", "Aurore"], ["a-ocean", "Océan"], ["a-braise", "Braise"], ["a-nebuleuse", "Nuit étoilée"], ["a-neige", "Neige"], ["a-pluie", "Pluie"], ["a-lucioles", "Lucioles"], ["a-bulles", "Bulles"], ["a-vitesse", "Hyperespace"], ["a-lave", "Lave"]];
-  var WALL = xGet("wall", "nuit");
+  var WALLA = [["a-meteo", "Météo dynamique"], ["a-aurore", "Aurore"], ["a-ocean", "Océan"], ["a-braise", "Braise"], ["a-nebuleuse", "Nuit étoilée"], ["a-neige", "Neige"], ["a-pluie", "Pluie"], ["a-lucioles", "Lucioles"], ["a-bulles", "Bulles"], ["a-vitesse", "Hyperespace"], ["a-lave", "Lave"]];
+  var WXK = "", WALL = xGet("wall", "nuit");
   if (WALL === "a-brume") { WALL = "a-neige"; }
   /* scène d'un fond animé. still = image figée pour la vignette (éléments posés à un instant donné, sans animation) */
   function wallScene(w, still) {
@@ -2624,7 +2727,30 @@ button:focus { outline: none; }
     function box(z) { return "width:" + z.toFixed(1) + "px;height:" + z.toFixed(1) + "px;"; }
     function at(lo, hi) { return still ? "top:" + rnd(lo, hi).toFixed(1) + "%;" : ""; }
     function tf(t) { return still ? "-webkit-transform:" + t + ";transform:" + t + ";" : ""; }
-    if (w === "a-aurore") {
+    if (w === "a-meteo") {
+      var k = WXK || "partly", nCl = { sun: 0, moon: 0, partly: 2, partlyNight: 2, cloud: 6, rain: 4, storm: 5, snow: 3, fog: 0 }[k] || 0, dk = (k === "rain" || k === "storm");
+      for (i = 0; i < nCl; i++) {
+        sz = rnd(420, 680); d = rnd(80, 140);
+        h += '<u class="cld' + (dk ? " d" : "") + '" style="width:' + sz.toFixed(0) + 'px;height:' + (sz * 0.3).toFixed(0) + 'px;top:' + rnd(-4, 34).toFixed(1) + '%;' + (still ? "left:" + rnd(-8, 78).toFixed(1) + "%;" : "") + an(d, rnd(0, d)) + '"></u>';
+      }
+      if (k === "sun" || k === "partly") {
+        h += '<u class="sun" style="left:66%;top:-22%;width:' + (still ? 560 : 520) + 'px;height:' + (still ? 560 : 520) + 'px"></u>';
+        for (i = 0; i < 8; i++) { d = rnd(4.5, 8); h += '<u class="ray" style="' + (k === "partly" ? "width:760px;" : "") + '-webkit-transform:rotate(' + (100 + i * 13) + 'deg);transform:rotate(' + (100 + i * 13) + 'deg);' + an(d, rnd(0, d)) + (still ? "opacity:" + rnd(0.2, 0.5).toFixed(2) + ";" : "") + '"></u>'; }
+      }
+      if (k === "moon" || k === "partlyNight") {
+        h += '<u class="str st1"></u><u class="st2w"><u class="str st2"></u></u><u class="moon" style="left:74%;top:9%"></u>';
+      }
+      if (k === "rain" || k === "storm") {
+        for (i = 0; i < (k === "storm" ? 28 : 22); i++) { d = rnd(0.7, 1.4); h += '<u class="rn" style="left:' + rnd(0, 118).toFixed(1) + '%;' + (still ? "width:4px;height:110px;" : "") + at(-10, 90) + 'opacity:' + rnd(0.35, 0.9).toFixed(2) + ';' + an(d, rnd(0, d)) + '"></u>'; }
+      }
+      if (k === "storm") { h += '<u class="lgt"' + (still ? ' style="opacity:0.55"' : "") + '></u><u class="bolt"' + (still ? ' style="opacity:0.95"' : "") + '></u>'; }
+      if (k === "snow") {
+        for (i = 0; i < 18; i++) { sz = rnd(3, 9) * (still ? 2 : 1); d = rnd(4, 9); h += '<u class="snw" style="left:' + rnd(-4, 98).toFixed(1) + '%;' + box(sz) + at(0, 96) + 'opacity:' + rnd(0.45, 0.95).toFixed(2) + ';' + an(d, rnd(0, d)) + '"></u>'; }
+      }
+      if (k === "fog") {
+        for (i = 0; i < 4; i++) { d = rnd(22, 34); h += '<u class="fog" style="top:' + (-10 + i * 22) + '%;' + an(d, rnd(0, d)) + '"></u>'; }
+      }
+    } else if (w === "a-aurore") {
       cols = ["rgba(60,220,150,.42)", "rgba(140,95,235,.38)", "rgba(50,170,220,.34)", "rgba(90,235,190,.30)"];
       for (i = 0; i < 4; i++) { h += '<u class="rib" style="left:' + (i * 12 - 10) + '%;background:-webkit-linear-gradient(left,rgba(0,0,0,0),' + cols[i] + ',rgba(0,0,0,0));background:linear-gradient(90deg,rgba(0,0,0,0),' + cols[i] + ',rgba(0,0,0,0));' + tf("translate3d(" + (i * 45 - 10) + "%,0,0) skewX(" + (i % 2 ? 12 : -18) + "deg)") + an(5.5 + i * 1.7, i * 2.3) + '"></u>'; }
     } else if (w === "a-ocean") {
@@ -2650,7 +2776,9 @@ button:focus { outline: none; }
     return h;
   }
   function wallFx() { $("bgA").innerHTML = /^a-/.test(WALL) ? wallScene(WALL, false) : ""; }
-  function wallApply() { $("bg").className = "w-" + WALL; wallFx(); }
+  function wallApply() { $("bg").className = "w-" + WALL + (WALL === "a-meteo" ? " wm-" + (WXK || "partly") : ""); wallFx(); }
+  /* la météo a changé : le fond « Météo dynamique » (et sa vignette) suit */
+  function wallWx(k) { if (WXK === k) { return; } WXK = k; wallDraw.cache = null; if (WALL === "a-meteo") { wallApply(); } }
   wallApply();
   function wallDraw() {
     var h = "", tn, k, i;
@@ -2658,7 +2786,7 @@ button:focus { outline: none; }
       var j; h += '<div class="wpT">' + t + '</div><div class="wpg">';
       for (j = 0; j < L.length; j++) {
         h += '<div class="wpi' + (WALL === L[j][0] ? " sel" : "") + '"><button type="button" data-x="wall" data-a="' + L[j][0] + '">'
-          + (anim ? '<div class="wp"><div class="wpS w-' + L[j][0] + '"><b class="h1"></b><b class="h2"></b><b class="h3"></b><div class="wfx">' + wallScene(L[j][0], true) + '</div></div></div>' : '<div class="wp w-' + L[j][0] + '"></div>')
+          + (anim ? '<div class="wp"><div class="wpS w-' + L[j][0] + (L[j][0] === "a-meteo" ? " wm-" + (WXK || "partly") : "") + '"><b class="h1"></b><b class="h2"></b><b class="h3"></b><div class="wfx">' + wallScene(L[j][0], true) + '</div></div></div>' : '<div class="wp w-' + L[j][0] + '"></div>')
           + L[j][1] + '</button></div>';
       }
       h += '</div>';
@@ -2955,10 +3083,9 @@ button:focus { outline: none; }
       mb += '<button type="button" data-zm="' + i + '" aria-label="Mode ' + MODES[i].t + '" style="display:block;text-align:center;background:' + (i === S.mode ? "#2e3540" : "transparent") + ';border:1px solid ' + (i === S.mode ? "#d8dde6" : "transparent") + ';border-radius:12px;padding:5px 9px;margin-left:4px;color:#eceff3;font-size:12px;font-weight:bold;line-height:14px;' + (S.linked ? "" : "opacity:0.45") + '">'
         + '<svg class="' + (i === S.mode && ra && MODES[i].az !== 1 ? "an-" + ra : "") + '" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="' + MODES[i].c + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block">' + MODES[i].svg + '</svg><div>' + MODES[i].t + '</div></button>';
     }
-    h = '<div style="display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:space-between;justify-content:space-between;margin:0 0 6px"><div>'
-      + '<div style="display:-webkit-flex;display:flex">'
-      + (ZMEM ? '<button type="button" class="xbtn sm" data-z="back">← Retour : ' + esc(ZLAB[ZMEM - 1]) + '</button>' : '') + '</div></div>'
-      + '<div style="display:-webkit-flex;display:flex;margin-top:22px">' + mb + '</div></div>';
+    h = '<div style="display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:space-between;justify-content:space-between;margin:0 0 6px">'
+      + '<div style="-webkit-flex:1;flex:1">' + (ZMEM ? '<button type="button" class="xbtn sm" data-z="back">← Retour : ' + esc(ZLAB[ZMEM - 1]) + '</button>' : '') + '</div>'
+      + '<div style="-webkit-flex:1;flex:1;display:-webkit-flex;display:flex;-webkit-justify-content:flex-end;justify-content:flex-end;margin-top:22px">' + mb + '</div></div>';
     if (ZVIEW === "liste") {
       h += '<div style="display:-webkit-flex;display:flex;-webkit-flex-wrap:wrap;flex-wrap:wrap;margin:14px -6px 0">';
       for (n = 1; n <= 5; n++) {
@@ -2971,9 +3098,9 @@ button:focus { outline: none; }
           + '<div style="font-size:20px;font-weight:bold;margin-top:6px;color:' + (t.k === "off" ? "#8a93a1" : "#d8dde6") + '">' + (t.k === "stop" ? "arrêt" : t.k === "off" ? "éteinte" : (t.k === "comfort" ? "Confort · " : "") + zNum(z.setpoint)) + '</div></div>'
           + '<div style="width:96px;height:96px;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;opacity:' + (t.k === "off" ? "0.55" : "1") + '">' + zIco(z, 84) + '</div></button>';
       }
-      h += '</div><div style="margin-top:10px">' + '<button type="button" data-z="view" aria-label="' + (ZVIEW === "plan" ? "Afficher en liste" : "Afficher le plan") + '" style="width:50px;height:50px;border-radius:25px;background:#232830;border:1px solid #2f353e;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;padding:0">' + (ZVIEW === "plan" ? '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#eceff3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>' : '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#eceff3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4zM4 11h8M12 4v10M12 17v3M16 11h4"/></svg>') + '</button>' + '</div>';
+      h += '</div><div style="margin-top:8px">' + '<button type="button" id="zView" aria-label="' + (ZVIEW === "plan" ? "Afficher en liste" : "Afficher le plan") + '" style="width:84px;height:44px;border-radius:12px;background:transparent;border:0;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;padding:0;margin:0">' + (ZVIEW === "plan" ? '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#eceff3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>' : '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#eceff3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 11.5L12 4l8.5 7.5M6 10v9.5h12V10M10 19.5v-5h4v5"/></svg>') + '</button>' + '</div>';
     } else {
-    h += '<div style="position:relative;width:100%;max-width:760px;margin:0 auto"><img src="' + PLAN + '" style="width:100%;display:block" alt=""><div style="position:absolute;left:0;bottom:6%">' + '<button type="button" data-z="view" aria-label="' + (ZVIEW === "plan" ? "Afficher en liste" : "Afficher le plan") + '" style="width:50px;height:50px;border-radius:25px;background:#232830;border:1px solid #2f353e;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;padding:0">' + (ZVIEW === "plan" ? '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#eceff3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>' : '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#eceff3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4zM4 11h8M12 4v10M12 17v3M16 11h4"/></svg>') + '</button>' + '</div>';
+    h += '<div style="position:relative;width:100%;max-width:760px;margin:0 auto"><img src="' + PLAN + '" style="width:100%;display:block" alt=""><div style="position:absolute;left:0;bottom:6%">' + '<button type="button" id="zView" aria-label="' + (ZVIEW === "plan" ? "Afficher en liste" : "Afficher le plan") + '" style="width:84px;height:44px;border-radius:12px;background:transparent;border:0;display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:center;justify-content:center;padding:0;margin:0">' + (ZVIEW === "plan" ? '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#eceff3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg>' : '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#eceff3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 11.5L12 4l8.5 7.5M6 10v9.5h12V10M10 19.5v-5h4v5"/></svg>') + '</button>' + '</div>';
     for (n = 1; n <= 5; n++) {
       z = ZD[n - 1] || {}; p = ZPOS[n - 1]; t = zState(z);
       h += '<button type="button" data-z="' + n + '" style="position:absolute;left:' + p[0] + '%;top:' + p[1] + '%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%);display:block;text-align:center;background:' + (t.bg ? zRgba(t.bg, 0.22) : "rgba(26,30,36,0.6)") + ';border:1px solid ' + (t.bg ? zRgba(t.bg, 0.8) : "rgba(110,120,135,0.4)") + ';border-radius:14px;padding:5px 8px;color:#eceff3;min-width:70px">'
@@ -2982,6 +3109,7 @@ button:focus { outline: none; }
     h += '</div><p class="note" style="margin-top:8px;text-align:center">Sous chaque logo : température de la pièce, puis consigne. Touche une zone pour la régler ; l\'onglet Clim s\'ouvrira ensuite sur elle.</p>';
     }
     $("zoneV").innerHTML = h;
+    if ($("zView")) { $("zView").onclick = function () { ZVIEW = ZVIEW === "plan" ? "liste" : "plan"; zoneDraw(); }; }
   }
   function zoneLoad() {
     if (zBusy) { return; } zBusy = true;
@@ -3036,14 +3164,17 @@ button:focus { outline: none; }
       m = parseInt(m, 10); zoneOptim(MODES[m].az); setMode(m, function () { setTimeout(zoneLoad, 600); }); zoneDraw(); return;
     }
     if (!z) { return; }
-    if (z === "view") { ZVIEW = ZVIEW === "plan" ? "liste" : "plan"; zoneDraw(); }
-    else if (z === "back") { zoneOpen(ZMEM || 1); }
+    if (z === "back") { zoneOpen(ZMEM || 1); }
     else { zoneOpen(parseInt(z, 10)); }
   });
 
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
+      ["4.25", "Fond animé « Météo dynamique » (test)", "Nouveau fond d'écran animé, dans Autre > Fonds d'écran > Animés : il suit la météo du moment. Soleil (rayons), éclaircies, nuages qui dérivent, pluie, orage (éclairs), neige, brouillard, nuit étoilée avec lune. Il change tout seul quand la météo change, et sa vignette montre la scène actuelle."],
+      ["4.24", "Logo de mode dans l'onglet Clim, ambiance météo en haut (test)", "L'icône de l'onglet Clim reprend le mode en cours (et s'anime quand ça tourne). Le bandeau du haut s'anime selon la météo : soleil, étoiles, nuages, pluie, orage avec éclairs, neige, brouillard. Le retour au plan utilise un logo maison."],
+      ["4.23", "Bouton liste en bas à gauche, transparent (test)", "Retour à l'emplacement d'avant (bas à gauche du plan), plus petit et sans fond. La correction des appuis sur les logos reste en place."],
+      ["4.22", "Bouton liste en haut, appuis sur les logos corrigés (test)", "Le bouton liste/plan passe en haut, entre le retour et les choix de mode, en rectangle plus grand. Cause du bug : un appui pile sur un logo (liste, modes, pastilles) était avalé par le tap immédiat, car un logo SVG n'a pas de click(). Corrigé : l'appui remonte au bouton."],
       ["4.21", "Changement de mode plus fiable, bouton liste en icône (test)", "Sur le plan, le changement de mode ne se perd plus : plusieurs clics de suite = le dernier est appliqué, et les ordres passent devant les relevés en attente. Les 5 zones se lisent en une seule requête au boîtier (sinon zone par zone). Le bouton liste devient une icône en bas à gauche du plan, et le mode choisi s'anime quand ça tourne."],
       ["4.20", "Plus d'encadré vert en confort (test)", "Une zone en confort garde l'encadré neutre (comme avant) ; seule une zone qui tourne prend la couleur de son mode."],
       ["4.19", "Couleurs et animations par mode (test)", "Zones et page Clim : encadré vert quand la zone est en confort, couleur du mode quand elle chauffe/refroidit/ventile/déshumidifie, gris « éteinte » sinon. Les logos s'animent quand ça tourne (soleil qui tourne, flocon, ventilateur, goutte). En liste, le gros logo du mode occupe la droite de chaque carte."],
