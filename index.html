@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:7800 TDBA:211-->
+<!--TDBV:7900 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -1737,7 +1737,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("7800", 10) || 0, UI_NAME = "4.38 iPad (beta)".charAt(0) === "_" ? "?" : "4.38 iPad (beta)";
+  var UI_CODE = parseInt("7900", 10) || 0, UI_NAME = "4.39 iPad (beta)".charAt(0) === "_" ? "?" : "4.39 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2995,7 +2995,8 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     ["Mode première fois", "13/11 · notée dans Feedback"],
     ["Intégration de Claude", "13/11 · notée dans Feedback"],
     ["Catégorie bug", "13/11 · notée dans Feedback"],
-    ["Feedback s'envoie tout seul à Claude", "13/11 · notée dans Feedback"]
+    ["Feedback s'envoie tout seul à Claude", "13/11 · notée dans Feedback"],
+    ["Encadré météo animé devant le fond d'écran", "13/11 · notée dans Feedback (réalisée en 4.38)"]
   ], l: [
     ["Pluie dans l'heure", "Facile", "Un bandeau « il va pleuvoir dans 20 min » sur l'accueil, à partir des prévisions déjà utilisées (Open-Meteo, pas de 15 min). Utile pour le linge, la fenêtre, la sortie.", "Mise à jour seule"],
     ["Scène « Réveil »", "Facile", "Un bouton (ou une heure) qui allume les lumières en douceur, affiche météo et agenda du jour en grand. Le pendant de « Bonne nuit ».", "Mise à jour seule"],
@@ -3011,7 +3012,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var IM = xGet("im", []);
   /* une idée peut être marquée « Réalisée » (mémorisé sur la tablette, par titre) ; « Catégorie bug » l'est d'office (Bug dans Feedback, Bugs dans Autre) */
   var IDONE = xGet("ideeDone", {});
-  function ideeIsDone(t) { return IDONE[t] !== undefined ? !!IDONE[t] : (t === "Catégorie bug"); }
+  function ideeIsDone(t) { return IDONE[t] !== undefined ? !!IDONE[t] : (t === "Catégorie bug" || t === "Feedback s'envoie tout seul à Claude" || t === "Encadré météo animé devant le fond d'écran" || t === "Carte des zones de Clim"); }
   function ideeToggle(t) { IDONE[t] = ideeIsDone(t) ? 0 : 1; xSet("ideeDone", IDONE); ideesDraw(true); }
   function ideeBtn(t) { return '<button type="button" class="xbtn sm" data-x="ideaDone" data-a="' + encodeURIComponent(t) + '" style="-webkit-flex:none;flex:none;margin-left:10px;align-self:center">' + (ideeIsDone(t) ? "Remettre" : "Réalisée ✓") + '</button>'; }
   var IHIST = false;
@@ -3046,6 +3047,14 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Bugs (versions TEST seulement) : bugs notés dans Feedback > Bug, rangés ici par Claude avec leur état ---------------- */
   var BUGS = { maj: "13/11/2026", l: [
     /* ["Titre", "Détail", "À corriger" | "Corrigé en 4.x", "jj/mm"] */
+    ["Batterie : niveau trop lent à se mettre à jour", "Le niveau n'était relu qu'une fois par minute. Maintenant toutes les 10 secondes et à chaque toucher. (Noté dans Feedback)", "Corrigé en 4.37", "13/11"],
+    ["Météo : chute de FPS avec un fond animé", "Deux animations tournaient en même temps (fond d'écran et encadré météo). Sur la page Météo, le fond est figé et l'encadré passe devant. (Signalé en direct)", "Corrigé en 4.38", "13/11"],
+    ["Menu : « Clim injoignable » furtif", "En changeant de page ou de zone, le menu de gauche affichait « injoignable » une demi-seconde avant les bonnes valeurs. Il affiche « … » pendant la lecture. (Signalé en direct)", "Corrigé en 4.34", "13/11"],
+    ["Zones toutes en « chauffage » à tort", "L'appli affichait chauffage alors que l'Airzone disait confort (consigne 22°, pièce 21,9°). Elle suit maintenant la demande réelle de l'Airzone. (Signalé en direct)", "Corrigé en 4.31", "13/11"],
+    ["Barre de modes pas à jour", "Après un changement de mode, la barre de sélection pouvait rester sur l'ancien mode alors que les zones affichaient le bon. (Signalé en direct)", "Corrigé en 4.29", "13/11"],
+    ["Clim injoignable et zones vides", "Un relevé de clim pouvait être abandonné sans réponse, laissant la page bloquée ou des zones vides. Relevés repris, reprises automatiques. (Signalé en direct)", "Corrigé en 4.28", "13/11"],
+    ["Changement de mode qui demande plusieurs appuis", "Un appui sur le logo d'un mode était perdu : les logos ne réagissaient pas au toucher rapide. (Signalé en direct)", "Corrigé en 4.22", "13/11"],
+    ["Liste des zones non défilable", "La vue liste ne défilait pas, le bas de l'écran restait coupé. (Signalé en direct)", "Corrigé en 4.33", "13/11"],
     ["Idées : écran non défilable", "L'écran Idées ne défilait pas (hauteur de la zone effacée par erreur, vrai aussi pour Historique et Feedback), et on ne pouvait pas marquer une idée comme réalisée.", "Corrigé en 4.5", "13/11"]
   ] };
   var BHIST = false;
@@ -3228,8 +3237,9 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["13/11/2026", [
-      ["4.38", "Météo plus fluide avec un fond animé (test)", "Sur la page Météo, le fond d'écran animé est figé et l'encadré de gauche passe devant, plus opaque : une seule animation tourne à la fois, donc moins de chute de FPS."],
-      ["4.37", "Batterie à jour plus vite (correctif, test)", "Le niveau de batterie est relu toutes les 10 secondes (au lieu de 60) et à chaque toucher de l'écran. Retour de ton feedback sur la 4.33."],
+      ["4.39", "Historique des bugs et du feedback rangés (test)", "Tous les bugs corrigés aujourd'hui sont dans Bugs > Historique (y compris ceux repérés en direct). Feedback traité : batterie trop lente (corrigé en 4.37) et encadré météo animé devant le fond d'écran (réalisé en 4.38, rangé dans Idées > Historique)."],
+      ["4.38", "Météo plus fluide avec un fond animé (test)", "Sur la page Météo, le fond d'écran animé est figé et l'encadré de gauche passe devant, plus opaque : une seule animation tourne à la fois, donc moins de chute de FPS. Feedback de la 4.33 traité : « Encadré animé de la météo superpose le fond écran »."],
+      ["4.37", "Batterie à jour plus vite (correctif, test)", "Le niveau de batterie est relu toutes les 10 secondes (au lieu de 60) et à chaque toucher de l'écran. Feedback de la 4.33 traité : « État de la batterie s'actualise trop lentement »."],
       ["4.36", "Feedback envoyé automatiquement (test)", "Dès que tu ranges une remarque (Bien, À améliorer, Idée ou Bug), elle part toute seule vers Claude : plus besoin d'appuyer sur « Envoyer à Claude ». Le bouton reste pour réessayer si l'envoi échoue."],
       ["4.35", "Mode démonstration : retour à l'accueil et pop-up d'explication (test)", "En lançant le mode démonstration, le tableau de bord revient à l'accueil et une fenêtre explique le but : tester chaque catégorie (Accueil, Clim, Lumières, Météo, Agenda, Autre) pour faire un retour complet."],
       ["4.34", "Correctif : plus de « Clim injoignable » furtif dans le menu (test)", "En changeant de page ou de zone, le menu de gauche n'affiche plus « injoignable » une demi-seconde : il montre « … » pendant la lecture, et « injoignable » seulement après un vrai échec."],
@@ -3300,7 +3310,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Feedback : remarques dictées (micro du clavier) ou tapées, gardées sur la tablette et jointes au diagnostic ---------------- */
   var FB = xGet("fb", []), fbMsg = "";
   /* idées déjà rangées par Claude (horodatages) : elles disparaissent de Feedback ; Claude ajoute ici celles qu'il vient de ranger */
-  var FBDONE = [1794533678099, 1794533703784, 1794534632421, 1794535801195, 1794536261960, 1794536503757, 1794536529782];
+  var FBDONE = [1794533678099, 1794533703784, 1794534632421, 1794535801195, 1794536261960, 1794536503757, 1794536529782, 1794578816911, 1794578903619];
   (function () {
     var keep = [], i;
     for (i = 0; i < FB.length; i++) { if (!((FB[i].k === "idee" || FB[i].k === "bug") && FBDONE.indexOf(FB[i].t) >= 0)) { keep.push(FB[i]); } }
