@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:3400 TDBA:211-->
+<!--TDBV:3410 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -669,7 +669,7 @@ button:focus { outline: none; }
  </div>
 </div>
 
-<div id="slp"><div id="slC">--:--</div><div id="slD"></div><div id="slR"><div class="slb"><div class="slI" id="slWI"></div><div class="slV" id="slWT"></div></div><div class="slb"><div class="slI" id="slMI"></div><div class="slV" id="slT"></div></div></div><div id="slS"></div><div id="slH"><i>i</i>Fais un appui long (3 s) n'importe où sur l'écran pour quitter la veille</div><div id="slP"></div></div>
+<div id="slp"><div id="slC">--:--</div><div id="slD"></div><div id="slR"><div class="slb"><div class="slI" id="slWI"></div><div class="slV" id="slWT"></div></div><div class="slb"><div class="slI" id="slRI"></div><div class="slV" id="slRT"></div></div><div class="slb"><div class="slI" id="slMI"></div><div class="slV" id="slT"></div></div></div><div id="slS"></div><div id="slH"><i>i</i>Fais un appui long (3 s) n'importe où sur l'écran pour quitter la veille</div><div id="slP"></div></div>
 <div id="dbg"><div class="bar"><h2>Diagnostic</h2><span><button type="button" id="dbgSend">Envoyer le diagnostic</button><button type="button" id="dbgClr">Vider le journal</button><button type="button" id="dbgX">Fermer</button></span></div>
  <div class="cols"><div class="box" id="dbgL"></div><div class="box" id="dbgR"></div></div></div>
 
@@ -1601,7 +1601,7 @@ button:focus { outline: none; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("3400", 10) || 0, UI_NAME = "3.40 iPad (beta)".charAt(0) === "_" ? "?" : "3.40 iPad (beta)";
+  var UI_CODE = parseInt("3410", 10) || 0, UI_NAME = "3.41 iPad (beta)".charAt(0) === "_" ? "?" : "3.41 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -1962,8 +1962,10 @@ button:focus { outline: none; }
     var d = new Date(), rm = $("hRoom").textContent.match(/(-?[\d]+[,.]?[\d]*)\s*°/), w = wxLast, m;
     $("slC").textContent = pad(d.getHours()) + ":" + pad(d.getMinutes());
     $("slD").textContent = DAYS[d.getDay()] + " " + d.getDate() + " " + MONTHS[d.getMonth()];
-    $("slT").textContent = rm ? rm[1] + "°" : "--";
-    $("slMI").innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#8a919c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0z"/><path d="M12 9v7"/></svg>';
+    $("slT").textContent = S.linked && S.on ? fmt(S.temp) + "°" : "--";
+    $("slMI").innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#8a919c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + (S.linked && S.on && S.mode >= 0 ? MODES[S.mode].svg : '<path d="M12 3v8M6.3 6.8a8 8 0 1 0 11.4 0"/>') + "</svg>";
+    $("slRI").innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#8a919c" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0z"/><path d="M12 9v7"/></svg>';
+    $("slRT").textContent = rm ? rm[1] + "°" : "--";
     if (w && w.now) { m = wmo(w.now.code, w.now.day); $("slWI").innerHTML = ICONS[m.k]; $("slWT").textContent = (typeof w.now.temp === "number" ? rnd(w.now.temp) + "°" : "--"); }
     else { $("slWI").innerHTML = ""; $("slWT").textContent = "--"; }
   }
