@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:10100 TDBA:211-->
+<!--TDBV:10200 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -716,29 +716,34 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 .bj2 .bjr b { min-width: 104px; }
 .bj2 .bjr.past { opacity: 0.4; }
 .bj2 .bjnone { font-size: 26px; padding: 8px 0; }
-.bjwt { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; margin-bottom: 16px; }
+.bjwt { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; margin-bottom: 18px; }
 .bjwt svg { width: 92px; height: 92px; -webkit-flex: none; flex: none; margin-right: 14px; }
 .bjwt .bjw1 { font-size: 88px; font-weight: bold; line-height: 1; color: #fff; }
 .bjwt .bjw2 { margin-left: 20px; font-size: 24px; line-height: 1.35; color: rgba(255,255,255,0.8); }
 .bjwt .bjw2 b { font-size: 28px; color: #fff; }
 .bjwt .bjw2 span { color: rgba(255,255,255,0.6); font-size: 21px; }
-.bjst { display: -webkit-flex; display: flex; margin: 0 0 14px; padding: 14px 0; border-top: 1px solid rgba(255,255,255,0.12); border-bottom: 1px solid rgba(255,255,255,0.12); }
-.bjst > div { -webkit-flex: 1; flex: 1; min-width: 0; padding: 0 6px; }
-.bjst > div + div { border-left: 1px solid rgba(255,255,255,0.12); padding-left: 16px; }
-.bjst > div:last-child { -webkit-flex: 1.3; flex: 1.3; }
-.bjst small { display: block; height: 40px; color: rgba(255,255,255,0.75); }
-.bjst small svg { width: 38px; height: 38px; }
-.bjst b { display: block; font-size: 28px; line-height: 1.2; color: #fff; white-space: nowrap; }
-.bjst i { display: block; font-style: normal; font-size: 15px; color: rgba(255,255,255,0.6); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 18px; }
-.bjhl { font-size: 15px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 8px; }
+.bjst { display: -webkit-flex; display: flex; margin: 0 -5px 16px; padding: 0; border: 0; }
+.bjst > div { -webkit-flex: 1; flex: 1; min-width: 0; margin: 0 5px; padding: 12px 4px 10px; border-radius: 22px; text-align: center; border: 0; }
+.bjst > div + div { border-left: 0; padding-left: 4px; }
+.bjst > div:last-child { -webkit-flex: 1; flex: 1; }
+.bjst .sR { background: rgba(70,150,255,0.20); color: #7cc0ff; }
+.bjst .sV { background: rgba(70,205,180,0.18); color: #6fe0c8; }
+.bjst .sU { background: rgba(255,185,70,0.20); color: #ffc45c; }
+.bjst small { display: block; height: 62px; color: inherit; }
+.bjst small svg { width: 60px; height: 60px; }
+.bjst b { display: block; font-size: 30px; line-height: 1.2; color: #fff; white-space: nowrap; }
+.bjst i { display: block; font-style: normal; font-size: 15px; color: rgba(255,255,255,0.7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 18px; }
+.bjhl { font-size: 15px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.65); margin-bottom: 8px; text-align: center; }
 .bjhr { display: -webkit-flex; display: flex; -webkit-flex: 1; flex: 1; min-height: 0; margin: 0 -4px; }
-.bjhr > div { -webkit-flex: 1; flex: 1; min-width: 0; margin: 0 4px; padding: 8px 0 6px; border-radius: 18px; background: rgba(255,255,255,0.06); display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-align-items: center; align-items: center; -webkit-justify-content: space-between; justify-content: space-between; text-align: center; }
+.bjhr > div { -webkit-flex: 1; flex: 1; min-width: 0; margin: 0 4px; padding: 8px 0 6px; border-radius: 18px; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-align-items: center; align-items: center; -webkit-justify-content: space-between; justify-content: space-between; text-align: center; }
 .bjhr .bjh { font-size: 17px; color: rgba(255,255,255,0.65); }
-.bjhr svg { width: 46px; height: 46px; }
+.bjhr svg { width: 58px; height: 58px; }
+.bjhr .t-sun { background: rgba(255,185,70,0.20); } .bjhr .t-moon { background: rgba(120,130,235,0.22); } .bjhr .t-cloud { background: rgba(135,165,205,0.20); } .bjhr .t-rain { background: rgba(70,150,255,0.24); } .bjhr .t-snow { background: rgba(170,220,255,0.22); } .bjhr .t-storm { background: rgba(170,110,240,0.24); }
+.bjhr b.tw { color: #ffb978; } .bjhr b.tc { color: #9fd6ff; }
 .bjhr b { font-size: 24px; color: #fff; }
 .bjhr em { font-style: normal; font-size: 16px; color: rgba(255,255,255,0.75); }
-.bjrb { display: -webkit-flex; display: flex; -webkit-align-items: flex-end; align-items: flex-end; height: 34px; width: 14px; border-radius: 7px; background: rgba(255,255,255,0.08); overflow: hidden; }
-.bjrb u { display: block; width: 100%; background: rgba(255,255,255,0.7); text-decoration: none; }
+.bjrb { display: -webkit-flex; display: flex; -webkit-align-items: flex-end; align-items: flex-end; height: 34px; width: 14px; border-radius: 7px; background: rgba(255,255,255,0.12); overflow: hidden; }
+.bjrb u { display: block; width: 100%; background: #62b4ff; text-decoration: none; }
 .bjp2 .bjbar .bjar { margin-left: 0; }
 .bjbar.bjone { -webkit-justify-content: center; justify-content: center; }
 .bjbar.bjone .bjar { margin-left: 0; }
@@ -1859,7 +1864,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("10100", 10) || 0, UI_NAME = "4.61 iPad (beta)".charAt(0) === "_" ? "?" : "4.61 iPad (beta)";
+  var UI_CODE = parseInt("10200", 10) || 0, UI_NAME = "4.62 iPad (beta)".charAt(0) === "_" ? "?" : "4.62 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2358,9 +2363,9 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     h = '<div class="bjwt">' + (m ? ICONS[m.k] : '') + '<div class="bjw1">' + (w && w.now ? rnd(w.now.temp) : "--") + '°</div><div class="bjw2"><b>' + (m ? esc(m.t) : "") + '</b><br>' + (t ? '↑ ' + rnd(t.hi) + '°  ↓ ' + rnd(t.lo) + '°' : "") + (fl !== null ? '<br><span>Ressenti ' + fl + '°</span>' : '') + '</div></div>';
     pp = W && W.pp !== null ? W.pp : (t ? t.rain : null);
     h += '<div class="bjst">'
-      + '<div><small aria-label="Pluie"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 14h10a4 4 0 0 0 .4-8A6 6 0 0 0 6 7.500 3.500 3.500 0 0 0 7 14z"/><path d="M9 17l-1 3M13 17l-1 3M17 17l-1 3"/></svg></small><b>' + (pp !== null ? pp + ' %' : '--') + '</b><i>' + (W && W.mm !== null ? (W.mm > 0 ? W.mm + ' mm' : 'aucune') : '') + '</i></div>'
-      + '<div><small aria-label="Vent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h11a2.500 2.500 0 1 0-2.500-2.500M3 15h14a2.500 2.500 0 1 1-2.500 2.500M3 12h7"/></svg></small><b>' + (W && W.wind !== null ? rnd(W.wind) + ' km/h' : '--') + '</b><i>' + (W && W.gust !== null ? 'rafales ' + rnd(W.gust) : '') + '</i></div>'
-      + '<div><small aria-label="UV"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="6.500"/><path d="M12 1.500v2M12 20.500v2M1.500 12h2M20.500 12h2M4.600 4.600l1.400 1.400M18 18l1.400 1.400M4.600 19.400 6 18M18 6l1.400-1.400"/><text x="12" y="14.800" text-anchor="middle" font-size="7.500" font-weight="bold" fill="currentColor" stroke="none" font-family="Arial,sans-serif">UV</text></svg></small><b>' + (W && W.uv !== null ? W.uv : '--') + '</b><i>' + (W && W.sunrise ? W.sunrise + ' · ' + W.sunset : '') + '</i></div></div>';
+      + '<div class="sR"><small aria-label="Pluie"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 14h10a4 4 0 0 0 .4-8A6 6 0 0 0 6 7.500 3.500 3.500 0 0 0 7 14z"/><path d="M9 17l-1 3M13 17l-1 3M17 17l-1 3"/></svg></small><b>' + (pp !== null ? pp + ' %' : '--') + '</b><i>' + (W && W.mm !== null ? (W.mm > 0 ? W.mm + ' mm' : 'aucune') : '') + '</i></div>'
+      + '<div class="sV"><small aria-label="Vent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h11a2.500 2.500 0 1 0-2.500-2.500M3 15h14a2.500 2.500 0 1 1-2.500 2.500M3 12h7"/></svg></small><b>' + (W && W.wind !== null ? rnd(W.wind) + ' km/h' : '--') + '</b><i>' + (W && W.gust !== null ? 'rafales ' + rnd(W.gust) : '') + '</i></div>'
+      + '<div class="sU"><small aria-label="UV"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="6.500"/><path d="M12 1.500v2M12 20.500v2M1.500 12h2M20.500 12h2M4.600 4.600l1.400 1.400M18 18l1.400 1.400M4.600 19.400 6 18M18 6l1.400-1.400"/><text x="12" y="14.800" text-anchor="middle" font-size="7.500" font-weight="bold" fill="currentColor" stroke="none" font-family="Arial,sans-serif">UV</text></svg></small><b>' + (W && W.uv !== null ? W.uv : '--') + '</b><i>' + (W && W.sunrise ? W.sunrise + ' · ' + W.sunset : '') + '</i></div></div>';
     if (W && W.sunrise) { sr = parseInt(W.sunrise.substr(0, 2), 10); ss = parseInt(W.sunset.substr(0, 2), 10); }
     all = (W && W.hours ? W.hours.map(function (q) { return { q: q, d: 0 }; }) : []).concat(W1 && W1.hours ? W1.hours.map(function (q) { return { q: q, d: 1 }; }) : []);
     for (i = 0; i < all.length && c < 5; i++) {
@@ -2369,7 +2374,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
       if ((hr.d === 0 ? hr.q.h - (nowH + 1) : 24 - (nowH + 1) + hr.q.h) % 3 !== 0) { continue; }
       dy = hr.q.h >= sr && hr.q.h < ss ? 1 : 0; mm2 = wmo(hr.q.code, dy, hr.q.mm);
       pp = hr.q.pp === null ? 0 : hr.q.pp; tp = hr.q.t === null ? "--" : rnd(hr.q.t);
-      cols += '<div><span class="bjh">' + hr.q.h + ' h</span>' + ICONS[mm2.k] + '<b>' + tp + '°</b><span class="bjrb"><u style="height:' + Math.max(2, Math.round(pp * 0.34)) + 'px"></u></span><em>' + pp + ' %</em></div>'; c++;
+      cols += '<div class="t-' + (mm2.k === "partly" ? "sun" : mm2.k === "partlyNight" ? "moon" : mm2.k === "fog" ? "cloud" : mm2.k) + '"><span class="bjh">' + hr.q.h + ' h</span>' + ICONS[mm2.k] + '<b' + (hr.q.t !== null && hr.q.t >= 20 ? ' class="tw"' : hr.q.t !== null && hr.q.t <= 6 ? ' class="tc"' : '') + '>' + tp + '°</b><span class="bjrb"><u style="height:' + Math.max(2, Math.round(pp * 0.34)) + 'px"></u></span><em>' + pp + ' %</em></div>'; c++;
     }
     if (cols) { h += '<div class="bjhl">Prochaines heures</div><div class="bjhr">' + cols + '</div>'; }
     return '<div class="bj2"><div class="bjk"><h4>' + BJ_IC.cal + 'Agenda du jour</h4>' + a + '</div><div class="bjk"><h4>' + BJ_IC.wx + 'Météo du jour</h4>' + h + '</div></div>';
@@ -3508,6 +3513,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["14/11/2026", [
+      ["4.62", "Météo du jour en couleurs (test)", "Pluie, Vent et UV deviennent des cartes colorées (bleu, turquoise, ambre) avec de grands logos centrés, sans traits de séparation. Les prochaines heures sont teintées selon le temps (soleil, nuit, nuages, pluie), avec une jauge de pluie bleue et des températures chaudes/froides colorées."],
       ["4.61", "Météo du jour : logos (test)", "Dans la météo du jour du pop-up Bonjour, les mots Pluie, Vent et UV sont remplacés par des logos (nuage de pluie, vent, soleil UV)."],
       ["4.60", "Bonjour : couleurs, météo refaite, bouton déplacé (test)", "Bonjour passe en gris-sauge, Pendant ton absence en gris-indigo. Dans Bonjour, le bouton « Bonne journée » quitte la 1re page et se place, plus petit, en bas de la 2e. La météo du jour affiche température, ressenti, pluie, vent, UV, lever/coucher et une frise des prochaines heures (icône, température, risque de pluie)."],
       ["4.59", "Bonjour : 2e page agenda + météo (test)", "La flèche du pop-up Bonjour ouvre un écran coupé en deux : l’agenda du jour à gauche, la météo du jour à droite (température, pluie, vent, UV, ressenti, lever/coucher et risque de pluie toutes les 2 h). Le pop-up Pendant ton absence garde une 2e page vide."],
