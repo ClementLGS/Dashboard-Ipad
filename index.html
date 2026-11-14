@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:9400 TDBA:211-->
+<!--TDBV:9500 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -669,11 +669,11 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 #demoPop button { display: block; width: 100%; height: 52px; margin-top: 6px; border-radius: 14px; border: 0; background: #d8dde6; color: #14181e; font-size: 18px; font-weight: bold; }
 
 /* ---- Bonjour (matin) et « Pendant ton absence » : deux pop-ups, design « aurore et verre » ---- */
-#bjPop { display: none; position: fixed; left: 0; top: 0; right: 0; bottom: 0; z-index: 80; background: rgba(0,0,0,0.72); -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; }
+#bjPop { display: none; position: fixed; left: 0; top: 0; right: 0; bottom: 0; z-index: 80; background: transparent; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; }
 #bjPop .bjc { position: relative; box-sizing: border-box; display: block; width: 100%; height: 100%; max-width: none; padding: 0; border-radius: 0; overflow: hidden; border: 0; box-shadow: none;
-  background: radial-gradient(ellipse at 12% 12%, rgba(255,150,80,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(90,120,255,0.50), rgba(0,0,0,0) 58%), #0d0f14; }
-#bjPop.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(60,200,220,0.50), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(120,90,255,0.50), rgba(0,0,0,0) 58%), #0d0f14; }
-.bjk { padding: 18px 22px; margin-bottom: 14px; border-radius: 26px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); }
+  background: radial-gradient(ellipse at 12% 12%, rgba(255,150,80,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(90,120,255,0.50), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
+#bjPop.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(60,200,220,0.50), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(120,90,255,0.50), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
+.bjk { padding: 18px 22px; margin-bottom: 14px; border-radius: 26px; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.22); }
 .bjk h4 { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; margin: 0 0 9px; font-size: 18px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.7); }
 .bjk h4 svg { width: 24px; height: 24px; margin-right: 10px; color: #fff; -webkit-flex: none; flex: none; }
 .bjk h4 em { margin-left: auto; font-style: normal; font-size: 18px; letter-spacing: 0; text-transform: none; padding: 2px 14px; border-radius: 999px; background: #ffc466; color: #1a1305; font-weight: bold; }
@@ -710,17 +710,17 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 .bjp2 .bjbar .bjar { margin-left: 0; }
 .bjemp { -webkit-flex: 1; flex: 1; min-height: 300px; }
 /* thèmes de couleur du pop-up */
-#bjPop { background: rgba(0,0,0,0.72); }
-#bjPop.t1 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(255,110,90,0.6), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(0,190,200,0.5), rgba(0,0,0,0) 58%), #0d0f14; }
-#bjPop.t1.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(0,200,210,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(70,110,255,0.5), rgba(0,0,0,0) 58%), #0d0f14; }
-#bjPop.t2 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(40,210,140,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(20,90,200,0.5), rgba(0,0,0,0) 58%), #0d0f14; }
-#bjPop.t2.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(60,200,230,0.5), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(30,160,120,0.5), rgba(0,0,0,0) 58%), #0d0f14; }
-#bjPop.t3 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(240,80,180,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(110,70,240,0.5), rgba(0,0,0,0) 58%), #0d0f14; }
-#bjPop.t3.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(130,90,250,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(60,160,240,0.5), rgba(0,0,0,0) 58%), #0d0f14; }
-#bjPop.t4 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(255,190,70,0.6), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(220,70,60,0.5), rgba(0,0,0,0) 58%), #0d0f14; }
-#bjPop.t4.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(90,150,210,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(40,60,140,0.5), rgba(0,0,0,0) 58%), #0d0f14; }
-#bjPop.t5 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(190,225,255,0.5), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(110,150,255,0.45), rgba(0,0,0,0) 58%), #141a26; }
-#bjPop.t5.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(150,200,255,0.5), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(200,170,255,0.45), rgba(0,0,0,0) 58%), #141a26; }
+#bjPop { background: transparent; }
+#bjPop.t1 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(255,110,90,0.6), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(0,190,200,0.5), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
+#bjPop.t1.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(0,200,210,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(70,110,255,0.5), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
+#bjPop.t2 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(40,210,140,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(20,90,200,0.5), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
+#bjPop.t2.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(60,200,230,0.5), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(30,160,120,0.5), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
+#bjPop.t3 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(240,80,180,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(110,70,240,0.5), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
+#bjPop.t3.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(130,90,250,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(60,160,240,0.5), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
+#bjPop.t4 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(255,190,70,0.6), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(220,70,60,0.5), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
+#bjPop.t4.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(90,150,210,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(40,60,140,0.5), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
+#bjPop.t5 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(190,225,255,0.5), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(110,150,255,0.45), rgba(0,0,0,0) 58%), rgba(20,26,38,0.28); }
+#bjPop.t5.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(150,200,255,0.5), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(200,170,255,0.45), rgba(0,0,0,0) 58%), rgba(20,26,38,0.28); }
 #demoTag { display: none; position: fixed; right: 8px; bottom: 6px; z-index: 50; padding: 3px 9px; border-radius: 8px; font-size: 11px; font-weight: bold; letter-spacing: 0.08em; color: #ffd27a; background: rgba(0,0,0,0.45); border: 1px solid rgba(255,210,122,0.5); pointer-events: none; }
 #fbT { display: block; width: 100%; height: 96px; padding: 10px 12px; font: inherit; font-size: 18px; color: #eceff3; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.14); border-radius: 12px; resize: none; -webkit-user-select: text; user-select: text; -webkit-appearance: none; }
 .fbI { display: -webkit-flex; display: flex; -webkit-align-items: flex-start; align-items: flex-start; padding: 10px 12px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.10); border-radius: 12px; background: rgba(255,255,255,0.045); }
@@ -1820,7 +1820,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("9400", 10) || 0, UI_NAME = "4.54 iPad (beta)".charAt(0) === "_" ? "?" : "4.54 iPad (beta)";
+  var UI_CODE = parseInt("9500", 10) || 0, UI_NAME = "4.55 iPad (beta)".charAt(0) === "_" ? "?" : "4.55 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2318,13 +2318,13 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     pop.className = (kind === "abs" ? "abs " : "") + "t" + (th || 1);
     pop.innerHTML = bjWrap(kind);
     var bc = pop.firstChild;
-    $("bjGo").onclick = function () { pop.style.display = "none"; };
+    $("bjGo").onclick = function () { pop.style.display = "none"; $("app").style.visibility = ""; };
     $("bjNx").onclick = function () { bc.className = "bjc p2"; };
     $("bjPv").onclick = function () { bc.className = "bjc"; };
   }
   (function () {
     var pop = document.createElement("div"); pop.id = "bjPop"; document.body.appendChild(pop);
-    window.bjShow = function (kind, th) { bjDraw(kind, th); pop.style.display = "-webkit-flex"; pop.style.display = "flex"; };
+    window.bjShow = function (kind, th) { bjDraw(kind, th); $("app").style.visibility = "hidden"; pop.style.display = "-webkit-flex"; pop.style.display = "flex"; };
   })();
 
   /* tap immédiat : l'ancien WebView attend ~300 ms avant de valider un appui */
@@ -3443,6 +3443,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["14/11/2026", [
+      ["4.55", "Pop-ups transparents sur le fond d’écran (test)", "Les pop-ups masquent toute la page du tableau de bord mais laissent voir ton fond d’écran à travers leur fond translucide, comme le reste de l’interface."],
       ["4.54", "Pop-ups en plein écran (test)", "Les pop-ups Bonjour et Pendant ton absence reprennent tout l’écran, comme avant la réduction de taille."],
       ["4.53", "Transition des pop-ups ralentie (test)", "Le glissement vers la 2e page des pop-ups Bonjour et Pendant ton absence va deux fois moins vite."],
       ["4.52", "Pop-ups Bonjour et Pendant ton absence : aperçu (test)", "Deux pop-ups aux couleurs corail/lagon (matin) et lagon/bleu (absence) : date, heure, météo, agenda, mails et actualités (exemples pour l’instant). Une flèche mène à une 2e page vide. Boutons de test dans Autre > Affichage ; ils ne s’ouvrent pas encore seuls. La liste des pièces de Clim a des cartes à fond transparent."],
