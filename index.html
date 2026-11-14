@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:9600 TDBA:211-->
+<!--TDBV:9700 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -673,11 +673,11 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 #bjPop .bjc { position: relative; box-sizing: border-box; display: block; width: 100%; height: 100%; max-width: none; padding: 0; border-radius: 0; overflow: hidden; border: 0; box-shadow: none;
   background: radial-gradient(ellipse at 12% 12%, rgba(255,150,80,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(90,120,255,0.50), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
 #bjPop.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(60,200,220,0.50), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(120,90,255,0.50), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
-.bjk { padding: 18px 22px; margin-bottom: 14px; border-radius: 26px; background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.22); }
+.bjk { padding: 18px 22px; margin-bottom: 14px; border-radius: 26px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); }
 .bjk h4 { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; margin: 0 0 9px; font-size: 18px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.7); }
 .bjk h4 svg { width: 24px; height: 24px; margin-right: 10px; color: #fff; -webkit-flex: none; flex: none; }
-.bjk h4 em { margin-left: auto; font-style: normal; font-size: 18px; letter-spacing: 0; text-transform: none; padding: 2px 14px; border-radius: 999px; background: #ffc466; color: #1a1305; font-weight: bold; }
-#bjPop.abs .bjk h4 em { background: #8fcbee; color: #071720; }
+.bjk h4 em { margin-left: auto; font-style: normal; font-size: 18px; letter-spacing: 0; text-transform: none; padding: 2px 14px; border-radius: 999px; background: rgba(255,255,255,0.88); color: #14181e; font-weight: bold; }
+
 .bjr { display: -webkit-flex; display: flex; font-size: 24px; line-height: 1.3; padding: 4px 0; color: #eceff3; }
 .bjr b { color: #fff; min-width: 82px; -webkit-flex: none; flex: none; font-weight: bold; }
 .bjr span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -711,8 +711,8 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 .bjemp { -webkit-flex: 1; flex: 1; min-height: 300px; }
 /* thèmes de couleur du pop-up */
 #bjPop { background: transparent; }
-#bjPop.t1 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(255,110,90,0.6), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(0,190,200,0.5), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
-#bjPop.t1.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(0,200,210,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(70,110,255,0.5), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
+#bjPop.t1 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(200,206,216,0.16), rgba(0,0,0,0) 60%), radial-gradient(ellipse at 90% 92%, rgba(120,130,146,0.12), rgba(0,0,0,0) 60%), rgba(22,26,32,0.55); }
+#bjPop.t1.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(160,180,206,0.16), rgba(0,0,0,0) 60%), radial-gradient(ellipse at 90% 92%, rgba(110,122,142,0.12), rgba(0,0,0,0) 60%), rgba(22,26,32,0.55); }
 #bjPop.t2 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(40,210,140,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(20,90,200,0.5), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
 #bjPop.t2.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(60,200,230,0.5), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(30,160,120,0.5), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
 #bjPop.t3 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(240,80,180,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(110,70,240,0.5), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
@@ -1820,7 +1820,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("9600", 10) || 0, UI_NAME = "4.56 iPad (beta)".charAt(0) === "_" ? "?" : "4.56 iPad (beta)";
+  var UI_CODE = parseInt("9700", 10) || 0, UI_NAME = "4.57 iPad (beta)".charAt(0) === "_" ? "?" : "4.57 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -3443,6 +3443,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["14/11/2026", [
+      ["4.57", "Pop-ups en gris transparent (test)", "Les pop-ups Bonjour et Pendant ton absence perdent leurs couleurs vives : fond gris translucide, cartes en verre, pastille blanche, dans l’esprit du reste du tableau de bord."],
       ["4.56", "Fond d’écran coupé pendant les pop-ups (test)", "Quand un pop-up Bonjour ou Pendant ton absence est affiché, le fond d’écran animé (pluie, neige…) est désactivé derrière, puis revient à la fermeture."],
       ["4.55", "Pop-ups transparents sur le fond d’écran (test)", "Les pop-ups masquent toute la page du tableau de bord mais laissent voir ton fond d’écran à travers leur fond translucide, comme le reste de l’interface."],
       ["4.54", "Pop-ups en plein écran (test)", "Les pop-ups Bonjour et Pendant ton absence reprennent tout l’écran, comme avant la réduction de taille."],
