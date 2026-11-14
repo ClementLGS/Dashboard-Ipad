@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:9900 TDBA:211-->
+<!--TDBV:10000 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -716,26 +716,41 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 .bj2 .bjr b { min-width: 104px; }
 .bj2 .bjr.past { opacity: 0.4; }
 .bj2 .bjnone { font-size: 26px; padding: 8px 0; }
-.bjwt { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; margin-bottom: 18px; }
-.bjwt svg { width: 84px; height: 84px; -webkit-flex: none; flex: none; margin-right: 18px; }
-.bjwt .bjw1 { font-size: 78px; font-weight: bold; line-height: 1; color: #fff; }
-.bjwt .bjw2 { margin-left: 22px; font-size: 26px; line-height: 1.3; color: rgba(255,255,255,0.85); }
-.bjst { display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; margin: 0 -8px; }
-.bjst > div { width: 33.33%; box-sizing: border-box; padding: 0 8px; margin-bottom: 14px; }
-.bjst small { display: block; font-size: 16px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
-.bjst b { display: block; font-size: 30px; line-height: 1.2; color: #fff; }
-.bjst i { font-style: normal; font-size: 18px; color: rgba(255,255,255,0.6); }
-.bjhr { display: -webkit-flex; display: flex; -webkit-align-items: flex-end; align-items: flex-end; height: 120px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.12); padding-top: 10px; }
-.bjhr > div { -webkit-flex: 1; flex: 1; text-align: center; font-size: 16px; color: rgba(255,255,255,0.55); }
-.bjhr > div > u { display: block; width: 62%; margin: 0 auto 4px; border-radius: 6px 6px 2px 2px; background: rgba(255,255,255,0.55); text-decoration: none; min-height: 3px; }
-.bjhr > div > em { display: block; font-style: normal; font-size: 15px; color: rgba(255,255,255,0.8); height: 18px; }
-.bjhl { font-size: 15px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-top: auto; padding-bottom: 6px; }
+.bjwt { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; margin-bottom: 16px; }
+.bjwt svg { width: 92px; height: 92px; -webkit-flex: none; flex: none; margin-right: 14px; }
+.bjwt .bjw1 { font-size: 88px; font-weight: bold; line-height: 1; color: #fff; }
+.bjwt .bjw2 { margin-left: 20px; font-size: 24px; line-height: 1.35; color: rgba(255,255,255,0.8); }
+.bjwt .bjw2 b { font-size: 28px; color: #fff; }
+.bjwt .bjw2 span { color: rgba(255,255,255,0.6); font-size: 21px; }
+.bjst { display: -webkit-flex; display: flex; margin: 0 0 14px; padding: 14px 0; border-top: 1px solid rgba(255,255,255,0.12); border-bottom: 1px solid rgba(255,255,255,0.12); }
+.bjst > div { -webkit-flex: 1; flex: 1; min-width: 0; padding: 0 6px; }
+.bjst > div + div { border-left: 1px solid rgba(255,255,255,0.12); padding-left: 16px; }
+.bjst > div:last-child { -webkit-flex: 1.3; flex: 1.3; }
+.bjst small { display: block; font-size: 15px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+.bjst b { display: block; font-size: 28px; line-height: 1.2; color: #fff; white-space: nowrap; }
+.bjst i { display: block; font-style: normal; font-size: 15px; color: rgba(255,255,255,0.6); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 18px; }
+.bjhl { font-size: 15px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 8px; }
+.bjhr { display: -webkit-flex; display: flex; -webkit-flex: 1; flex: 1; min-height: 0; margin: 0 -4px; }
+.bjhr > div { -webkit-flex: 1; flex: 1; min-width: 0; margin: 0 4px; padding: 8px 0 6px; border-radius: 18px; background: rgba(255,255,255,0.06); display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-align-items: center; align-items: center; -webkit-justify-content: space-between; justify-content: space-between; text-align: center; }
+.bjhr .bjh { font-size: 17px; color: rgba(255,255,255,0.65); }
+.bjhr svg { width: 46px; height: 46px; }
+.bjhr b { font-size: 24px; color: #fff; }
+.bjhr em { font-style: normal; font-size: 16px; color: rgba(255,255,255,0.75); }
+.bjrb { display: -webkit-flex; display: flex; -webkit-align-items: flex-end; align-items: flex-end; height: 34px; width: 14px; border-radius: 7px; background: rgba(255,255,255,0.08); overflow: hidden; }
+.bjrb u { display: block; width: 100%; background: rgba(255,255,255,0.7); text-decoration: none; }
 .bjp2 .bjbar .bjar { margin-left: 0; }
+.bjbar.bjone { -webkit-justify-content: center; justify-content: center; }
+.bjbar.bjone .bjar { margin-left: 0; }
+.bjbar.bjtwo { -webkit-justify-content: space-between; justify-content: space-between; }
+.bjbar.bjtwo .bjar { width: 56px; height: 56px; }
+.bjbar.bjtwo .bjgh { visibility: hidden; border: 0; }
+.bjbar.bjtwo #bjGo { -webkit-flex: none; flex: none; width: 300px; height: 56px; font-size: 21px; margin: 0; }
+
 .bjemp { -webkit-flex: 1; flex: 1; min-height: 300px; }
 /* thèmes de couleur du pop-up */
 #bjPop { background: transparent; }
-#bjPop.t1 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(214,160,100,0.30), rgba(0,0,0,0) 62%), radial-gradient(ellipse at 90% 92%, rgba(170,110,80,0.20), rgba(0,0,0,0) 62%), rgba(22,26,32,0.55); }
-#bjPop.t1.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(100,150,210,0.30), rgba(0,0,0,0) 62%), radial-gradient(ellipse at 90% 92%, rgba(70,100,170,0.22), rgba(0,0,0,0) 62%), rgba(22,26,32,0.55); }
+#bjPop.t1 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(120,170,160,0.26), rgba(0,0,0,0) 62%), radial-gradient(ellipse at 90% 92%, rgba(80,120,130,0.18), rgba(0,0,0,0) 62%), rgba(22,26,32,0.55); }
+#bjPop.t1.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(120,125,205,0.28), rgba(0,0,0,0) 62%), radial-gradient(ellipse at 90% 92%, rgba(80,85,160,0.22), rgba(0,0,0,0) 62%), rgba(22,26,32,0.55); }
 #bjPop.t2 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(40,210,140,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(20,90,200,0.5), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
 #bjPop.t2.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(60,200,230,0.5), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(30,160,120,0.5), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
 #bjPop.t3 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(240,80,180,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(110,70,240,0.5), rgba(0,0,0,0) 58%), rgba(8,10,14,0.28); }
@@ -1843,7 +1858,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("9900", 10) || 0, UI_NAME = "4.59 iPad (beta)".charAt(0) === "_" ? "?" : "4.59 iPad (beta)";
+  var UI_CODE = parseInt("10000", 10) || 0, UI_NAME = "4.60 iPad (beta)".charAt(0) === "_" ? "?" : "4.60 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2330,32 +2345,37 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     var D = bjD(kind);
     return '<div class="bjc"><div class="bjrow"><div class="v5l"><div class="v5g">' + D.title + '</div><div class="v5d">' + (D.abs ? D.sub : D.date) + '</div><div class="v5c">' + D.clk + '</div><div class="v5w">' + (D.m ? ICONS[D.m.k] : '') + D.t + '° · ' + (D.m ? esc(D.m.t) : '') + ' · ' + D.hi + '° / ' + D.lo + '°</div></div>'
       + '<div class="v5r">' + bjCard('cal', D.abs ? 'À venir' : 'Aujourd\'hui', '', bjAg(2)) + bjCard('mail', D.abs ? 'Mails reçus' : 'Mails de la nuit', '4', bjMails(2)) + bjCard('news', 'À la une', '', bjNews(2)) + '</div></div>'
-      + '<div class="bjsm">Aperçu : mails et actualités sont des exemples pour l\'instant</div><div class="bjbar"><button type="button" id="bjGo">' + (D.abs ? 'Compris' : 'Bonne journée') + '</button><button type="button" class="bjar" id="bjNx" aria-label="Page suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button></div>';
+      + '<div class="bjsm">Aperçu : mails et actualités sont des exemples pour l\'instant</div><div class="bjbar' + (D.abs ? '' : ' bjone') + '">' + (D.abs ? '<button type="button" id="bjGo">Compris</button>' : '') + '<button type="button" class="bjar" id="bjNx" aria-label="Page suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button></div>';
   }
   function bjP2(kind) {
-    var d = new Date(), day = agDays[0], w = wxLast, W = (typeof W7 !== "undefined" && W7 && W7.days && W7.days[0]) || null, m, i, x, n = 0, h = "", a = "", st = [], hrs, hh, v, hs = "", c = 0, nowH = d.getHours(), t = w && w.days ? w.days[0] : null;
+    var d = new Date(), day = agDays[0], w = wxLast, W = (typeof W7 !== "undefined" && W7 && W7.days && W7.days[0]) || null, W1 = (typeof W7 !== "undefined" && W7 && W7.days && W7.days[1]) || null, m, i, x, n = 0, h = "", a = "", all = [], c = 0, nowH = d.getHours(), t = w && w.days ? w.days[0] : null, sr = 7, ss = 18, hr, mm2, dy, cols = "", pp, tp, fl;
     if (kind === "abs") { return '<div class="bjemp"></div>'; }
     if (!day || !day.evs.length) { a = '<div class="bjnone">' + (day ? "Rien de prévu aujourd'hui" : "Agenda indisponible") + '</div>'; }
     else { for (i = 0; i < day.evs.length; i++) { if (n >= 7) { break; } x = day.evs[i]; a += '<div class="bjr' + (x.past ? " past" : "") + '"><b>' + esc(x.time) + '</b><span>' + esc(x.title) + '</span></div>'; n++; } if (day.evs.length > n) { a += '<div class="bjnone">+ ' + (day.evs.length - n) + ' autre' + (day.evs.length - n > 1 ? "s" : "") + '</div>'; } }
     m = w && w.now ? wmo(w.now.code, w.now.day, w.now.mm) : null;
-    h = '<div class="bjwt">' + (m ? ICONS[m.k] : '') + '<div class="bjw1">' + (w && w.now ? rnd(w.now.temp) : "--") + '°</div><div class="bjw2">' + (m ? esc(m.t) : "") + '<br>' + (t ? rnd(t.hi) + '° / ' + rnd(t.lo) + '°' : "") + '</div></div>';
-    st.push(["Pluie", (W && W.pp !== null ? W.pp : (t ? t.rain : "--")) + " %", W && W.mm !== null ? W.mm + " mm" : ""]);
-    st.push(["Vent", W && W.wind !== null ? rnd(W.wind) + " km/h" : "--", W && W.gust !== null ? "rafales " + rnd(W.gust) : ""]);
-    st.push(["UV", W && W.uv !== null ? W.uv : "--", ""]);
-    st.push(["Ressenti", w && w.now && w.now.feel !== null && w.now.feel !== undefined ? rnd(w.now.feel) + "°" : "--", ""]);
-    st.push(["Lever", W ? W.sunrise : "--", ""]);
-    st.push(["Coucher", W ? W.sunset : "--", ""]);
-    h += '<div class="bjst">'; for (i = 0; i < st.length; i++) { h += '<div><small>' + st[i][0] + '</small><b>' + st[i][1] + '</b><i>' + st[i][2] + '</i></div>'; } h += '</div>';
-    if (W && W.hours) {
-      hrs = W.hours;
-      for (i = 0; i < hrs.length; i++) { hh = hrs[i]; if (hh.h >= nowH && (hh.h - nowH) % 2 === 0 && c < 10) { v = hh.pp === null ? 0 : hh.pp; hs += '<div><em>' + (v > 0 ? v : "") + '</em><u style="height:' + Math.max(3, Math.round(v * 0.7)) + 'px"></u>' + hh.h + ' h</div>'; c++; } }
-      if (hs) { h += '<div class="bjhl">Risque de pluie (%) · toutes les 2 h</div><div class="bjhr" style="margin-top:0">' + hs + '</div>'; }
+    fl = w && w.now && w.now.feel !== null && w.now.feel !== undefined ? rnd(w.now.feel) : null;
+    h = '<div class="bjwt">' + (m ? ICONS[m.k] : '') + '<div class="bjw1">' + (w && w.now ? rnd(w.now.temp) : "--") + '°</div><div class="bjw2"><b>' + (m ? esc(m.t) : "") + '</b><br>' + (t ? '↑ ' + rnd(t.hi) + '°  ↓ ' + rnd(t.lo) + '°' : "") + (fl !== null ? '<br><span>Ressenti ' + fl + '°</span>' : '') + '</div></div>';
+    pp = W && W.pp !== null ? W.pp : (t ? t.rain : null);
+    h += '<div class="bjst">'
+      + '<div><small>Pluie</small><b>' + (pp !== null ? pp + ' %' : '--') + '</b><i>' + (W && W.mm !== null ? (W.mm > 0 ? W.mm + ' mm' : 'aucune') : '') + '</i></div>'
+      + '<div><small>Vent</small><b>' + (W && W.wind !== null ? rnd(W.wind) + ' km/h' : '--') + '</b><i>' + (W && W.gust !== null ? 'rafales ' + rnd(W.gust) : '') + '</i></div>'
+      + '<div><small>UV</small><b>' + (W && W.uv !== null ? W.uv : '--') + '</b><i>' + (W && W.sunrise ? W.sunrise + ' · ' + W.sunset : '') + '</i></div></div>';
+    if (W && W.sunrise) { sr = parseInt(W.sunrise.substr(0, 2), 10); ss = parseInt(W.sunset.substr(0, 2), 10); }
+    all = (W && W.hours ? W.hours.map(function (q) { return { q: q, d: 0 }; }) : []).concat(W1 && W1.hours ? W1.hours.map(function (q) { return { q: q, d: 1 }; }) : []);
+    for (i = 0; i < all.length && c < 5; i++) {
+      hr = all[i];
+      if (hr.d === 0 && hr.q.h < nowH + 1) { continue; }
+      if ((hr.d === 0 ? hr.q.h - (nowH + 1) : 24 - (nowH + 1) + hr.q.h) % 3 !== 0) { continue; }
+      dy = hr.q.h >= sr && hr.q.h < ss ? 1 : 0; mm2 = wmo(hr.q.code, dy, hr.q.mm);
+      pp = hr.q.pp === null ? 0 : hr.q.pp; tp = hr.q.t === null ? "--" : rnd(hr.q.t);
+      cols += '<div><span class="bjh">' + hr.q.h + ' h</span>' + ICONS[mm2.k] + '<b>' + tp + '°</b><span class="bjrb"><u style="height:' + Math.max(2, Math.round(pp * 0.34)) + 'px"></u></span><em>' + pp + ' %</em></div>'; c++;
     }
+    if (cols) { h += '<div class="bjhl">Prochaines heures</div><div class="bjhr">' + cols + '</div>'; }
     return '<div class="bj2"><div class="bjk"><h4>' + BJ_IC.cal + 'Agenda du jour</h4>' + a + '</div><div class="bjk"><h4>' + BJ_IC.wx + 'Météo du jour</h4>' + h + '</div></div>';
   }
   function bjWrap(kind) {
     var inner = bjV5(kind).replace('<div class="bjc">', '');
-    return '<div class="bjc"><div class="bjtr"><div class="bjpg bjp1">' + inner + '</div><div class="bjpg bjp2">' + bjP2(kind) + '<div class="bjbar"><button type="button" class="bjar" id="bjPv" aria-label="Page précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button></div></div></div></div>';
+    return '<div class="bjc"><div class="bjtr"><div class="bjpg bjp1">' + inner + '</div><div class="bjpg bjp2">' + bjP2(kind) + '<div class="bjbar' + (kind === 'abs' ? '' : ' bjtwo') + '"><button type="button" class="bjar" id="bjPv" aria-label="Page précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>' + (kind === 'abs' ? '' : '<button type="button" id="bjGo">Bonne journée</button><span class="bjar bjgh"></span>') + '</div></div></div></div>';
   }
   function bjDraw(kind, th) {
     var pop = $("bjPop");
@@ -3487,6 +3507,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["14/11/2026", [
+      ["4.60", "Bonjour : couleurs, météo refaite, bouton déplacé (test)", "Bonjour passe en gris-sauge, Pendant ton absence en gris-indigo. Dans Bonjour, le bouton « Bonne journée » quitte la 1re page et se place, plus petit, en bas de la 2e. La météo du jour affiche température, ressenti, pluie, vent, UV, lever/coucher et une frise des prochaines heures (icône, température, risque de pluie)."],
       ["4.59", "Bonjour : 2e page agenda + météo (test)", "La flèche du pop-up Bonjour ouvre un écran coupé en deux : l’agenda du jour à gauche, la météo du jour à droite (température, pluie, vent, UV, ressenti, lever/coucher et risque de pluie toutes les 2 h). Le pop-up Pendant ton absence garde une 2e page vide."],
       ["4.58", "Deux teintes pour les pop-ups (test)", "Bonjour prend un gris teinté sable chaud, Pendant ton absence un gris teinté bleu acier. Les couleurs restent très atténuées."],
       ["4.57", "Pop-ups en gris transparent (test)", "Les pop-ups Bonjour et Pendant ton absence perdent leurs couleurs vives : fond gris translucide, cartes en verre, pastille blanche, dans l’esprit du reste du tableau de bord."],
