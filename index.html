@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:9800 TDBA:211-->
+<!--TDBV:9900 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -705,8 +705,31 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 .bjar { -webkit-flex: none; flex: none; width: 68px; height: 68px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.35); background: rgba(255,255,255,0.14); color: #fff; padding: 0; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; }
 .bjar svg { width: 34px; height: 34px; }
 .bjbar .bjar { margin-left: 16px; }
-.bjp2 .bjbar { margin-top: 0; }
-.bjp2 { -webkit-justify-content: flex-end; justify-content: flex-end; }
+.bjp2 .bjbar { margin-top: 24px; }
+.bjp2 { -webkit-justify-content: flex-start; justify-content: flex-start; }
+.bj2 { display: -webkit-flex; display: flex; -webkit-flex: 1; flex: 1; min-height: 0; }
+.bj2 .bjk { -webkit-flex: 1 1 0; flex: 1 1 0; min-width: 0; margin: 0; padding: 24px 28px; overflow: hidden; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; }
+.bj2 .bjk + .bjk { margin-left: 22px; }
+.bj2 .bjk h4 { font-size: 22px; margin-bottom: 14px; }
+.bj2 .bjk h4 svg { width: 30px; height: 30px; }
+.bj2 .bjr { font-size: 29px; padding: 9px 0; }
+.bj2 .bjr b { min-width: 104px; }
+.bj2 .bjr.past { opacity: 0.4; }
+.bj2 .bjnone { font-size: 26px; padding: 8px 0; }
+.bjwt { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; margin-bottom: 18px; }
+.bjwt svg { width: 84px; height: 84px; -webkit-flex: none; flex: none; margin-right: 18px; }
+.bjwt .bjw1 { font-size: 78px; font-weight: bold; line-height: 1; color: #fff; }
+.bjwt .bjw2 { margin-left: 22px; font-size: 26px; line-height: 1.3; color: rgba(255,255,255,0.85); }
+.bjst { display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; margin: 0 -8px; }
+.bjst > div { width: 33.33%; box-sizing: border-box; padding: 0 8px; margin-bottom: 14px; }
+.bjst small { display: block; font-size: 16px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+.bjst b { display: block; font-size: 30px; line-height: 1.2; color: #fff; }
+.bjst i { font-style: normal; font-size: 18px; color: rgba(255,255,255,0.6); }
+.bjhr { display: -webkit-flex; display: flex; -webkit-align-items: flex-end; align-items: flex-end; height: 120px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.12); padding-top: 10px; }
+.bjhr > div { -webkit-flex: 1; flex: 1; text-align: center; font-size: 16px; color: rgba(255,255,255,0.55); }
+.bjhr > div > u { display: block; width: 62%; margin: 0 auto 4px; border-radius: 6px 6px 2px 2px; background: rgba(255,255,255,0.55); text-decoration: none; min-height: 3px; }
+.bjhr > div > em { display: block; font-style: normal; font-size: 15px; color: rgba(255,255,255,0.8); height: 18px; }
+.bjhl { font-size: 15px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-top: auto; padding-bottom: 6px; }
 .bjp2 .bjbar .bjar { margin-left: 0; }
 .bjemp { -webkit-flex: 1; flex: 1; min-height: 300px; }
 /* thèmes de couleur du pop-up */
@@ -1820,7 +1843,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("9800", 10) || 0, UI_NAME = "4.58 iPad (beta)".charAt(0) === "_" ? "?" : "4.58 iPad (beta)";
+  var UI_CODE = parseInt("9900", 10) || 0, UI_NAME = "4.59 iPad (beta)".charAt(0) === "_" ? "?" : "4.59 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2309,9 +2332,30 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
       + '<div class="v5r">' + bjCard('cal', D.abs ? 'À venir' : 'Aujourd\'hui', '', bjAg(2)) + bjCard('mail', D.abs ? 'Mails reçus' : 'Mails de la nuit', '4', bjMails(2)) + bjCard('news', 'À la une', '', bjNews(2)) + '</div></div>'
       + '<div class="bjsm">Aperçu : mails et actualités sont des exemples pour l\'instant</div><div class="bjbar"><button type="button" id="bjGo">' + (D.abs ? 'Compris' : 'Bonne journée') + '</button><button type="button" class="bjar" id="bjNx" aria-label="Page suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button></div>';
   }
+  function bjP2(kind) {
+    var d = new Date(), day = agDays[0], w = wxLast, W = (typeof W7 !== "undefined" && W7 && W7.days && W7.days[0]) || null, m, i, x, n = 0, h = "", a = "", st = [], hrs, hh, v, hs = "", c = 0, nowH = d.getHours(), t = w && w.days ? w.days[0] : null;
+    if (kind === "abs") { return '<div class="bjemp"></div>'; }
+    if (!day || !day.evs.length) { a = '<div class="bjnone">' + (day ? "Rien de prévu aujourd'hui" : "Agenda indisponible") + '</div>'; }
+    else { for (i = 0; i < day.evs.length; i++) { if (n >= 7) { break; } x = day.evs[i]; a += '<div class="bjr' + (x.past ? " past" : "") + '"><b>' + esc(x.time) + '</b><span>' + esc(x.title) + '</span></div>'; n++; } if (day.evs.length > n) { a += '<div class="bjnone">+ ' + (day.evs.length - n) + ' autre' + (day.evs.length - n > 1 ? "s" : "") + '</div>'; } }
+    m = w && w.now ? wmo(w.now.code, w.now.day, w.now.mm) : null;
+    h = '<div class="bjwt">' + (m ? ICONS[m.k] : '') + '<div class="bjw1">' + (w && w.now ? rnd(w.now.temp) : "--") + '°</div><div class="bjw2">' + (m ? esc(m.t) : "") + '<br>' + (t ? rnd(t.hi) + '° / ' + rnd(t.lo) + '°' : "") + '</div></div>';
+    st.push(["Pluie", (W && W.pp !== null ? W.pp : (t ? t.rain : "--")) + " %", W && W.mm !== null ? W.mm + " mm" : ""]);
+    st.push(["Vent", W && W.wind !== null ? rnd(W.wind) + " km/h" : "--", W && W.gust !== null ? "rafales " + rnd(W.gust) : ""]);
+    st.push(["UV", W && W.uv !== null ? W.uv : "--", ""]);
+    st.push(["Ressenti", w && w.now && w.now.feel !== null && w.now.feel !== undefined ? rnd(w.now.feel) + "°" : "--", ""]);
+    st.push(["Lever", W ? W.sunrise : "--", ""]);
+    st.push(["Coucher", W ? W.sunset : "--", ""]);
+    h += '<div class="bjst">'; for (i = 0; i < st.length; i++) { h += '<div><small>' + st[i][0] + '</small><b>' + st[i][1] + '</b><i>' + st[i][2] + '</i></div>'; } h += '</div>';
+    if (W && W.hours) {
+      hrs = W.hours;
+      for (i = 0; i < hrs.length; i++) { hh = hrs[i]; if (hh.h >= nowH && (hh.h - nowH) % 2 === 0 && c < 10) { v = hh.pp === null ? 0 : hh.pp; hs += '<div><em>' + (v > 0 ? v : "") + '</em><u style="height:' + Math.max(3, Math.round(v * 0.7)) + 'px"></u>' + hh.h + ' h</div>'; c++; } }
+      if (hs) { h += '<div class="bjhl">Risque de pluie (%) · toutes les 2 h</div><div class="bjhr" style="margin-top:0">' + hs + '</div>'; }
+    }
+    return '<div class="bj2"><div class="bjk"><h4>' + BJ_IC.cal + 'Agenda du jour</h4>' + a + '</div><div class="bjk"><h4>' + BJ_IC.wx + 'Météo du jour</h4>' + h + '</div></div>';
+  }
   function bjWrap(kind) {
     var inner = bjV5(kind).replace('<div class="bjc">', '');
-    return '<div class="bjc"><div class="bjtr"><div class="bjpg bjp1">' + inner + '</div><div class="bjpg bjp2"><div class="bjemp"></div><div class="bjbar"><button type="button" class="bjar" id="bjPv" aria-label="Page précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button></div></div></div></div>';
+    return '<div class="bjc"><div class="bjtr"><div class="bjpg bjp1">' + inner + '</div><div class="bjpg bjp2">' + bjP2(kind) + '<div class="bjbar"><button type="button" class="bjar" id="bjPv" aria-label="Page précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button></div></div></div></div>';
   }
   function bjDraw(kind, th) {
     var pop = $("bjPop");
@@ -3443,6 +3487,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["14/11/2026", [
+      ["4.59", "Bonjour : 2e page agenda + météo (test)", "La flèche du pop-up Bonjour ouvre un écran coupé en deux : l’agenda du jour à gauche, la météo du jour à droite (température, pluie, vent, UV, ressenti, lever/coucher et risque de pluie toutes les 2 h). Le pop-up Pendant ton absence garde une 2e page vide."],
       ["4.58", "Deux teintes pour les pop-ups (test)", "Bonjour prend un gris teinté sable chaud, Pendant ton absence un gris teinté bleu acier. Les couleurs restent très atténuées."],
       ["4.57", "Pop-ups en gris transparent (test)", "Les pop-ups Bonjour et Pendant ton absence perdent leurs couleurs vives : fond gris translucide, cartes en verre, pastille blanche, dans l’esprit du reste du tableau de bord."],
       ["4.56", "Fond d’écran coupé pendant les pop-ups (test)", "Quand un pop-up Bonjour ou Pendant ton absence est affiché, le fond d’écran animé (pluie, neige…) est désactivé derrière, puis revient à la fermeture."],
