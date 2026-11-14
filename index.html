@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:9500 TDBA:211-->
+<!--TDBV:9600 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -1820,7 +1820,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("9500", 10) || 0, UI_NAME = "4.55 iPad (beta)".charAt(0) === "_" ? "?" : "4.55 iPad (beta)";
+  var UI_CODE = parseInt("9600", 10) || 0, UI_NAME = "4.56 iPad (beta)".charAt(0) === "_" ? "?" : "4.56 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2318,13 +2318,13 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     pop.className = (kind === "abs" ? "abs " : "") + "t" + (th || 1);
     pop.innerHTML = bjWrap(kind);
     var bc = pop.firstChild;
-    $("bjGo").onclick = function () { pop.style.display = "none"; $("app").style.visibility = ""; };
+    $("bjGo").onclick = function () { pop.style.display = "none"; $("app").style.visibility = ""; $("bg").style.display = ""; };
     $("bjNx").onclick = function () { bc.className = "bjc p2"; };
     $("bjPv").onclick = function () { bc.className = "bjc"; };
   }
   (function () {
     var pop = document.createElement("div"); pop.id = "bjPop"; document.body.appendChild(pop);
-    window.bjShow = function (kind, th) { bjDraw(kind, th); $("app").style.visibility = "hidden"; pop.style.display = "-webkit-flex"; pop.style.display = "flex"; };
+    window.bjShow = function (kind, th) { bjDraw(kind, th); $("app").style.visibility = "hidden"; $("bg").style.display = "none"; pop.style.display = "-webkit-flex"; pop.style.display = "flex"; };
   })();
 
   /* tap immédiat : l'ancien WebView attend ~300 ms avant de valider un appui */
@@ -3443,6 +3443,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["14/11/2026", [
+      ["4.56", "Fond d’écran coupé pendant les pop-ups (test)", "Quand un pop-up Bonjour ou Pendant ton absence est affiché, le fond d’écran animé (pluie, neige…) est désactivé derrière, puis revient à la fermeture."],
       ["4.55", "Pop-ups transparents sur le fond d’écran (test)", "Les pop-ups masquent toute la page du tableau de bord mais laissent voir ton fond d’écran à travers leur fond translucide, comme le reste de l’interface."],
       ["4.54", "Pop-ups en plein écran (test)", "Les pop-ups Bonjour et Pendant ton absence reprennent tout l’écran, comme avant la réduction de taille."],
       ["4.53", "Transition des pop-ups ralentie (test)", "Le glissement vers la 2e page des pop-ups Bonjour et Pendant ton absence va deux fois moins vite."],
