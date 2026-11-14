@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:8900 TDBA:211-->
+<!--TDBV:9000 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -429,6 +429,20 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 .slV { font-size: 54px; font-weight: bold; color: #8a919c; margin-top: 6px; }
 #slWI { opacity: 0.5; }
 #slp.auto { -webkit-filter: brightness(1.2); filter: brightness(1.2); }
+/* veille automatique : les trois pastilles en quinconce (haut / bas / haut), version en bas à gauche, très tamisée */
+#slp.auto .slb { -webkit-transform: translateY(-46px); transform: translateY(-46px); }
+#slp.auto .slb + .slb { -webkit-transform: translateY(46px); transform: translateY(46px); }
+#slp.auto .slb + .slb + .slb { -webkit-transform: translateY(-46px); transform: translateY(-46px); }
+#slVer { display: none; position: absolute; left: 28px; bottom: 24px; font-size: 16px; color: #3a3f48; }
+#slp.auto #slVer { display: block; }
+/* écran « Nuit » (Bonne nuit / bouton Veille) : presque noir, juste une grosse heure ambrée très tamisée ; rien d'autre ne s'allume */
+#slp.nuit { -webkit-justify-content: center; justify-content: center; }
+#slp.nuit #slC { font-size: 190px; color: #4f4234; margin-top: 0; }
+#slp.nuit #slD { color: #3a342d; font-size: 26px; margin-top: 12px; }
+#slp.nuit #slR, #slp.nuit #slS { display: none; }
+#slp.nuit #slB:not(.low) { display: none !important; }
+#slp.nuit #slH { margin: 70px 0 0; border-color: #1f2227; color: #343840; font-size: 17px; }
+#slp.nuit #slH i { background: #1b1e22; color: #343840; }
 #slp { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 #slP { display: none; position: absolute; left: 0; bottom: 0; height: 4px; width: 0; background: #3c424b; }
 #slS { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; font-size: 30px; font-weight: bold; color: #8a919c; margin-bottom: 14px; }
@@ -768,7 +782,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
  </div>
 </div>
 
-<div id="slp"><div id="slB"></div><div id="slC">--:--</div><div id="slD"></div><div id="slR"><div class="slb"><div class="slI" id="slWI"></div><div class="slV" id="slWT"></div></div><div class="slb"><div class="slI" id="slRI"></div><div class="slV" id="slRT"></div></div><div class="slb"><div class="slI" id="slMI"></div><div class="slV" id="slT"></div></div></div><div id="slS"></div><div id="slH"><i>i</i>Fais un appui long (3 s) n'importe où sur l'écran pour quitter la veille</div><div id="slP"></div></div>
+<div id="slp"><div id="slB"></div><div id="slC">--:--</div><div id="slD"></div><div id="slR"><div class="slb"><div class="slI" id="slWI"></div><div class="slV" id="slWT"></div></div><div class="slb"><div class="slI" id="slRI"></div><div class="slV" id="slRT"></div></div><div class="slb"><div class="slI" id="slMI"></div><div class="slV" id="slT"></div></div></div><div id="slS"></div><div id="slH"><i>i</i>Fais un appui long (3 s) n'importe où sur l'écran pour quitter la veille</div><div id="slVer"></div><div id="slP"></div></div>
 <div id="dbg"><div class="bar"><h2>Diagnostic</h2><span><button type="button" id="dbgSend">Envoyer le diagnostic</button><button type="button" id="dbgClr">Vider le journal</button><button type="button" id="dbgX">Fermer</button></span></div>
  <div class="cols"><div class="box" id="dbgL"></div><div class="box" id="dbgR"></div></div></div>
 
@@ -1681,7 +1695,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     lum: "Lumières — allume, éteins et règle la couleur de la LED et de la lampe Lego, ou éteins tout d'un appui.",
     wx: "Météo — les conditions du moment et les prévisions des prochaines heures, pour t'organiser sans sortir le téléphone.",
     lib: "Autre — la bibliothèque des modules : infos, réglages d'écran et idées à venir. Chaque module a sa propre fenêtre.",
-    veille: "Veille — éteint l'affichage pour la nuit ; un simple toucher le réveille, et il se met en veille seul après 2 min sans toucher."
+    veille: "Veille — éteint l'affichage pour la nuit ; un appui de 3 secondes le réveille. Sans toucher pendant 2 min, un autre écran de veille se lance seul (il se réveille d'un simple toucher)."
   };
   function demoBub(t) { var d = document.createElement("div"); d.className = "demoB"; d.innerHTML = '<b>i</b><span>' + esc(t) + '</span>'; return d; }
   function demoSync() {
@@ -1752,7 +1766,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("8900", 10) || 0, UI_NAME = "4.49 iPad (beta)".charAt(0) === "_" ? "?" : "4.49 iPad (beta)";
+  var UI_CODE = parseInt("9000", 10) || 0, UI_NAME = "4.50 iPad (beta)".charAt(0) === "_" ? "?" : "4.50 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2137,13 +2151,15 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     if (d.getMinutes() % 5 === 0) { pull(); }
     slTm = setTimeout(slTick, 60000 - (Date.now() % 60000) + 100);
   }
-  function sleepOn(auto) {
+  function sleepOn(kind) {
     if (CZ) { zoneExitAll(); }
     var i;
     SLEEP = 1; $("bg").style.display = "none";
     for (i = 0; i < IVS.length; i++) { _ci.call(window, IVS[i].id); }
     $("app").style.display = "none"; $("bg").style.display = "none";
-    $("slp").className = auto === true ? "auto" : "";   /* veille automatique : affichage 20 % plus lumineux ; Bonne nuit et bouton restent inchangés */
+    $("slp").className = kind === "auto" ? "auto" : "nuit";   /* « auto » : écran d'attente complet, +20 % de lumière, réveil au simple toucher ; « nuit » : heure tamisée seule, réveil par appui de 3 s */
+    $("slVer").textContent = "Version " + UI_NAME;
+    $("slH").innerHTML = '<i>i</i>' + (kind === "auto" ? "Touche l'écran pour quitter la veille" : "Appui long (3 s) n'importe où pour quitter la veille");
     $("slp").style.display = "-webkit-flex"; $("slp").style.display = "flex";
     try { if (window.Native && window.Native.setSleep) { window.Native.setSleep(true); } } catch (e) { }
     pull();
@@ -2159,22 +2175,30 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     lastMin = -1; tick(); batDraw(); pull(); loadLum(); loadWeather(); loadAgenda();
     try { if (window.veilleArm) { window.veilleArm(); } } catch (e) { }
   }
-  /* réveil : un simple toucher de l'écran suffit */
+  /* réveil : veille automatique (classe « auto ») = un simple toucher ; veille « Nuit » = appui maintenu 3 secondes (barre de progression) */
   (function () {
-    var p = $("slp"), bar = $("slP");
-    function wake(ev) {
-      if (!SLEEP) { return; }
-      if (ev && ev.preventDefault && ev.cancelable !== false) { ev.preventDefault(); }
-      bar.style.display = "none"; bar.style.width = "0";
-      sleepOff();
+    var p = $("slp"), bar = $("slP"), t0 = 0, tm = 0;
+    function cancel() { clearTimeout(tm); t0 = 0; bar.style.display = "none"; bar.style.width = "0"; }
+    function tick() {
+      var e = Date.now() - t0;
+      bar.style.width = Math.min(100, e / 30) + "%";
+      if (e >= 3000) { cancel(); sleepOff(); } else { tm = setTimeout(tick, 100); }
     }
-    p.addEventListener("touchstart", wake); p.addEventListener("mousedown", wake);
+    function start(ev) {
+      if (!SLEEP) { return; }
+      if (ev.preventDefault && ev.cancelable !== false) { ev.preventDefault(); }
+      if (p.className === "auto") { cancel(); sleepOff(); return; }
+      if (t0) { return; }
+      t0 = Date.now(); bar.style.display = "block"; tick();
+    }
+    p.addEventListener("touchstart", start); p.addEventListener("mousedown", start);
+    p.addEventListener("touchend", cancel); p.addEventListener("touchcancel", cancel); p.addEventListener("mouseup", cancel); p.addEventListener("mouseleave", cancel);
     p.addEventListener("contextmenu", function (ev) { ev.preventDefault(); });
   })();
   /* veille automatique : après 2 min sans aucun toucher, l'écran passe en veille */
   (function () {
     var IDLE = 120000, tm = 0;
-    function arm() { clearTimeout(tm); if (!SLEEP) { tm = setTimeout(function () { if (!SLEEP) { sleepOn(true); } }, IDLE); } }
+    function arm() { clearTimeout(tm); if (!SLEEP) { tm = setTimeout(function () { if (!SLEEP && VAUTO) { sleepOn("auto"); } }, IDLE); } }
     function touch() { if (!SLEEP) { arm(); } }
     document.addEventListener("touchstart", touch, true); document.addEventListener("touchmove", touch, true);
     document.addEventListener("mousedown", touch, true); document.addEventListener("keydown", touch, true);
@@ -2759,6 +2783,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   function xGet(k, d) { try { var v = window.localStorage.getItem("tdb_" + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } }
   function xSet(k, v) { try { window.localStorage.setItem("tdb_" + k, JSON.stringify(v)); } catch (e) { } }
   var PERF = xGet("perf", 1);
+  var VAUTO = xGet("vauto", 1);   /* veille automatique après 2 min sans toucher (réglable dans Autre > Affichage) */
   function perfApply() { var c = document.documentElement.className.replace(/\bperf\b/g, "").replace(/\s+$/, ""); document.documentElement.className = PERF ? (c ? c + " perf" : "perf") : c; }
   perfApply();
   var ICO = xGet("ico", 2);
@@ -2785,6 +2810,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   }
   function dispDraw() {
     var h = '<div class="xrow2" style="margin-bottom:10px"><button type="button" class="xbtn lg' + (PERF ? " on" : "") + '" data-x="perf">Mode léger : ' + (PERF ? "oui" : "non") + '</button><button type="button" class="xbtn lg' + (ICO ? " on" : "") + '" data-x="ico" style="margin-left:8px">Animation météo : ' + ["non", "complète", "légère"][ICO] + '</button></div>';
+    h += '<div class="xrow2" style="margin-bottom:6px"><button type="button" class="xbtn' + (VAUTO ? " on" : "") + '" data-x="vauto">Veille automatique : ' + (VAUTO ? "après 2 min sans toucher" : "désactivée") + '</button></div><p class="note" style="margin-bottom:10px">Quand elle est active, l\'écran passe en veille tout seul après 2 minutes sans toucher, et un simple toucher le réveille. Désactivée, seule la veille « Nuit » (Bonne nuit ou bouton Veille) reste possible.</p>';
     h += '<div class="xrow2" style="margin-bottom:6px"><button type="button" class="xbtn' + (ECO ? " on" : "") + '" data-x="eco">Animations : ' + (ECO ? "pause après 2 min sans appui" : "en continu") + '</button></div><p class="note" style="margin-bottom:10px">En pause, le fond animé et les icônes se figent quand personne ne touche l\'écran : la tablette chauffe moins et consomme moins. Un appui les relance.</p>';
     h += '<p class="note" style="margin-bottom:10px">Le mode léger supprime les ombres, les transparences, les halos et les animations pour que la tablette reste fluide. Compare avec « non » grâce au test ci-dessous.</p>';
     h += '<div class="xrow2"><span style="font-size:20px;font-weight:bold">Fluidité : <span id="fpsV">…</span> images/s · pire image <span id="fpsW">…</span> ms</span></div><div class="fpsb"><i id="fpsS"></i></div><p class="note">Même mesure que le bandeau des versions TEST (pire image : la plus longue pause des 5 dernières secondes). La bille doit glisser sans saccade. Autour de 60 images/s : parfait. Moins de 20 : la tablette peine.</p>';
@@ -2906,6 +2932,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     if (!t || t === this) { return; }
     a = t.getAttribute("data-x"); v = t.getAttribute("data-a");
     if (a === "ico") { ICO = ICO === 1 ? 2 : (ICO === 2 ? 0 : 1); xSet("ico", ICO); icoApply(); if (wxLast) { drawWeather(wxLast); } dispDraw(); }
+    else if (a === "vauto") { VAUTO = VAUTO ? 0 : 1; xSet("vauto", VAUTO); if (window.veilleArm) { window.veilleArm(); } dispDraw(); }
     else if (a === "perf") { PERF = PERF ? 0 : 1; xSet("perf", PERF); perfApply(); dispDraw(); }
     else if (a === "lab") { labRun(); }
     else if (a === "synm" || a === "synp") { xSet("sync", Math.max(-1000, Math.min(1000, xGet("sync", 0) + (a === "synp" ? 50 : -50)))); dispDraw(); }
@@ -3054,6 +3081,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     ["Circulation et infos", "13/11 · envoyée depuis la tablette : circulation / embouteillages et actualités"],
     ["Intégration Discord", "14/11 · envoyée depuis la tablette (à préciser)"],
     ["Page « Bonjour »", "14/11 · envoyée depuis la tablette : à développer ensemble, Claude te pose les questions"],
+    ["Caméra du portail", "14/11 · étudiée : l'interphone actuel (2 fils, sans réglages) n'a pas de flux réseau ; seule piste = une caméra IP séparée près du portail, relayée par le PC"],
     ["Alerte météo", "13/11 · dite en direct : vigilance Météo-France (orages, pluie-inondation…) et crues (Vigicrues) pour la Gironde"]
   ], l: [
     ["Pluie dans l'heure", "Facile", "Un bandeau « il va pleuvoir dans 20 min » sur l'accueil, à partir des prévisions déjà utilisées (Open-Meteo, pas de 15 min). Utile pour le linge, la fenêtre, la sortie.", "Mise à jour seule"],
@@ -3296,6 +3324,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["14/11/2026", [
+      ["4.50", "Deux veilles distinctes + option pour couper la veille automatique (test)", "Veille automatique (2 min sans toucher) : écran d’attente complet, +20 % de lumière, pastilles en quinconce, version tamisée, réveil au simple toucher. Veille « Nuit » (Bonne nuit, bouton Veille) : presque noir, heure ambrée tamisée seule, réveil par appui de 3 secondes. Nouveau réglage Autre > Affichage > Veille automatique (oui/non). Idée « Caméra du portail » notée."],
       ["4.49", "Retour à l’état de la 4.47 (test)", "Les deux réveils différents (4.48) sont annulés suite à un bug : la veille se réveille de nouveau d’un simple toucher, comme en 4.47."],
       ["4.47", "Deux idées du Feedback rangées (test)", "« Intégration Discord » et « Page Bonjour » ajoutées dans Autre > Idées, en attente de précisions."]
     ]],
