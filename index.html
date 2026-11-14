@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:10300 TDBA:211-->
+<!--TDBV:10400 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -202,6 +202,9 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 .nowT { font-size: 76px; line-height: 1; font-weight: bold; margin-top: 22px; }
 .nowP { font-size: 20px; margin-top: 4px; }
 .nowD { font-size: 14px; color: #8f98a5; margin-top: 6px; }
+.wDayT { -webkit-flex: 1 1 0; flex: 1 1 0; min-width: 0; padding: 18px 20px; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-justify-content: center; justify-content: center; }
+.wDayT .bjhr { -webkit-flex: none; flex: none; height: 270px; }
+.wDayT .bjst { margin-bottom: 26px; }
 .wCast { -webkit-flex: 1 1 0; flex: 1 1 0; padding: 12px 18px; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; }
 .msg { margin: 0; color: #8f98a5; }
 .msg.bad { color: #ff7a70; }
@@ -870,7 +873,8 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
        <div class="nowT" id="nowT"></div><div class="nowP" id="nowP"></div><div class="nowD" id="nowD"></div>
       </div>
      </div>
-     <div class="tile wCast"><p class="msg" id="castMsg2">Chargement…</p><div class="fl" id="fl2" style="display:none"></div></div>
+     <div class="tile wCast" style="display:none"><p class="msg" id="castMsg2">Chargement…</p><div class="fl" id="fl2" style="display:none"></div></div>
+     <div class="tile wDayT" id="wDay"></div>
     </div>
    </section>
 
@@ -1863,7 +1867,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("10300", 10) || 0, UI_NAME = "4.63 iPad (beta)".charAt(0) === "_" ? "?" : "4.63 iPad (beta)";
+  var UI_CODE = parseInt("10400", 10) || 0, UI_NAME = "4.64 iPad (beta)".charAt(0) === "_" ? "?" : "4.64 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2352,14 +2356,11 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
       + '<div class="v5r">' + bjCard('cal', D.abs ? 'À venir' : 'Aujourd\'hui', '', bjAg(2)) + bjCard('mail', D.abs ? 'Mails reçus' : 'Mails de la nuit', '4', bjMails(2)) + bjCard('news', 'À la une', '', bjNews(2)) + '</div></div>'
       + '<div class="bjsm">Aperçu : mails et actualités sont des exemples pour l\'instant</div><div class="bjbar' + (D.abs ? '' : ' bjone') + '">' + (D.abs ? '<button type="button" id="bjGo">Compris</button>' : '') + '<button type="button" class="bjar" id="bjNx" aria-label="Page suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button></div>';
   }
-  function bjP2(kind) {
-    var d = new Date(), day = agDays[0], w = wxLast, W = (typeof W7 !== "undefined" && W7 && W7.days && W7.days[0]) || null, W1 = (typeof W7 !== "undefined" && W7 && W7.days && W7.days[1]) || null, m, i, x, n = 0, h = "", a = "", all = [], c = 0, nowH = d.getHours(), t = w && w.days ? w.days[0] : null, sr = 7, ss = 18, hr, mm2, dy, cols = "", pp, tp, fl;
-    if (kind === "abs") { return '<div class="bjemp"></div>'; }
-    if (!day || !day.evs.length) { a = '<div class="bjnone">' + (day ? "Rien de prévu aujourd'hui" : "Agenda indisponible") + '</div>'; }
-    else { for (i = 0; i < day.evs.length; i++) { if (n >= 7) { break; } x = day.evs[i]; a += '<div class="bjr' + (x.past ? " past" : "") + '"><b>' + esc(x.time) + '</b><span>' + esc(x.title) + '</span></div>'; n++; } if (day.evs.length > n) { a += '<div class="bjnone">+ ' + (day.evs.length - n) + ' autre' + (day.evs.length - n > 1 ? "s" : "") + '</div>'; } }
+  function bjWx(noTop) {
+    var d = new Date(), w = wxLast, W = (typeof W7 !== "undefined" && W7 && W7.days && W7.days[0]) || null, W1 = (typeof W7 !== "undefined" && W7 && W7.days && W7.days[1]) || null, m, i, h = "", all = [], c = 0, nowH = d.getHours(), t = w && w.days ? w.days[0] : null, sr = 7, ss = 18, hr, mm2, dy, cols = "", pp, tp, fl;
     m = w && w.now ? wmo(w.now.code, w.now.day, w.now.mm) : null;
     fl = w && w.now && w.now.feel !== null && w.now.feel !== undefined ? rnd(w.now.feel) : null;
-    h = '<div class="bjwt">' + (m ? ICONS[m.k] : '') + '<div class="bjw1">' + (w && w.now ? rnd(w.now.temp) : "--") + '°</div><div class="bjw2"><b>' + (m ? esc(m.t) : "") + '</b><br>' + (t ? '↑ ' + rnd(t.hi) + '°  ↓ ' + rnd(t.lo) + '°' : "") + (fl !== null ? '<br><span>Ressenti ' + fl + '°</span>' : '') + '</div></div>';
+    if (!noTop) { h = '<div class="bjwt">' + (m ? ICONS[m.k] : '') + '<div class="bjw1">' + (w && w.now ? rnd(w.now.temp) : "--") + '°</div><div class="bjw2"><b>' + (m ? esc(m.t) : "") + '</b><br>' + (t ? '↑ ' + rnd(t.hi) + '°  ↓ ' + rnd(t.lo) + '°' : "") + (fl !== null ? '<br><span>Ressenti ' + fl + '°</span>' : '') + '</div></div>'; }
     pp = W && W.pp !== null ? W.pp : (t ? t.rain : null);
     h += '<div class="bjst">'
       + '<div class="sR"><small aria-label="Pluie"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 14h10a4 4 0 0 0 .4-8A6 6 0 0 0 6 7.500 3.500 3.500 0 0 0 7 14z"/><path d="M9 17l-1 3M13 17l-1 3M17 17l-1 3"/></svg></small><b>' + (pp !== null ? pp + ' %' : '--') + '</b><i>' + (W && W.mm !== null ? (W.mm > 0 ? W.mm + ' mm' : 'aucune') : '') + '</i></div>'
@@ -2376,6 +2377,16 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
       cols += '<div class="t-' + (mm2.k === "partly" ? "sun" : mm2.k === "partlyNight" ? "moon" : mm2.k === "fog" ? "cloud" : mm2.k) + '"><span class="bjh">' + hr.q.h + ' h</span>' + ICONS[mm2.k] + '<b' + (hr.q.t !== null && hr.q.t >= 20 ? ' class="tw"' : hr.q.t !== null && hr.q.t <= 6 ? ' class="tc"' : '') + '>' + tp + '°</b><span class="bjrb"><u style="height:' + Math.max(2, Math.round(pp * 0.34)) + 'px"></u></span><em>' + pp + ' %</em></div>'; c++;
     }
     if (cols) { h += '<div class="bjhl">Prochaines heures</div><div class="bjhr">' + cols + '</div>'; }
+    return h;
+  }
+  function wDayDraw() { var e = $("wDay"); if (e) { e.innerHTML = bjWx(true); } }
+  window.wDayDraw = wDayDraw;
+  function bjP2(kind) {
+    var d = new Date(), day = agDays[0], w = wxLast, W = (typeof W7 !== "undefined" && W7 && W7.days && W7.days[0]) || null, W1 = (typeof W7 !== "undefined" && W7 && W7.days && W7.days[1]) || null, m, i, x, n = 0, h = "", a = "", all = [], c = 0, nowH = d.getHours(), t = w && w.days ? w.days[0] : null, sr = 7, ss = 18, hr, mm2, dy, cols = "", pp, tp, fl;
+    if (kind === "abs") { return '<div class="bjemp"></div>'; }
+    if (!day || !day.evs.length) { a = '<div class="bjnone">' + (day ? "Rien de prévu aujourd'hui" : "Agenda indisponible") + '</div>'; }
+    else { for (i = 0; i < day.evs.length; i++) { if (n >= 7) { break; } x = day.evs[i]; a += '<div class="bjr' + (x.past ? " past" : "") + '"><b>' + esc(x.time) + '</b><span>' + esc(x.title) + '</span></div>'; n++; } if (day.evs.length > n) { a += '<div class="bjnone">+ ' + (day.evs.length - n) + ' autre' + (day.evs.length - n > 1 ? "s" : "") + '</div>'; } }
+    h = bjWx(false);
     return '<div class="bj2"><div class="bjk"><h4>' + BJ_IC.cal + 'Agenda du jour</h4>' + a + '</div><div class="bjk"><h4>' + BJ_IC.wx + 'Météo du jour</h4>' + h + '</div></div>';
   }
   function bjWrap(kind) {
@@ -2551,7 +2562,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var wxOk = false;
   function drawWeather(w) {
     var n = w.now, m = wmo(n.code, n.day, n.mm), t = w.days[0], i;
-    wxLast = w;
+    wxLast = w; if (window.wDayDraw) { window.wDayDraw(); }
     $("nowIco").innerHTML = wic(m.k);
     $("nowT").textContent = rnd(n.temp) + "°";
     $("nowP").textContent = m.t;
@@ -2672,7 +2683,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
         if (!W7) { $("w7Msg").className = "msg bad"; $("w7Msg").style.display = "block"; $("w7Msg").textContent = "Météo de la semaine indisponible [" + err.code + "] : " + err.message; }
         return;
       }
-      try { if (!w.days || !w.days.length) { throw 1; } W7 = w; drawW7(); OKT.wx = Date.now(); ACT.wx = null; if (w.stale) { noteErr(mk("E04", "données météo anciennes"), "meteo7"); } drawErr(); }
+      try { if (!w.days || !w.days.length) { throw 1; } W7 = w; drawW7(); if (window.wDayDraw) { window.wDayDraw(); } OKT.wx = Date.now(); ACT.wx = null; if (w.stale) { noteErr(mk("E04", "données météo anciennes"), "meteo7"); } drawErr(); }
       catch (e) { noteErr(mk("E05", "météo semaine : réponse inattendue"), "meteo7"); }
     });
   }
@@ -3512,6 +3523,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["14/11/2026", [
+      ["4.64", "Onglet Météo : météo du jour à droite (test)", "Dans l’onglet Météo, la météo animée reste à gauche et la liste des prévisions à droite est remplacée par la météo du jour du pop-up Bonjour : pluie, vent et UV en logos colorés, puis les prochaines heures. Les prévisions restent sur l’Accueil et dans Autre > Météo."],
       ["4.63", "Météo du jour : logos colorés sans cadres (test)", "Les encadrés de couleur disparaissent : seuls les logos Pluie (bleu), Vent (turquoise) et UV (ambre) sont en couleur, grands et centrés, sans traits ni cartes derrière. Les prochaines heures n’ont plus de cadre non plus."],
       ["4.62", "Météo du jour en couleurs (test)", "Pluie, Vent et UV deviennent des cartes colorées (bleu, turquoise, ambre) avec de grands logos centrés, sans traits de séparation. Les prochaines heures sont teintées selon le temps (soleil, nuit, nuages, pluie), avec une jauge de pluie bleue et des températures chaudes/froides colorées."],
       ["4.61", "Météo du jour : logos (test)", "Dans la météo du jour du pop-up Bonjour, les mots Pluie, Vent et UV sont remplacés par des logos (nuage de pluie, vent, soleil UV)."],
