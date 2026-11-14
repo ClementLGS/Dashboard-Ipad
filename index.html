@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:9100 TDBA:211-->
+<!--TDBV:9200 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -667,6 +667,59 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 #demoPop .dpn { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; font-size: 16px; color: #ffd27a; margin: 6px 0; }
 #demoPop .dpn svg { width: 22px; height: 22px; margin-right: 8px; -webkit-flex: none; flex: none; }
 #demoPop button { display: block; width: 100%; height: 52px; margin-top: 6px; border-radius: 14px; border: 0; background: #d8dde6; color: #14181e; font-size: 18px; font-weight: bold; }
+
+/* ---- Bonjour (matin) et « Pendant ton absence » : deux pop-ups, design « aurore et verre » ---- */
+#bjPop { display: none; position: fixed; left: 0; top: 0; right: 0; bottom: 0; z-index: 80; background: rgba(0,0,0,0.72); -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; }
+#bjPop .bjc { position: relative; box-sizing: border-box; display: block; width: 980px; max-width: 96%; padding: 0; border-radius: 36px; overflow: hidden; border: 1px solid rgba(255,255,255,0.20); box-shadow: 0 14px 50px rgba(0,0,0,0.55);
+  background: radial-gradient(ellipse at 12% 12%, rgba(255,150,80,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(90,120,255,0.50), rgba(0,0,0,0) 58%), #0d0f14; }
+#bjPop.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(60,200,220,0.50), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(120,90,255,0.50), rgba(0,0,0,0) 58%), #0d0f14; }
+.bjk { padding: 18px 22px; margin-bottom: 14px; border-radius: 26px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); }
+.bjk h4 { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; margin: 0 0 9px; font-size: 18px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.7); }
+.bjk h4 svg { width: 24px; height: 24px; margin-right: 10px; color: #fff; -webkit-flex: none; flex: none; }
+.bjk h4 em { margin-left: auto; font-style: normal; font-size: 18px; letter-spacing: 0; text-transform: none; padding: 2px 14px; border-radius: 999px; background: #ffc466; color: #1a1305; font-weight: bold; }
+#bjPop.abs .bjk h4 em { background: #8fcbee; color: #071720; }
+.bjr { display: -webkit-flex; display: flex; font-size: 24px; line-height: 1.3; padding: 4px 0; color: #eceff3; }
+.bjr b { color: #fff; min-width: 82px; -webkit-flex: none; flex: none; font-weight: bold; }
+.bjr span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bjr small { font-size: 19px; color: rgba(255,255,255,0.55); margin-left: 8px; }
+.bjnone { font-size: 22px; color: rgba(255,255,255,0.5); padding: 3px 0; }
+.bjsm { font-size: 16px; color: rgba(255,255,255,0.45); text-align: center; margin: 4px 0 0; }
+#bjGo { display: block; width: 100%; height: 68px; margin-top: 28px; border-radius: 999px; border: 0; background: rgba(255,255,255,0.92); color: #14181e; font-size: 25px; font-weight: bold; }
+.bjrow { display: -webkit-flex; display: flex; }
+.v5l { -webkit-flex: 1; flex: 1; min-width: 0; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-justify-content: center; justify-content: center; padding-right: 34px; }
+.v5l .v5g { font-size: 64px; font-weight: bold; line-height: 1.05; color: #fff; }
+.v5l .v5d { font-size: 28px; color: rgba(255,255,255,0.75); margin: 8px 0 16px; }
+.v5l .v5c { font-size: 140px; font-weight: bold; line-height: 0.95; color: rgba(255,255,255,0.95); }
+.v5l .v5w { font-size: 26px; color: rgba(255,255,255,0.85); margin-top: 16px; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; }
+.v5l .v5w svg { width: 56px; height: 56px; margin-right: 14px; -webkit-flex: none; flex: none; }
+.v5r { width: 440px; -webkit-flex: none; flex: none; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-justify-content: center; justify-content: center; }
+.v5r .bjk:last-of-type { margin-bottom: 0; }
+.bjtr { display: -webkit-flex; display: flex; width: 200%; -webkit-transition: -webkit-transform 0.55s cubic-bezier(0.22,1,0.36,1); transition: transform 0.55s cubic-bezier(0.22,1,0.36,1); }
+#bjPop .bjc.p2 .bjtr { -webkit-transform: translateX(-50%); transform: translateX(-50%); }
+.bjpg { width: 50%; -webkit-flex: none; flex: none; box-sizing: border-box; padding: 36px 40px 32px; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-transition: opacity 0.45s ease, -webkit-transform 0.55s cubic-bezier(0.22,1,0.36,1); transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.22,1,0.36,1); }
+.bjpg.bjp2 { opacity: 0; -webkit-transform: scale(0.94); transform: scale(0.94); }
+#bjPop .bjc.p2 .bjp1 { opacity: 0; -webkit-transform: scale(0.94); transform: scale(0.94); }
+#bjPop .bjc.p2 .bjp2 { opacity: 1; -webkit-transform: scale(1); transform: scale(1); }
+.bjbar { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; margin-top: 28px; }
+.bjbar #bjGo { -webkit-flex: 1; flex: 1; margin-top: 0; }
+.bjar { -webkit-flex: none; flex: none; width: 68px; height: 68px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.35); background: rgba(255,255,255,0.14); color: #fff; padding: 0; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; }
+.bjar svg { width: 34px; height: 34px; }
+.bjbar .bjar { margin-left: 16px; }
+.bjp2 .bjbar { margin-top: auto; }
+.bjp2 .bjbar .bjar { margin-left: 0; }
+.bjemp { -webkit-flex: 1; flex: 1; min-height: 300px; }
+/* thèmes de couleur du pop-up */
+#bjPop { background: rgba(0,0,0,0.72); }
+#bjPop.t1 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(255,110,90,0.6), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(0,190,200,0.5), rgba(0,0,0,0) 58%), #0d0f14; }
+#bjPop.t1.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(0,200,210,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(70,110,255,0.5), rgba(0,0,0,0) 58%), #0d0f14; }
+#bjPop.t2 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(40,210,140,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(20,90,200,0.5), rgba(0,0,0,0) 58%), #0d0f14; }
+#bjPop.t2.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(60,200,230,0.5), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(30,160,120,0.5), rgba(0,0,0,0) 58%), #0d0f14; }
+#bjPop.t3 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(240,80,180,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(110,70,240,0.5), rgba(0,0,0,0) 58%), #0d0f14; }
+#bjPop.t3.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(130,90,250,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(60,160,240,0.5), rgba(0,0,0,0) 58%), #0d0f14; }
+#bjPop.t4 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(255,190,70,0.6), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(220,70,60,0.5), rgba(0,0,0,0) 58%), #0d0f14; }
+#bjPop.t4.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(90,150,210,0.55), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(40,60,140,0.5), rgba(0,0,0,0) 58%), #0d0f14; }
+#bjPop.t5 .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(190,225,255,0.5), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(110,150,255,0.45), rgba(0,0,0,0) 58%), #141a26; }
+#bjPop.t5.abs .bjc { background: radial-gradient(ellipse at 12% 12%, rgba(150,200,255,0.5), rgba(0,0,0,0) 58%), radial-gradient(ellipse at 90% 92%, rgba(200,170,255,0.45), rgba(0,0,0,0) 58%), #141a26; }
 #demoTag { display: none; position: fixed; right: 8px; bottom: 6px; z-index: 50; padding: 3px 9px; border-radius: 8px; font-size: 11px; font-weight: bold; letter-spacing: 0.08em; color: #ffd27a; background: rgba(0,0,0,0.45); border: 1px solid rgba(255,210,122,0.5); pointer-events: none; }
 #fbT { display: block; width: 100%; height: 96px; padding: 10px 12px; font: inherit; font-size: 18px; color: #eceff3; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.14); border-radius: 12px; resize: none; -webkit-user-select: text; user-select: text; -webkit-appearance: none; }
 .fbI { display: -webkit-flex; display: flex; -webkit-align-items: flex-start; align-items: flex-start; padding: 10px 12px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.10); border-radius: 12px; background: rgba(255,255,255,0.045); }
@@ -1766,7 +1819,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("9100", 10) || 0, UI_NAME = "4.51 iPad (beta)".charAt(0) === "_" ? "?" : "4.51 iPad (beta)";
+  var UI_CODE = parseInt("9200", 10) || 0, UI_NAME = "4.52 iPad (beta)".charAt(0) === "_" ? "?" : "4.52 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2216,6 +2269,62 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   loadLum(); setInterval(slow(pw("Lumières", loadLum)), 30000);
   go("clim");
 
+
+
+  /* ---------------- Bonjour (matin) et « Pendant ton absence » : deux pop-ups (maquette : mails et actus sont des exemples pour l'instant) ---------------- */
+  var BJ_MAILS = [["Ma banque", "Votre relevé du mois est disponible"], ["École", "Planning de la semaine prochaine"], ["Boutique en ligne", "Votre colis a été expédié"], ["Newsletter", "Les offres de la semaine"]];
+  var BJ_NEWS = [["franceinfo", "Exemple de titre d'actualité nationale"], ["Sud Ouest", "Exemple de titre d'actualité locale, Gironde"], ["franceinfo", "Exemple de titre d'actualité internationale"]];
+  var BJ_IC = {
+    wx: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg>',
+    cal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>',
+    mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M4 8l8 6 8-6"/></svg>',
+    news: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M9 9h6M9 13h6"/></svg>',
+    clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></svg>'
+  };
+  function bjWx() {
+    var w = wxLast, m, t, h = '';
+    if (!w || !w.now) { return '<div class="bjnone">Météo indisponible</div>'; }
+    m = wmo(w.now.code, w.now.day, w.now.mm); t = w.days[0];
+    return '<div class="bjw"><div class="ic">' + ICONS[m.k] + '</div><div><div class="tp">' + rnd(w.now.temp) + '°</div><div class="tx">' + esc(m.t) + '</div><div class="sm">Max ' + rnd(t.hi) + '° · Min ' + rnd(t.lo) + '°' + (t.rain >= 30 ? ' · pluie ' + t.rain + ' %' : '') + '</div></div></div>';
+  }
+  function bjAg(max) {
+    var day = agDays[0], h = '', i, n = 0, x;
+    if (!day) { return '<div class="bjnone">Agenda indisponible</div>'; }
+    for (i = 0; i < day.evs.length && n < max; i++) { x = day.evs[i]; if (x.past) { continue; } h += '<div class="bjr"><b>' + esc(x.time) + '</b><span>' + esc(x.title) + '</span></div>'; n++; }
+    return h || '<div class="bjnone">Rien de prévu aujourd\'hui</div>';
+  }
+  function bjMails(n) { var h = '', i; for (i = 0; i < n && i < BJ_MAILS.length; i++) { h += '<div class="bjr"><b style="min-width:0;margin-right:10px">' + esc(BJ_MAILS[i][0]) + '</b><span>' + esc(BJ_MAILS[i][1]) + '</span></div>'; } return h; }
+  function bjNews(n) { var h = '', i; for (i = 0; i < n && i < BJ_NEWS.length; i++) { h += '<div class="bjr"><span>' + esc(BJ_NEWS[i][1]) + '<small>' + esc(BJ_NEWS[i][0]) + '</small></span></div>'; } return h; }
+  function bjCard(ic, title, badge, body) { return '<div class="bjk"><h4>' + BJ_IC[ic] + title + (badge ? '<em>' + badge + '</em>' : '') + '</h4>' + body + '</div>'; }
+  /* données du pop-up */
+  function bjD(kind) {
+    var d = new Date(), w = wxLast, m = w && w.now ? wmo(w.now.code, w.now.day, w.now.mm) : null, ag = [], i, x, abs = kind === "abs";
+    if (agDays[0]) { for (i = 0; i < agDays[0].evs.length; i++) { x = agDays[0].evs[i]; if (!x.past) { ag.push(x); } } }
+    return { abs: abs, clk: pad(d.getHours()) + ":" + pad(d.getMinutes()), date: DAYS[d.getDay()] + " " + d.getDate() + " " + MONTHS[d.getMonth()], m: m, w: w, ag: ag, hi: w ? rnd(w.days[0].hi) : "--", lo: w ? rnd(w.days[0].lo) : "--", t: w && w.now ? rnd(w.now.temp) : "--", title: abs ? "Pendant ton absence" : "Bonjour Clément", sub: abs ? "Absent depuis 14:32 · 2 h 48" : null };
+  }
+  function bjV5(kind) {
+    var D = bjD(kind);
+    return '<div class="bjc"><div class="bjrow"><div class="v5l"><div class="v5g">' + D.title + '</div><div class="v5d">' + (D.abs ? D.sub : D.date) + '</div><div class="v5c">' + D.clk + '</div><div class="v5w">' + (D.m ? ICONS[D.m.k] : '') + D.t + '° · ' + (D.m ? esc(D.m.t) : '') + ' · ' + D.hi + '° / ' + D.lo + '°</div></div>'
+      + '<div class="v5r">' + bjCard('cal', D.abs ? 'À venir' : 'Aujourd\'hui', '', bjAg(2)) + bjCard('mail', D.abs ? 'Mails reçus' : 'Mails de la nuit', '4', bjMails(2)) + bjCard('news', 'À la une', '', bjNews(2)) + '</div></div>'
+      + '<div class="bjsm">Aperçu : mails et actualités sont des exemples pour l\'instant</div><div class="bjbar"><button type="button" id="bjGo">' + (D.abs ? 'Compris' : 'Bonne journée') + '</button><button type="button" class="bjar" id="bjNx" aria-label="Page suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button></div>';
+  }
+  function bjWrap(kind) {
+    var inner = bjV5(kind).replace('<div class="bjc">', '');
+    return '<div class="bjc"><div class="bjtr"><div class="bjpg bjp1">' + inner + '</div><div class="bjpg bjp2"><div class="bjemp"></div><div class="bjbar"><button type="button" class="bjar" id="bjPv" aria-label="Page précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button></div></div></div></div>';
+  }
+  function bjDraw(kind, th) {
+    var pop = $("bjPop");
+    pop.className = (kind === "abs" ? "abs " : "") + "t" + (th || 1);
+    pop.innerHTML = bjWrap(kind);
+    var bc = pop.firstChild;
+    $("bjGo").onclick = function () { pop.style.display = "none"; };
+    $("bjNx").onclick = function () { bc.className = "bjc p2"; };
+    $("bjPv").onclick = function () { bc.className = "bjc"; };
+  }
+  (function () {
+    var pop = document.createElement("div"); pop.id = "bjPop"; document.body.appendChild(pop);
+    window.bjShow = function (kind, th) { bjDraw(kind, th); pop.style.display = "-webkit-flex"; pop.style.display = "flex"; };
+  })();
 
   /* tap immédiat : l'ancien WebView attend ~300 ms avant de valider un appui */
   (function () {
@@ -2818,6 +2927,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   function dispDraw() {
     var h = '<div class="xrow2" style="margin-bottom:10px"><button type="button" class="xbtn lg' + (PERF ? " on" : "") + '" data-x="perf">Mode léger : ' + (PERF ? "oui" : "non") + '</button><button type="button" class="xbtn lg' + (ICO ? " on" : "") + '" data-x="ico" style="margin-left:8px">Animation météo : ' + ["non", "complète", "légère"][ICO] + '</button></div>';
     h += '<div class="xrow2" style="margin-bottom:6px"><button type="button" class="xbtn' + (VAUTO ? " on" : "") + '" data-x="vauto">Veille automatique : ' + (VAUTO ? "après 2 min sans toucher" : "désactivée") + '</button></div><p class="note" style="margin-bottom:10px">Quand elle est active, l\'écran passe en veille tout seul après 2 minutes sans toucher, et un simple toucher le réveille. Désactivée, seule la veille « Nuit » (Bonne nuit ou bouton Veille) reste possible.</p>';
+    h += '<div class="xrow2" style="margin-bottom:6px"><button type="button" class="xbtn" data-x="bjm">Tester le pop-up Bonjour</button><button type="button" class="xbtn" data-x="bja" style="margin-left:8px">Tester « Pendant ton absence »</button></div><p class="note" style="margin-bottom:10px">Aperçu des deux pop-ups (données d\'exemple pour les mails et les actualités). Ils ne s\'ouvrent pas encore tout seuls.</p>';
     h += '<div class="xrow2" style="margin-bottom:6px"><button type="button" class="xbtn' + (ECO ? " on" : "") + '" data-x="eco">Animations : ' + (ECO ? "pause après 2 min sans appui" : "en continu") + '</button></div><p class="note" style="margin-bottom:10px">En pause, le fond animé et les icônes se figent quand personne ne touche l\'écran : la tablette chauffe moins et consomme moins. Un appui les relance.</p>';
     h += '<p class="note" style="margin-bottom:10px">Le mode léger supprime les ombres, les transparences, les halos et les animations pour que la tablette reste fluide. Compare avec « non » grâce au test ci-dessous.</p>';
     h += '<div class="xrow2"><span style="font-size:20px;font-weight:bold">Fluidité : <span id="fpsV">…</span> images/s · pire image <span id="fpsW">…</span> ms</span></div><div class="fpsb"><i id="fpsS"></i></div><p class="note">Même mesure que le bandeau des versions TEST (pire image : la plus longue pause des 5 dernières secondes). La bille doit glisser sans saccade. Autour de 60 images/s : parfait. Moins de 20 : la tablette peine.</p>';
@@ -2939,6 +3049,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     if (!t || t === this) { return; }
     a = t.getAttribute("data-x"); v = t.getAttribute("data-a");
     if (a === "ico") { ICO = ICO === 1 ? 2 : (ICO === 2 ? 0 : 1); xSet("ico", ICO); icoApply(); if (wxLast) { drawWeather(wxLast); } dispDraw(); }
+    else if (a === "bjm" || a === "bja") { window.bjShow(a === "bjm" ? "matin" : "abs", 1); }
     else if (a === "vauto") { VAUTO = VAUTO ? 0 : 1; xSet("vauto", VAUTO); if (window.veilleArm) { window.veilleArm(); } dispDraw(); }
     else if (a === "perf") { PERF = PERF ? 0 : 1; xSet("perf", PERF); perfApply(); dispDraw(); }
     else if (a === "lab") { labRun(); }
@@ -3219,7 +3330,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
       for (n = 1; n <= 5; n++) {
         z = ZD[n - 1] || {};
         t = zState(z);
-        h += '<button type="button" data-z="' + n + '" style="display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:space-between;justify-content:space-between;text-align:left;width:calc(50% - 12px);margin:6px;padding:14px 18px;background:' + (t.bg ? zRgba(t.bg, 0.14) : "#1b2027") + ';border:1px solid ' + (t.bg ? zRgba(t.bg, 0.7) : "#2f353e") + ';border-radius:18px;color:' + (t.k === "off" ? "#8a93a1" : "#eceff3") + '">'
+        h += '<button type="button" data-z="' + n + '" style="display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;-webkit-justify-content:space-between;justify-content:space-between;text-align:left;width:calc(50% - 12px);margin:6px;padding:14px 18px;background:' + (t.bg ? zRgba(t.bg, 0.14) : "rgba(150,160,175,0.10)") + ';border:1px solid ' + (t.bg ? zRgba(t.bg, 0.7) : "rgba(150,160,175,0.35)") + ';border-radius:18px;color:' + (t.k === "off" ? "#8a93a1" : "#eceff3") + '">'
           + '<div><div style="font-size:17px;font-weight:bold;color:#b4bcc9">' + esc(ZLAB[n - 1]) + '</div>'
           + '<div style="display:-webkit-flex;display:flex;-webkit-align-items:baseline;align-items:baseline;margin-top:2px"><span style="font-size:44px;font-weight:bold;line-height:50px">' + (z.err ? "!" : zNum(z.roomTemp)) + '</span>'
           + (typeof z.humidity === "number" ? '<span style="display:-webkit-inline-flex;display:inline-flex;-webkit-align-items:center;align-items:center;font-size:16px;color:#9fc3dd;margin-left:14px"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#7fb4d8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px"><path d="M12 3.5c3.2 4 5.5 6.9 5.5 10a5.5 5.5 0 0 1-11 0c0-3.1 2.3-6 5.5-10z"/></svg>' + z.humidity + ' %</span>' : '') + '</div>'
@@ -3331,6 +3442,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["14/11/2026", [
+      ["4.52", "Pop-ups Bonjour et Pendant ton absence : aperçu (test)", "Deux pop-ups aux couleurs corail/lagon (matin) et lagon/bleu (absence) : date, heure, météo, agenda, mails et actualités (exemples pour l’instant). Une flèche mène à une 2e page vide. Boutons de test dans Autre > Affichage ; ils ne s’ouvrent pas encore seuls. La liste des pièces de Clim a des cartes à fond transparent."],
       ["4.51", "Économie d’énergie pendant la veille (test)", "Quand une veille s’active (automatique ou Nuit), le mode léger est forcé et les animations sont figées, en plus de la luminosité à zéro et de l’arrêt des relevés réguliers. Au réveil, ton réglage de mode léger est remis tel quel."],
       ["4.50", "Deux veilles distinctes + option pour couper la veille automatique (test)", "Veille automatique (2 min sans toucher) : écran d’attente complet, +20 % de lumière, pastilles en quinconce, version tamisée, réveil au simple toucher. Veille « Nuit » (Bonne nuit, bouton Veille) : presque noir, heure ambrée tamisée seule, réveil par appui de 3 secondes. Nouveau réglage Autre > Affichage > Veille automatique (oui/non). Idée « Caméra du portail » notée."],
       ["4.49", "Retour à l’état de la 4.47 (test)", "Les deux réveils différents (4.48) sont annulés suite à un bug : la veille se réveille de nouveau d’un simple toucher, comme en 4.47."],
