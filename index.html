@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:8700 TDBA:211-->
+<!--TDBV:8800 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -1681,7 +1681,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     lum: "Lumières — allume, éteins et règle la couleur de la LED et de la lampe Lego, ou éteins tout d'un appui.",
     wx: "Météo — les conditions du moment et les prévisions des prochaines heures, pour t'organiser sans sortir le téléphone.",
     lib: "Autre — la bibliothèque des modules : infos, réglages d'écran et idées à venir. Chaque module a sa propre fenêtre.",
-    veille: "Veille — éteint l'affichage pour la nuit ; un simple toucher le réveille, et il se met en veille seul après 2 min sans toucher."
+    veille: "Veille — éteint l'affichage pour la nuit ; un appui de 3 secondes le réveille. Sans toucher pendant 2 min, la veille se lance seule (celle-là se réveille d'un simple toucher)."
   };
   function demoBub(t) { var d = document.createElement("div"); d.className = "demoB"; d.innerHTML = '<b>i</b><span>' + esc(t) + '</span>'; return d; }
   function demoSync() {
@@ -1752,7 +1752,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("8700", 10) || 0, UI_NAME = "4.47 iPad (beta)".charAt(0) === "_" ? "?" : "4.47 iPad (beta)";
+  var UI_CODE = parseInt("8800", 10) || 0, UI_NAME = "4.48 iPad (beta)".charAt(0) === "_" ? "?" : "4.48 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2159,16 +2159,24 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     lastMin = -1; tick(); batDraw(); pull(); loadLum(); loadWeather(); loadAgenda();
     try { if (window.veilleArm) { window.veilleArm(); } } catch (e) { }
   }
-  /* réveil : un simple toucher de l'écran suffit */
+  /* réveil : veille automatique (classe « auto ») = un simple toucher ; veille manuelle / « Bonne nuit » = appui maintenu 3 secondes (barre de progression) */
   (function () {
-    var p = $("slp"), bar = $("slP");
-    function wake(ev) {
-      if (!SLEEP) { return; }
-      if (ev && ev.preventDefault && ev.cancelable !== false) { ev.preventDefault(); }
-      bar.style.display = "none"; bar.style.width = "0";
-      sleepOff();
+    var p = $("slp"), bar = $("slP"), t0 = 0, tm = 0;
+    function cancel() { clearTimeout(tm); t0 = 0; bar.style.display = "none"; bar.style.width = "0"; }
+    function tick() {
+      var e = Date.now() - t0;
+      bar.style.width = Math.min(100, e / 30) + "%";
+      if (e >= 3000) { cancel(); sleepOff(); } else { tm = setTimeout(tick, 100); }
     }
-    p.addEventListener("touchstart", wake); p.addEventListener("mousedown", wake);
+    function start(ev) {
+      if (!SLEEP) { return; }
+      if (ev.preventDefault && ev.cancelable !== false) { ev.preventDefault(); }
+      if (p.className === "auto") { cancel(); sleepOff(); return; }
+      if (t0) { return; }
+      t0 = Date.now(); bar.style.display = "block"; tick();
+    }
+    p.addEventListener("touchstart", start); p.addEventListener("mousedown", start);
+    p.addEventListener("touchend", cancel); p.addEventListener("touchcancel", cancel); p.addEventListener("mouseup", cancel); p.addEventListener("mouseleave", cancel);
     p.addEventListener("contextmenu", function (ev) { ev.preventDefault(); });
   })();
   /* veille automatique : après 2 min sans aucun toucher, l'écran passe en veille */
@@ -3296,6 +3304,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["14/11/2026", [
+      ["4.48", "Deux réveils différents (test)", "Veille « Bonne nuit » (lune) et bouton Veille : appui de 3 secondes pour réveiller, avec la barre de progression. Veille automatique (2 min sans toucher) : réveil au simple toucher. Même écran, seul le réveil change."],
       ["4.47", "Deux idées du Feedback rangées (test)", "« Intégration Discord » et « Page Bonjour » ajoutées dans Autre > Idées, en attente de précisions."]
     ]],
     ["13/11/2026", [
