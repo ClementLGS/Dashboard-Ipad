@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:11200 TDBA:211-->
+<!--TDBV:11300 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -792,7 +792,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 .fbI .tg { -webkit-flex: none; flex: none; min-width: 96px; margin-right: 12px; font-size: 12px; font-weight: bold; letter-spacing: 0.06em; text-transform: uppercase; padding-top: 3px; }
 .fbI .tx { -webkit-flex: 1; flex: 1; min-width: 0; font-size: 16px; word-wrap: break-word; -webkit-user-select: text; user-select: text; }
 .fbI .tx small { display: block; font-size: 12px; color: #8f98a5; margin-top: 2px; }
-.fbI .rm { -webkit-flex: none; flex: none; width: 40px; height: 40px; margin-left: 8px; border-radius: 20px; border: 0; background: rgba(255,255,255,0.08); color: #b9c2d0; font-size: 20px; }
+.fbI .rm, #xB .rm { -webkit-flex: none; flex: none; width: 40px; height: 40px; margin-left: 8px; border-radius: 20px; border: 0; background: rgba(255,255,255,0.08); color: #b9c2d0; font-size: 20px; padding: 0; }
 </style></head><body><div id="bg"><b class="h1"></b><b class="h2"></b><b class="h3"></b><div id="bgA" class="wfx"></div><i class="al" style="left:150px;top:-120px;width:900px;height:700px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(143,163,189,0.37) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(143,163,189,0.37) 0%,rgba(0,0,0,0) 68%)"></i><i class="bl" style="left:700px;top:250px;width:900px;height:700px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(111,127,149,0.34) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(111,127,149,0.34) 0%,rgba(0,0,0,0) 68%)"></i><i class="al" style="left:-200px;top:350px;width:700px;height:600px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(160,173,191,0.24) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(160,173,191,0.24) 0%,rgba(0,0,0,0) 68%)"></i></div>
 <div id="app">
  <div id="nav">
@@ -1886,7 +1886,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("11200", 10) || 0, UI_NAME = "4.72 iPad (beta)".charAt(0) === "_" ? "?" : "4.72 iPad (beta)";
+  var UI_CODE = parseInt("11300", 10) || 0, UI_NAME = "4.73 iPad (beta)".charAt(0) === "_" ? "?" : "4.73 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -3568,6 +3568,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["15/11/2026", [
+      ["4.73", "Idées : croix des idées de Claude corrigée (test)", "La croix de suppression s’affichait comme un carré blanc dans la liste « Idées de Claude » (son style ne s’appliquait que dans « Tes idées »). Même rendu partout."],
       ["4.72", "Veille : un simple toucher la quitte (test)", "La règle des 3 secondes est supprimée : toutes les veilles (Bonne nuit comme veille automatique) se quittent d’un simple toucher. Plus de barre de progression."],
       ["4.71", "Idées : suppression avec une croix (test)", "Chaque idée (les tiennes et celles de Claude) a une croix à droite. Un premier appui affiche « Sûr ? », un second supprime l’idée de la liste ; sans second appui, ça s’annule au bout de 3 secondes. La suppression est mémorisée sur la tablette."],
       ["4.70", "Veille Bonne nuit : appui de 3 s fiabilisé (test)", "Corrige l’appui maintenu qui avançait par à-coups puis s’arrêtait. La barre suit maintenant l’horloge image par image (le mode économie coupait ses animations CSS), et seul le doigt posé au départ peut annuler : un deuxième doigt ou la paume qui se lève ne coupe plus l’appui, ni les faux événements souris."],
