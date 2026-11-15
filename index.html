@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:10900 TDBA:211-->
+<!--TDBV:11000 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -466,7 +466,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 #slp.nuit #slH { margin: 70px 0 0; border-color: #1f2227; color: #343840; font-size: 17px; }
 #slp.nuit #slH i { background: #1b1e22; color: #343840; }
 #slp { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
-#slP { display: none; position: absolute; left: 0; bottom: 0; height: 4px; width: 0; background: #3c424b; }
+#slP { display: none; position: absolute; left: 0; bottom: 0; height: 4px; width: 100%; background: #3c424b; -webkit-transform-origin: 0 50%; transform-origin: 0 50%; -webkit-transform: scaleX(0); transform: scaleX(0); }
 #slS { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; font-size: 30px; font-weight: bold; color: #8a919c; margin-bottom: 14px; }
 #slS svg { width: 34px; height: 34px; margin-right: 10px; }
 #slB { position: absolute; right: 30px; top: 26px; display: none; -webkit-align-items: center; align-items: center; font-size: 30px; font-weight: bold; color: #8a919c; }
@@ -1886,7 +1886,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("10900", 10) || 0, UI_NAME = "4.69 iPad (beta)".charAt(0) === "_" ? "?" : "4.69 iPad (beta)";
+  var UI_CODE = parseInt("11000", 10) || 0, UI_NAME = "4.70 iPad (beta)".charAt(0) === "_" ? "?" : "4.70 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2304,22 +2304,43 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   }
   /* réveil : veille automatique (classe « auto ») = un simple toucher ; veille « Nuit » = appui maintenu 3 secondes (barre de progression) */
   (function () {
-    var p = $("slp"), bar = $("slP"), t0 = 0, tm = 0;
-    function cancel() { clearTimeout(tm); t0 = 0; bar.style.display = "none"; bar.style.width = "0"; }
-    function tick() {
-      var e = Date.now() - t0;
-      bar.style.width = Math.min(100, e / 30) + "%";
-      if (e >= 3000) { cancel(); sleepOff(); } else { tm = setTimeout(tick, 100); }
+    var p = $("slp"), bar = $("slP"), tm = 0, on = 0, tid = null, lastT = 0;
+    function cancel() {
+      clearTimeout(tm); on = 0; tid = null;
+      bar.style.webkitTransform = "scaleX(0)"; bar.style.transform = "scaleX(0)"; bar.style.display = "none";
+    }
+    var raf = window.requestAnimationFrame || function (f) { return setTimeout(f, 33); }, t0 = 0;
+    function frame() {
+      var e;
+      if (!on) { return; }
+      e = Date.now() - t0;
+      if (e >= 3000) { cancel(); sleepOff(); return; }
+      bar.style.webkitTransform = "scaleX(" + (e / 3000).toFixed(3) + ")"; bar.style.transform = "scaleX(" + (e / 3000).toFixed(3) + ")";
+      raf(frame);
+    }
+    function begin() {
+      on = 1; t0 = Date.now(); bar.style.display = "block";
+      tm = setTimeout(function () { if (on) { cancel(); sleepOff(); } }, 3050);
+      frame();
     }
     function start(ev) {
+      var t = ev.changedTouches && ev.changedTouches[0];
       if (!SLEEP) { return; }
+      if (t) { lastT = Date.now(); } else if (Date.now() - lastT < 1200) { return; }
       if (ev.preventDefault && ev.cancelable !== false) { ev.preventDefault(); }
       if (p.className === "auto") { cancel(); sleepOff(); return; }
-      if (t0) { return; }
-      t0 = Date.now(); bar.style.display = "block"; tick();
+      if (on) { return; }
+      tid = t ? t.identifier : null; begin();
     }
+    function endT(ev) {
+      var i, hit = tid === null, cs = ev.changedTouches || [];
+      lastT = Date.now();
+      for (i = 0; i < cs.length; i++) { if (cs[i].identifier === tid) { hit = true; } }
+      if (hit) { cancel(); }
+    }
+    function endM() { if (Date.now() - lastT < 1200) { return; } cancel(); }
     p.addEventListener("touchstart", start); p.addEventListener("mousedown", start);
-    p.addEventListener("touchend", cancel); p.addEventListener("touchcancel", cancel); p.addEventListener("mouseup", cancel); p.addEventListener("mouseleave", cancel);
+    p.addEventListener("touchend", endT); p.addEventListener("touchcancel", endT); p.addEventListener("mouseup", endM);
     p.addEventListener("contextmenu", function (ev) { ev.preventDefault(); });
   })();
   /* veille automatique : après 2 min sans aucun toucher, l'écran passe en veille */
@@ -3566,6 +3587,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["15/11/2026", [
+      ["4.70", "Veille Bonne nuit : appui de 3 s fiabilisé (test)", "Corrige l’appui maintenu qui avançait par à-coups puis s’arrêtait. La barre suit maintenant l’horloge image par image (le mode économie coupait ses animations CSS), et seul le doigt posé au départ peut annuler : un deuxième doigt ou la paume qui se lève ne coupe plus l’appui, ni les faux événements souris."],
       ["4.69", "Météo heure par heure + idées d’équipements (test)", "L’onglet Météo affiche maintenant une ligne par heure, sur 24 h, avec défilement. Dans Idées, 9 intégrations d’équipements connectés sont ajoutées, de la plus facile à la plus difficile."]
     ]],
     ["14/11/2026", [
