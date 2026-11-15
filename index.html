@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:10800 TDBA:211-->
+<!--TDBV:10900 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -214,7 +214,8 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 .bjr5 .r5p svg { width: 26px; height: 26px; margin-right: 6px; }
 .bjr5 .r5p.hi { color: #4da3ff; }
 .wDayT .bjr5 { padding: 0 16px 0 14px; max-height: 66px; margin-bottom: 6px; border-radius: 16px; }
-.wDayT .bjrw { -webkit-justify-content: center; justify-content: center; }
+.wDayT .bjrw { -webkit-justify-content: flex-start; justify-content: flex-start; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.wDayT .bjr5 { -webkit-flex: none; flex: none; height: 62px; }
 .wDayT .bjr5 .r5h { width: 70px; font-size: 22px; } .wDayT .bjr5 .r5t { width: 86px; font-size: 28px; } .wDayT .bjr5 .r5p { width: 104px; font-size: 22px; } .wDayT .bjr5 .r5p svg { width: 20px; height: 20px; margin-right: 5px; } .wDayT .bjr5 .r5i svg { width: 42px; height: 42px; }
 .bj2 .bjr5 { -webkit-flex: none; flex: none; height: 62px; margin-bottom: 6px; padding: 0 10px; }
 .bj2 .bjr5 .r5h { width: 70px; font-size: 24px; } .bj2 .bjr5 .r5i svg { width: 44px; height: 44px; } .bj2 .bjr5 .r5t { width: 90px; font-size: 30px; } .bj2 .bjr5 .r5p { width: 108px; font-size: 24px; } .bj2 .bjr5 .r5p svg { width: 22px; height: 22px; }
@@ -1885,7 +1886,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("10800", 10) || 0, UI_NAME = "4.68 iPad (beta)".charAt(0) === "_" ? "?" : "4.68 iPad (beta)";
+  var UI_CODE = parseInt("10900", 10) || 0, UI_NAME = "4.69 iPad (beta)".charAt(0) === "_" ? "?" : "4.69 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2374,7 +2375,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
       + '<div class="v5r">' + bjCard('cal', D.abs ? 'À venir' : 'Aujourd\'hui', '', bjAg(2)) + bjCard('mail', D.abs ? 'Mails reçus' : 'Mails de la nuit', '4', bjMails(2)) + bjCard('news', 'À la une', '', bjNews(2)) + '</div></div>'
       + '<div class="bjsm">Aperçu : mails et actualités sont des exemples pour l\'instant</div><div class="bjbar' + (D.abs ? '' : ' bjone') + '">' + (D.abs ? '<button type="button" id="bjGo">Compris</button>' : '') + '<button type="button" class="bjar" id="bjNx" aria-label="Page suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button></div>';
   }
-  function bjWx(noTop, cnt) {
+  function bjWx(noTop, cnt, step) {
     var d = new Date(), w = wxLast, W = (typeof W7 !== "undefined" && W7 && W7.days && W7.days[0]) || null, W1 = (typeof W7 !== "undefined" && W7 && W7.days && W7.days[1]) || null, m, i, h = "", all = [], c = 0, nowH = d.getHours(), t = w && w.days ? w.days[0] : null, sr = 7, ss = 18, hr, mm2, dy, pts = [], pp, tp, fl;
     m = w && w.now ? wmo(w.now.code, w.now.day, w.now.mm) : null;
     fl = w && w.now && w.now.feel !== null && w.now.feel !== undefined ? rnd(w.now.feel) : null;
@@ -2384,7 +2385,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     for (i = 0; i < all.length && c < (cnt || 5); i++) {
       hr = all[i];
       if (hr.d === 0 && hr.q.h < nowH + 1) { continue; }
-      if ((hr.d === 0 ? hr.q.h - (nowH + 1) : 24 - (nowH + 1) + hr.q.h) % 3 !== 0) { continue; }
+      if ((hr.d === 0 ? hr.q.h - (nowH + 1) : 24 - (nowH + 1) + hr.q.h) % (step || 3) !== 0) { continue; }
       dy = hr.q.h >= sr && hr.q.h < ss ? 1 : 0; mm2 = wmo(hr.q.code, dy, hr.q.mm);
       pts.push({ h: hr.q.h, k: mm2.k, t: hr.q.t === null ? null : hr.q.t, pp: hr.q.pp === null ? 0 : hr.q.pp }); c++;
     }
@@ -2400,7 +2401,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     }
     return h + '</div>';
   }
-  function wDayDraw() { var e = $("wDay"); if (e) { e.innerHTML = bjWx(true, 8); } }
+  function wDayDraw() { var e = $("wDay"); if (e) { e.innerHTML = bjWx(true, 24, 1); } }
   window.wDayDraw = wDayDraw;
   function bjP2(kind) {
     var d = new Date(), day = agDays[0], w = wxLast, W = (typeof W7 !== "undefined" && W7 && W7.days && W7.days[0]) || null, W1 = (typeof W7 !== "undefined" && W7 && W7.days && W7.days[1]) || null, m, i, x, n = 0, h = "", a = "", all = [], c = 0, nowH = d.getHours(), t = w && w.days ? w.days[0] : null, sr = 7, ss = 18, hr, mm2, dy, cols = "", pp, tp, fl;
@@ -3303,7 +3304,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 
 
   /* ---------------- Idées (versions TEST seulement) : liste tenue à jour par Claude, à chaque version ---------------- */
-  var IDEES = { maj: "14/11/2026", u: [
+  var IDEES = { maj: "15/11/2026", u: [
     ["Carte des zones de Clim", "13/11 · notée dans Feedback"],
     ["Mode première fois", "13/11 · notée dans Feedback"],
     ["Intégration de Claude", "13/11 · notée dans Feedback"],
@@ -3323,7 +3324,16 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     ["Lumière chaude le soir", "Moyen", "La couleur de la LED devient plus chaude après le coucher du soleil, sans y penser. Demande de bien tester le Bluetooth pour ne pas clignoter.", "Mise à jour seule"],
     ["Anniversaires et jours fériés", "Facile", "Un petit rappel sur l'accueil quand l'agenda contient un anniversaire, ou un jour férié demain.", "Mise à jour seule"],
     ["Écran qui se réveille quand tu entres", "Gros chantier", "Détection de présence avec la caméra de l'iPad (rien n'est enregistré, tout reste dans l'appli). Cool mais touche à la vie privée et demande une nouvelle autorisation iOS.", "Nécessite l'IPA"],
-    ["Capteur température/humidité de la chambre", "Gros chantier", "Un petit capteur radio (Zigbee) pour connaître l'air réel de la chambre, pas seulement celui de l'Airzone. Matériel à acheter.", "IPA + matériel"]
+    ["Capteur température/humidité de la chambre", "Gros chantier", "Un petit capteur radio (Zigbee) pour connaître l'air réel de la chambre, pas seulement celui de l'Airzone. Matériel à acheter.", "IPA + matériel"],
+    ["Équipement : prise connectée Tuya avec consommation", "Facile", "Tes lumières passent déjà par le cloud Tuya : une prise Tuya / Smart Life avec mesure de conso se branche avec le même code. Un bouton marche/arrêt (ventilateur, lampe, chargeur) et les watts en direct. Une dizaine d'euros.", "Mise à jour + matériel"],
+    ["Équipement : réveil du téléphone qui lance « Bonjour »", "Moyen", "Quand tu arrêtes l'alarme de l'iPhone, une automatisation Raccourcis envoie un signal au PC relais, et le pop-up Bonjour s'ouvre à ce moment-là, au lieu du premier toucher. Aucun achat, mais il faut que le PC relais soit allumé et que l'iPhone soit sur le Wi-Fi de la maison.", "Relais + Raccourcis iPhone"],
+    ["Équipement : capteur d'ouverture de fenêtre", "Moyen", "Un petit capteur sur la fenêtre de la chambre : « fenêtre ouverte, clim en marche » sur l'accueil, ou coupure automatique de la zone. Cohérent avec ta clim Airzone. Il faut une passerelle Zigbee Tuya (environ 15 €) en plus du capteur.", "Mise à jour + matériel"],
+    ["Équipement : capteur de CO2 de la chambre", "Moyen", "Pour savoir si l'air devient étouffant la nuit et quand aérer. Un capteur Tuya Wi-Fi se lit avec le code existant ; un Netatmo (environ 100 €) a une API officielle mais demande une connexion à un compte via le PC. À choisir : budget ou simplicité.", "Mise à jour + matériel"],
+    ["Équipement : volets roulants motorisés", "Moyen", "Seulement si tes volets sont (ou peuvent être) motorisés : un module Tuya ou une box Somfy TaHoma en mode développeur. La scène « Réveil » les ouvrirait en douceur. Sans motorisation, ça demande de changer le moteur : à oublier.", "Mise à jour + matériel"],
+    ["Équipement : consommation électrique de la maison", "Moyen", "Via l'API gratuite d'Enedis (compteur Linky) : consommation et coût du jour. Les données arrivent avec un jour de retard, et la demande d'accès se fait sur le site d'Enedis. Du temps réel demanderait un module sur la sortie du compteur, plus technique.", "Relais"],
+    ["Équipement : radar de présence pour réveiller l'écran", "Gros chantier", "Un petit capteur radar (ESP32, environ 15 €, à programmer) qui voit quand tu entres dans la chambre, sans caméra. L'écran se réveille et sort de la veille. Il faut une nouvelle version de l'appli iPad pour réveiller l'écran de l'intérieur.", "IPA + matériel"],
+    ["Équipement : ouvre-portail depuis le tableau de bord", "Gros chantier", "Un relais branché sur le contact de ton ouvre-portail, avec la caméra du portail à côté. À sécuriser (appui long, pas d'ouverture à distance depuis Internet) et un câblage à vérifier selon ton moteur. À faire en même temps que « Caméra du portail ».", "Matériel + câblage"],
+    ["Équipement : Home Assistant comme passerelle", "Gros chantier", "Un petit serveur (Raspberry Pi ou mini PC toujours allumé) qui parle à tous les équipements (Zigbee, Netatmo, Somfy…) avec une seule API pour le tableau de bord. Ça ne vaut le coup que si tu dépasses trois ou quatre équipements hors Tuya.", "Matériel + serveur"]
   ] };
   /* 3.38 : plus de saisie ici. Les idées de Clément se notent dans Feedback (bouton Idée) puis « Envoyer à Claude » ; Claude les ajoute à IDEES.u.
      Les idées déjà saisies dans la 3.36/3.37 (clé tdb_im) sont recopiées dans Feedback, une seule fois, pour partir avec l'envoi. */
@@ -3555,6 +3565,9 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
+    ["15/11/2026", [
+      ["4.69", "Météo heure par heure + idées d’équipements (test)", "L’onglet Météo affiche maintenant une ligne par heure, sur 24 h, avec défilement. Dans Idées, 9 intégrations d’équipements connectés sont ajoutées, de la plus facile à la plus difficile."]
+    ]],
     ["14/11/2026", [
       ["4.68", "Onglet Météo : 8 lignes plus petites (test)", "Dans l’onglet Météo, les lignes de la fenêtre de droite sont plus petites : 8 lignes toutes les 3 h au lieu de 5, donc un horizon plus large (environ 21 h). Le pop-up Bonjour garde 5 lignes."],
       ["4.67", "Météo de la semaine : catégorie Aperçu (test)", "Dans Autre > Météo, un nouveau bouton « Aperçu » à droite d’UV affiche, heure par heure, le logo du temps de chaque heure (soleil, lune, nuages, pluie, neige, brouillard, orage, et vent fort quand il dépasse 30 km/h ou 50 km/h en rafales). Toucher une heure donne le détail."],
