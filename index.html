@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:11300 TDBA:211-->
+<!--TDBV:11400 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -465,6 +465,71 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 #slp.nuit #slB:not(.low) { display: none !important; }
 #slp.nuit #slH { margin: 70px 0 0; border-color: #1f2227; color: #343840; font-size: 17px; }
 #slp.nuit #slH i { background: #1b1e22; color: #343840; }
+/* ---- veille automatique : 5 styles de test (réglage tdb_slv) ; 0 = l'ancien affichage ---- */
+#slA { display: none; }
+#slp.sv #slC, #slp.sv #slD, #slp.sv #slR, #slp.sv #slS { display: none; }
+#slp.sv #slA { display: block; position: absolute; left: 0; top: 0; right: 0; bottom: 0; text-align: left; color: #8a919c; }
+#slA svg { display: block; }
+#slA .al { position: absolute; left: 0; right: 0; bottom: 70px; text-align: center; font-size: 24px; font-weight: bold; color: #ff7a70; }
+#slA .ic { width: 52px; height: 52px; -webkit-flex: none; flex: none; }
+#slA .ic svg, #slA .wi svg { width: 100%; height: 100%; }
+#slA .wm { color: #b88a6a; } #slA .bl { color: #6f93b8; } #slA .ac { color: #c9b27a; } #slA .lt { color: #d8c27a; }
+#slA .t { font-weight: bold; color: #8a919c; }
+#slA .l { color: #5b626d; }
+/* style 1 : horloge centrée + bandeau de 4 infos */
+#slA .s1 { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; }
+#slA .s1 .c { font-size: 190px; font-weight: bold; color: #8a919c; line-height: 1; }
+#slA .s1 .d { font-size: 30px; margin-top: 6px; color: #6f7783; }
+#slA .s1 .row { display: -webkit-flex; display: flex; margin-top: 56px; }
+#slA .s1 .it { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; padding: 0 30px; border-left: 1px solid #262b32; }
+#slA .s1 .it:first-child { border-left: 0; }
+#slA .s1 .it .ic { margin-right: 14px; }
+#slA .s1 .it b { font-size: 46px; color: #8a919c; }
+#slA .s1 .it small { display: block; font-size: 17px; color: #5b626d; margin-top: 2px; }
+#slA .s1 .nx { margin-top: 44px; font-size: 28px; color: #6f7783; }
+#slA .s1 .nx b { color: #c9b27a; margin-right: 10px; }
+/* style 2 : deux colonnes */
+#slA .s2 { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: -webkit-flex; display: flex; }
+#slA .s2 .a { -webkit-flex: 1.15; flex: 1.15; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-justify-content: center; justify-content: center; padding: 0 0 0 64px; }
+#slA .s2 .c { font-size: 170px; font-weight: bold; color: #8a919c; line-height: 1; margin-left: -6px; }
+#slA .s2 .d { font-size: 30px; margin-top: 10px; color: #6f7783; }
+#slA .s2 .b { -webkit-flex: 1; flex: 1; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-justify-content: center; justify-content: center; margin: 70px 56px 70px 20px; border-left: 1px solid #262b32; padding-left: 40px; }
+#slA .s2 .k { padding: 22px 0; border-top: 1px solid #1f2328; }
+#slA .s2 .k:first-child { border-top: 0; }
+#slA .s2 .k h4 { margin: 0 0 6px; font-size: 16px; letter-spacing: 0.1em; text-transform: uppercase; color: #5b626d; }
+#slA .s2 .k div { font-size: 32px; font-weight: bold; color: #8a919c; }
+#slA .s2 .k div small { display: block; margin: 4px 0 0; font-size: 20px; font-weight: normal; color: #6f7783; margin-left: 8px; }
+/* style 3 : le prochain rendez-vous au centre */
+#slA .s3 { position: absolute; left: 0; right: 0; top: 0; bottom: 0; padding: 0 70px; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-justify-content: center; justify-content: center; }
+#slA .s3 .h { display: -webkit-flex; display: flex; -webkit-align-items: baseline; align-items: baseline; }
+#slA .s3 .c { font-size: 96px; font-weight: bold; color: #8a919c; line-height: 1; }
+#slA .s3 .d { font-size: 28px; margin-left: 26px; color: #6f7783; }
+#slA .s3 .lb { margin-top: 54px; font-size: 18px; letter-spacing: 0.14em; text-transform: uppercase; color: #5b626d; }
+#slA .s3 .ti { margin-top: 10px; font-size: 68px; font-weight: bold; color: #aab1bc; line-height: 1.1; }
+#slA .s3 .wh { margin-top: 12px; font-size: 38px; color: #c9b27a; font-weight: bold; }
+#slA .s3 .su { font-size: 24px; color: #6f7783; margin-top: 4px; }
+#slA .s3 .ft { position: absolute; left: 70px; right: 70px; bottom: 56px; display: -webkit-flex; display: flex; -webkit-justify-content: space-between; justify-content: space-between; font-size: 30px; font-weight: bold; color: #8a919c; padding-top: 22px; border-top: 1px solid #1f2328; }
+#slA .s3 .ft span { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; }
+#slA .s3 .ft .ic { width: 38px; height: 38px; margin-right: 10px; }
+/* style 4 : minimal, une seule ligne */
+#slA .s4 { position: absolute; left: 0; right: 0; top: 0; bottom: 0; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; }
+#slA .s4 .c { font-size: 250px; font-weight: bold; color: #8a919c; line-height: 1; }
+#slA .s4 .d { font-size: 28px; margin-top: 8px; color: #5b626d; }
+#slA .s4 .ln { margin-top: 64px; font-size: 32px; color: #6f7783; text-align: center; padding: 0 40px; line-height: 1.45; }
+#slA .s4 .ln b { color: #8a919c; }
+#slA .s4 .ln i { font-style: normal; color: #3a3f48; margin: 0 14px; }
+/* style 5 : grille 2 x 2 */
+#slA .s5 { position: absolute; left: 0; right: 0; top: 0; bottom: 0; padding: 78px 50px 0; }
+#slA .s5 .h { display: -webkit-flex; display: flex; -webkit-align-items: baseline; align-items: baseline; }
+#slA .s5 .c { font-size: 110px; font-weight: bold; color: #8a919c; line-height: 1; }
+#slA .s5 .d { font-size: 28px; margin-left: 26px; color: #6f7783; }
+#slA .s5 .g { margin-top: 30px; display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; }
+#slA .s5 .q { box-sizing: border-box; width: 49%; margin: 0 2% 2% 0; height: 200px; border: 1px solid #262b32; border-radius: 24px; padding: 22px 26px; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-justify-content: space-between; justify-content: space-between; }
+#slA .s5 .q:nth-child(2n) { margin-right: 0; }
+#slA .s5 .q .ic { width: 62px; height: 62px; }
+#slA .s5 .q b { font-size: 50px; color: #8a919c; display: block; line-height: 1.05; }
+#slA .s5 .q span { font-size: 20px; color: #5b626d; display: block; margin-top: 4px; }
+#slA .s5 .q b.sm { font-size: 34px; }
 #slp { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 #slP { display: none; position: absolute; left: 0; bottom: 0; height: 4px; width: 100%; background: #3c424b; -webkit-transform-origin: 0 50%; transform-origin: 0 50%; -webkit-transform: scaleX(0); transform: scaleX(0); }
 #slS { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; font-size: 30px; font-weight: bold; color: #8a919c; margin-bottom: 14px; }
@@ -902,7 +967,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
  </div>
 </div>
 
-<div id="slp"><div id="slB"></div><div id="slC">--:--</div><div id="slD"></div><div id="slR"><div class="slb"><div class="slI" id="slWI"></div><div class="slV" id="slWT"></div></div><div class="slb"><div class="slI" id="slRI"></div><div class="slV" id="slRT"></div></div><div class="slb"><div class="slI" id="slMI"></div><div class="slV" id="slT"></div></div></div><div id="slS"></div><div id="slH"><i>i</i>Fais un appui long (3 s) n'importe où sur l'écran pour quitter la veille</div><div id="slVer"></div><div id="slP"></div></div>
+<div id="slp"><div id="slB"></div><div id="slA"></div><div id="slC">--:--</div><div id="slD"></div><div id="slR"><div class="slb"><div class="slI" id="slWI"></div><div class="slV" id="slWT"></div></div><div class="slb"><div class="slI" id="slRI"></div><div class="slV" id="slRT"></div></div><div class="slb"><div class="slI" id="slMI"></div><div class="slV" id="slT"></div></div></div><div id="slS"></div><div id="slH"><i>i</i>Fais un appui long (3 s) n'importe où sur l'écran pour quitter la veille</div><div id="slVer"></div><div id="slP"></div></div>
 <div id="dbg"><div class="bar"><h2>Diagnostic</h2><span><button type="button" id="dbgSend">Envoyer le diagnostic</button><button type="button" id="dbgClr">Vider le journal</button><button type="button" id="dbgX">Fermer</button></span></div>
  <div class="cols"><div class="box" id="dbgL"></div><div class="box" id="dbgR"></div></div></div>
 
@@ -1886,7 +1951,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("11300", 10) || 0, UI_NAME = "4.73 iPad (beta)".charAt(0) === "_" ? "?" : "4.73 iPad (beta)";
+  var UI_CODE = parseInt("11400", 10) || 0, UI_NAME = "4.74 iPad (beta)".charAt(0) === "_" ? "?" : "4.74 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2244,8 +2309,71 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   }
 
   /* ---------------- mode veille : écran noir, aucune animation, plus aucune actualisation sauf toutes les 5 min ---------------- */
+  /* ---- veille automatique : 5 styles de test (SLV : 0 = ancien affichage, 1 à 5 = nouveaux) ---- */
+  var SLV = xGet("slv", 0);
+  function slSv(k) {
+    var P = {
+      cal: '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+      room: '<path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0z"/><path d="M12 9v7"/>',
+      drop: '<path d="M12 3C8.5 8 6.5 11 6.5 14a5.5 5.5 0 0 0 11 0C17.5 11 15.5 8 12 3z"/>',
+      bulb: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>',
+      clim: S.linked && S.on && S.mode >= 0 ? MODES[S.mode].svg : '<path d="M12 3v8M6.3 6.8a8 8 0 1 0 11.4 0"/>'
+    };
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + P[k] + '</svg>';
+  }
+  function slInfo() {
+    var d = new Date(), w = wxLast, m = null, rm = $("hRoom").textContent.match(/(-?[\d]+[,.]?[\d]*)\s*°/), i, nl = -1, o = {}, ti, al = "", r, a, pc, ch = false;
+    try { agHome(); } catch (e) { }
+    if (w && w.now) { m = wmo(w.now.code, w.now.day, w.now.mm); }
+    o.clk = pad(d.getHours()) + ":" + pad(d.getMinutes());
+    o.date = DAYS[d.getDay()] + " " + d.getDate() + " " + MONTHS[d.getMonth()];
+    o.wi = m ? ICONS[m.k] : ""; o.wt = w && w.now && typeof w.now.temp === "number" ? rnd(w.now.temp) + "°" : "--"; o.wx = m ? m.t : "";
+    o.rain = w && w.days && w.days[0] ? rnd(w.days[0].rain) : null;
+    o.hi = w && w.days && w.days[0] ? rnd(w.days[0].hi) + "°" : "--"; o.lo = w && w.days && w.days[0] ? rnd(w.days[0].lo) + "°" : "--";
+    o.room = rm ? rm[1] + "°" : "--";
+    o.cm = S.linked && S.on && S.mode >= 0 ? MODES[S.mode].t : (S.linked ? "Clim éteinte" : "Clim injoignable");
+    o.ct = S.linked && S.on ? fmt(S.temp) + "°" : "--";
+    ti = $("hnTi").textContent; o.nti = /^(Chargement|Agenda)/.test(ti) ? "" : ti; o.nsu = $("hnS").textContent; o.nwh = $("hnW").textContent;
+    if (LUM && LUM.lights) { nl = 0; for (i = 0; i < LUM.lights.length; i++) { if (LUM.lights[i].on) { nl++; } } }
+    o.nl = nl;
+    try { if (window.Native && window.Native.battery) { r = window.Native.battery(); } } catch (x) { r = ""; }
+    a = r ? r.split(";") : []; pc = parseInt(a[0], 10); ch = a[1] === "1";
+    if (!S.linked) { al = "Clim injoignable"; } else if (!isNaN(pc) && pc <= 15 && !ch) { al = "Batterie faible : " + pc + " %"; }
+    o.al = al ? '<div class="al">● ' + esc(al) + '</div>' : "";
+    return o;
+  }
+  function slBuild(n) {
+    var o = slInfo(), h = "", nx = o.nti ? '<b>' + esc(o.nwh || o.nsu) + '</b>' + esc(o.nti) : "Rien de prévu", rain = o.rain === null ? "--" : o.rain + " %", lt = o.nl < 0 ? "--" : (o.nl ? o.nl + " allumée" + (o.nl > 1 ? "s" : "") : "tout éteint");
+    if (n === 1) {
+      h = '<div class="s1"><div class="c">' + o.clk + '</div><div class="d">' + esc(o.date) + '</div><div class="row">'
+        + '<div class="it"><div class="ic wm"><div class="wi" style="width:52px;height:52px">' + o.wi + '</div></div><div><b>' + o.wt + '</b><small>' + esc(o.wx) + '</small></div></div>'
+        + '<div class="it"><div class="ic bl">' + slSv("drop") + '</div><div><b>' + rain + '</b><small>pluie</small></div></div>'
+        + '<div class="it"><div class="ic wm">' + slSv("room") + '</div><div><b>' + o.room + '</b><small>chambre</small></div></div>'
+        + '<div class="it"><div class="ic ac">' + slSv("clim") + '</div><div><b>' + o.ct + '</b><small>' + esc(o.cm) + '</small></div></div></div>'
+        + '<div class="nx">' + nx + '</div></div>';
+    } else if (n === 2) {
+      h = '<div class="s2"><div class="a"><div class="c">' + o.clk + '</div><div class="d">' + esc(o.date) + '</div></div><div class="b">'
+        + '<div class="k"><h4>Prochain rendez-vous</h4><div>' + esc(o.nti || "Rien de prévu") + '<small>' + esc(o.nwh) + '</small></div></div>'
+        + '<div class="k"><h4>Météo</h4><div>' + o.wt + '<small>' + esc(o.wx) + ' · pluie ' + rain + '</small></div></div>'
+        + '<div class="k"><h4>Chambre</h4><div>' + o.room + '<small>' + esc(o.cm) + ' ' + o.ct + '</small></div></div></div></div>';
+    } else if (n === 3) {
+      h = '<div class="s3"><div class="h"><div class="c">' + o.clk + '</div><div class="d">' + esc(o.date) + '</div></div>'
+        + '<div class="lb">Prochain rendez-vous</div><div class="ti">' + esc(o.nti || "Rien de prévu") + '</div>' + (o.nwh ? '<div class="wh">' + esc(o.nwh) + '</div>' : "") + '<div class="su">' + esc(o.nsu) + '</div>'
+        + '<div class="ft"><span><div class="ic wm"><div class="wi" style="width:38px;height:38px">' + o.wi + '</div></div>' + o.wt + '</span><span><div class="ic bl">' + slSv("drop") + '</div>' + rain + '</span><span><div class="ic wm">' + slSv("room") + '</div>' + o.room + '</span><span><div class="ic ac">' + slSv("clim") + '</div>' + o.ct + '</span></div></div>';
+    } else if (n === 4) {
+      h = '<div class="s4"><div class="c">' + o.clk + '</div><div class="d">' + esc(o.date) + '</div><div class="ln"><b>' + o.wt + '</b> ' + esc(o.wx.toLowerCase()) + '<i>·</i><b>' + rain + '</b> de pluie<i>·</i>chambre <b>' + o.room + '</b><br>' + (o.nti ? esc(o.nti) + ' <b>' + esc(o.nwh || o.nsu) + '</b>' : "Rien de prévu") + '</div></div>';
+    } else if (n === 5) {
+      h = '<div class="s5"><div class="h"><div class="c">' + o.clk + '</div><div class="d">' + esc(o.date) + '</div></div><div class="g">'
+        + '<div class="q"><div class="ic wm"><div class="wi" style="width:62px;height:62px">' + o.wi + '</div></div><div><b>' + o.wt + '</b><span>' + esc(o.wx) + ' · ' + o.lo + ' / ' + o.hi + '</span></div></div>'
+        + '<div class="q"><div class="ic bl">' + slSv("drop") + '</div><div><b>' + rain + '</b><span>risque de pluie aujourd\'hui</span></div></div>'
+        + '<div class="q"><div class="ic ac">' + slSv("room") + '</div><div><b>' + o.room + '</b><span>chambre · ' + esc(o.cm) + ' ' + o.ct + '</span></div></div>'
+        + '<div class="q"><div class="ic lt">' + slSv("cal") + '</div><div><b class="sm">' + esc(o.nti || "Rien de prévu") + '</b><span>' + esc((o.nwh ? o.nwh + " · " : "") + o.nsu) + '</span></div></div></div></div>';
+    }
+    return h + (n === 3 || n === 5 ? "" : "") + o.al;
+  }
   function slDraw() {
     var d = new Date(), rm = $("hRoom").textContent.match(/(-?[\d]+[,.]?[\d]*)\s*°/), w = wxLast, m;
+    if (SLV > 0 && $("slp").className.indexOf("sv") > -1) { try { $("slA").innerHTML = slBuild(SLV); } catch (e) { $("slA").innerHTML = ""; } }
     $("slC").textContent = pad(d.getHours()) + ":" + pad(d.getMinutes());
     $("slD").textContent = DAYS[d.getDay()] + " " + d.getDate() + " " + MONTHS[d.getMonth()];
     $("slT").textContent = S.linked && S.on ? fmt(S.temp) + "°" : "--";
@@ -2269,6 +2397,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     var d = new Date();
     slDraw();
     if (d.getMinutes() % 5 === 0) { pull(); }
+    if (d.getMinutes() % 15 === 0 && $("slp").className.indexOf("sv") > -1) { try { loadWeather(); loadAgenda(); } catch (e) { } }
     slTm = setTimeout(slTick, 60000 - (Date.now() % 60000) + 100);
   }
   /* économie d'énergie en veille : mode léger forcé (ni ombres, ni transparences, ni animations) et animations figées ; au réveil, le réglage de Clément (mode léger oui/non) est remis tel quel */
@@ -2284,7 +2413,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     SLEEP = 1; ecoSleep(true); $("bg").style.display = "none";
     for (i = 0; i < IVS.length; i++) { _ci.call(window, IVS[i].id); }
     $("app").style.display = "none"; $("bg").style.display = "none";
-    $("slp").className = kind === "auto" ? "auto" : "nuit";   /* « auto » : écran d'attente complet, +20 % de lumière, réveil au simple toucher ; « nuit » : heure tamisée seule, réveil au simple toucher aussi */
+    $("slp").className = kind === "auto" ? (SLV > 0 ? "auto sv sv" + SLV : "auto") : "nuit";   /* « auto » : écran d'attente complet, +20 % de lumière, réveil au simple toucher ; « nuit » : heure tamisée seule, réveil au simple toucher aussi */
     $("slVer").textContent = "Version " + UI_NAME;
     $("slH").innerHTML = '<i>i</i>' + (kind === "auto" ? "Touche l'écran pour quitter la veille" : "Touche l'écran pour quitter la veille");
     $("slp").style.display = "-webkit-flex"; $("slp").style.display = "flex";
@@ -3034,6 +3163,9 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   function dispDraw() {
     var h = '<div class="xrow2" style="margin-bottom:10px"><button type="button" class="xbtn lg' + (PERF ? " on" : "") + '" data-x="perf">Mode léger : ' + (PERF ? "oui" : "non") + '</button><button type="button" class="xbtn lg' + (ICO ? " on" : "") + '" data-x="ico" style="margin-left:8px">Animation météo : ' + ["non", "complète", "légère"][ICO] + '</button></div>';
     h += '<div class="xrow2" style="margin-bottom:6px"><button type="button" class="xbtn' + (VAUTO ? " on" : "") + '" data-x="vauto">Veille automatique : ' + (VAUTO ? "après 2 min sans toucher" : "désactivée") + '</button></div><p class="note" style="margin-bottom:10px">Quand elle est active, l\'écran passe en veille tout seul après 2 minutes sans toucher, et un simple toucher le réveille. Désactivée, seule la veille « Nuit » (Bonne nuit ou bouton Veille) reste possible.</p>';
+    h += '<div class="xrow2" style="margin-bottom:6px;-webkit-flex-wrap:wrap;flex-wrap:wrap">';
+    for (var q = 0; q <= 5; q++) { h += '<button type="button" class="xbtn' + (SLV === q ? " on" : "") + '" data-x="slv' + q + '" style="margin:0 8px 8px 0">' + (q ? "Style " + q : "Actuel") + '</button>'; }
+    h += '</div><p class="note" style="margin-bottom:10px">Tester la veille automatique (TEST) : chaque bouton ouvre tout de suite l\'écran de veille automatique avec ce style, et le garde pour les prochaines veilles. Un toucher le ferme. « Actuel » = l\'ancien affichage.</p>';
     h += '<div class="xrow2" style="margin-bottom:6px"><button type="button" class="xbtn" data-x="bjm">Tester le pop-up Bonjour</button><button type="button" class="xbtn" data-x="bja" style="margin-left:8px">Tester « Pendant ton absence »</button></div><p class="note" style="margin-bottom:10px">Aperçu des deux pop-ups (données d\'exemple pour les mails et les actualités). Ils ne s\'ouvrent pas encore tout seuls.</p>';
     h += '<div class="xrow2" style="margin-bottom:6px"><button type="button" class="xbtn' + (ECO ? " on" : "") + '" data-x="eco">Animations : ' + (ECO ? "pause après 2 min sans appui" : "en continu") + '</button></div><p class="note" style="margin-bottom:10px">En pause, le fond animé et les icônes se figent quand personne ne touche l\'écran : la tablette chauffe moins et consomme moins. Un appui les relance.</p>';
     h += '<p class="note" style="margin-bottom:10px">Le mode léger supprime les ombres, les transparences, les halos et les animations pour que la tablette reste fluide. Compare avec « non » grâce au test ci-dessous.</p>';
@@ -3156,6 +3288,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     if (!t || t === this) { return; }
     a = t.getAttribute("data-x"); v = t.getAttribute("data-a");
     if (a === "ico") { ICO = ICO === 1 ? 2 : (ICO === 2 ? 0 : 1); xSet("ico", ICO); icoApply(); if (wxLast) { drawWeather(wxLast); } dispDraw(); }
+    else if (/^slv[0-5]$/.test(a)) { SLV = parseInt(a.charAt(3), 10); xSet("slv", SLV); dispDraw(); sleepOn("auto"); }
     else if (a === "bjm" || a === "bja") { window.bjShow(a === "bjm" ? "matin" : "abs", 1); }
     else if (a === "vauto") { VAUTO = VAUTO ? 0 : 1; xSet("vauto", VAUTO); if (window.veilleArm) { window.veilleArm(); } dispDraw(); }
     else if (a === "perf") { PERF = PERF ? 0 : 1; xSet("perf", PERF); perfApply(); dispDraw(); }
@@ -3568,6 +3701,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["15/11/2026", [
+      ["4.74", "Veille automatique : 5 styles à tester (test)", "Cinq nouveaux écrans de veille automatique, avec le prochain rendez-vous, la météo, la pluie, la température de la chambre et le mode clim : 1 horloge + bandeau, 2 deux colonnes, 3 rendez-vous au centre, 4 minimal, 5 grille 2×2. Un point rouge apparaît seulement si la clim est injoignable ou la batterie faible. Autre > Affichage : boutons Actuel / Style 1 à 5 pour ouvrir la veille automatique tout de suite avec le style choisi (gardé ensuite)."],
       ["4.73", "Idées : croix des idées de Claude corrigée (test)", "La croix de suppression s’affichait comme un carré blanc dans la liste « Idées de Claude » (son style ne s’appliquait que dans « Tes idées »). Même rendu partout."],
       ["4.72", "Veille : un simple toucher la quitte (test)", "La règle des 3 secondes est supprimée : toutes les veilles (Bonne nuit comme veille automatique) se quittent d’un simple toucher. Plus de barre de progression."],
       ["4.71", "Idées : suppression avec une croix (test)", "Chaque idée (les tiennes et celles de Claude) a une croix à droite. Un premier appui affiche « Sûr ? », un second supprime l’idée de la liste ; sans second appui, ça s’annule au bout de 3 secondes. La suppression est mémorisée sur la tablette."],
