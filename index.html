@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:11700 TDBA:211-->
+<!--TDBV:11800 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -489,6 +489,18 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 #slA .s1 .it small { display: block; font-size: 17px; color: #5b626d; margin-top: 2px; }
 #slA .s1 .nx { position: relative; top: 10px; margin-top: 44px; font-size: 28px; color: #6f7783; }
 #slA .s1 .nx b { color: #c9b27a; margin-right: 10px; }
+/* veille « Bonne nuit » : même écran que la veille automatique, en version très tamisée (tons chauds, sans lumière bleue) */
+#slp.nuit #slA .s1 .c { color: #4f4234; }
+#slp.nuit #slA .s1 .d, #slp.nuit #slA .s1 .nx { color: #3a342d; }
+#slp.nuit #slA .s1 .nx b { color: #54452a; }
+#slp.nuit #slA .s1 .it { border-left-color: #1c1a17; }
+#slp.nuit #slA .s1 .it b { color: #4a3f33; }
+#slp.nuit #slA .s1 .it small { color: #342f29; }
+#slp.nuit #slA .ic, #slp.nuit #slA .wm, #slp.nuit #slA .bl, #slp.nuit #slA .ac { color: #4a3f33; }
+#slp.nuit #slA .wi { -webkit-filter: grayscale(1) sepia(0.6) brightness(0.3); filter: grayscale(1) sepia(0.6) brightness(0.3); }
+#slp.nuit.sv { -webkit-justify-content: flex-start; justify-content: flex-start; }
+#slp.nuit.sv #slH { margin: 0; }
+#slp.nuit #slA .al { color: #7a3f38; }
 #slp { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 #slP { display: none; position: absolute; left: 0; bottom: 0; height: 4px; width: 100%; background: #3c424b; -webkit-transform-origin: 0 50%; transform-origin: 0 50%; -webkit-transform: scaleX(0); transform: scaleX(0); }
 #slS { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; font-size: 30px; font-weight: bold; color: #8a919c; margin-bottom: 14px; }
@@ -1910,7 +1922,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("11700", 10) || 0, UI_NAME = "4.77 iPad (beta)".charAt(0) === "_" ? "?" : "4.77 iPad (beta)";
+  var UI_CODE = parseInt("11800", 10) || 0, UI_NAME = "4.78 iPad (beta)".charAt(0) === "_" ? "?" : "4.78 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2360,7 +2372,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     SLEEP = 1; ecoSleep(true); $("bg").style.display = "none";
     for (i = 0; i < IVS.length; i++) { _ci.call(window, IVS[i].id); }
     $("app").style.display = "none"; $("bg").style.display = "none";
-    $("slp").className = kind === "auto" ? (SLV > 0 ? "auto sv sv" + SLV : "auto") : "nuit";   /* « auto » : écran d'attente complet, +20 % de lumière, réveil au simple toucher ; « nuit » : heure tamisée seule, réveil au simple toucher aussi */
+    $("slp").className = kind === "auto" ? (SLV > 0 ? "auto sv sv" + SLV : "auto") : "nuit sv sv" + SLV;   /* « auto » : écran d'attente complet, +20 % de lumière, réveil au simple toucher ; « nuit » : heure tamisée seule, réveil au simple toucher aussi */
     $("slVer").textContent = "Version " + UI_NAME;
     $("slH").innerHTML = '<i>i</i>' + (kind === "auto" ? "Touche l'écran pour quitter la veille" : "Touche l'écran pour quitter la veille");
     $("slp").style.display = "-webkit-flex"; $("slp").style.display = "flex";
@@ -3646,6 +3658,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["15/11/2026", [
+      ["4.78", "Veille Bonne nuit : même format, version tamisée (test)", "La veille « Bonne nuit » reprend la disposition de la veille automatique (heure, date, bandeau d’infos, prochain rendez-vous) en tons chauds très sombres, sans bleu. Le message pour quitter passe en haut. Un toucher quitte la veille."],
       ["4.77", "Veille automatique : espacements (test)", "Heure et date relevées de 60 px, bandeau d’infos relevé de 20 px, prochain rendez-vous abaissé de 10 px."],
       ["4.76", "Veille automatique : nouvel écran (test)", "Horloge centrée, bandeau de 4 infos (météo, pluie, chambre, mode clim) et prochain rendez-vous (« demain 9 h » quand il est dans plus de 6 h, sinon « dans 45 min »). Icône météo tamisée. Un point rouge n’apparaît que si la clim est injoignable ou la batterie faible. Météo et agenda rafraîchis toutes les 15 min en veille. Autre > Affichage : bouton « Tester la veille automatique »."],
       ["4.75", "Retour à la 4.73 (test)", "Les 5 styles de veille automatique de la 4.74 sont retirés en attendant ton accord."],
