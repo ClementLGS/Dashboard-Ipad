@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:12100 TDBA:211-->
+<!--TDBV:12200 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -681,6 +681,12 @@ html #nowFx.nt .nf-flake, html #nowFx.nt .nf-drop { opacity: 0.7; }
 .w-a-lave .h1 { background: radial-gradient(closest-side, rgba(120,30,70,.26), rgba(0,0,0,0)); }
 .w-a-lave .h2 { background: radial-gradient(closest-side, rgba(150,50,30,.22), rgba(0,0,0,0)); }
 .w-a-lave .h3 { background: radial-gradient(closest-side, rgba(90,30,110,.20), rgba(0,0,0,0)); }
+
+/* ---- 4.82 : fonds animés Vagues vives et Étoiles filantes ---- */
+@-webkit-keyframes fxSh2 { 0% { -webkit-transform: rotate(24deg) translate3d(0,0,0); opacity: 0; } 4% { opacity: 1; } 26% { -webkit-transform: rotate(24deg) translate3d(640px,0,0); opacity: 0; } 100% { -webkit-transform: rotate(24deg) translate3d(640px,0,0); opacity: 0; } }
+@keyframes fxSh2 { 0% { transform: rotate(24deg) translate3d(0,0,0); opacity: 0; } 4% { opacity: 1; } 26% { transform: rotate(24deg) translate3d(640px,0,0); opacity: 0; } 100% { transform: rotate(24deg) translate3d(640px,0,0); opacity: 0; } }
+.wfx .wvh1 { height: 52%; } .wfx .wvh2 { height: 43%; } .wfx .wvh3 { height: 34%; } .wfx .wvh4 { height: 26%; } .wfx .wvh5 { height: 19%; }
+.wfx .sh2 { width: 150px; height: 2px; border-radius: 2px; -webkit-transform-origin: 0 0; transform-origin: 0 0; background: -webkit-linear-gradient(left,rgba(255,255,255,0),#fff); background: linear-gradient(90deg,rgba(255,255,255,0),#fff); opacity: 0; -webkit-animation: fxSh2 6s linear infinite; animation: fxSh2 6s linear infinite; }
 
 @-webkit-keyframes fxRain { 0% { -webkit-transform: translate3d(0,-12vh,0) rotate(9deg); } 100% { -webkit-transform: translate3d(-20vh,116vh,0) rotate(9deg); } }
 @keyframes fxRain { 0% { transform: translate3d(0,-12vh,0) rotate(9deg); } 100% { transform: translate3d(-20vh,116vh,0) rotate(9deg); } }
@@ -1950,7 +1956,7 @@ html #nowFx.nt .nf-flake, html #nowFx.nt .nf-drop { opacity: 0.7; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("12100", 10) || 0, UI_NAME = "4.81 iPad (beta)".charAt(0) === "_" ? "?" : "4.81 iPad (beta)";
+  var UI_CODE = parseInt("12200", 10) || 0, UI_NAME = "4.82 iPad (beta)".charAt(0) === "_" ? "?" : "4.82 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -3226,6 +3232,25 @@ html #nowFx.nt .nf-flake, html #nowFx.nt .nf-drop { opacity: 0.7; }
   }
   var WALLS = [["nuit", "Nuit"], ["aurore", "Aurore"], ["crepuscule", "Crépuscule"], ["ocean", "Océan"], ["foret", "Forêt"], ["braise", "Braise"], ["brume", "Brume"], ["etoiles", "Étoiles"], ["minuit", "Minuit"], ["sunset", "Coucher de soleil"], ["lagon", "Lagon"], ["lavande", "Lavande"], ["bordeaux", "Bordeaux"], ["cuivre", "Cuivre"]];
   var WALLA = [["a-aurore", "Aurore"], ["a-ocean", "Océan"], ["a-braise", "Braise"], ["a-nebuleuse", "Nuit étoilée"], ["a-neige", "Neige"], ["a-pluie", "Pluie"], ["a-lucioles", "Lucioles"], ["a-bulles", "Bulles"], ["a-vitesse", "Hyperespace"], ["a-lave", "Lave"]];
+  /* 4.82 : fonds animés dynamiques pilotés par une table [id, nom, fond, [3 halos], type de scène, paramètres] */
+  var NW = [
+    ["a-vagues", "Vagues vives", "linear-gradient(180deg,#040a18,#0a1c3c)", ["rgba(30,70,150,.30)", "rgba(20,50,110,.26)", "rgba(60,100,170,.16)"], "wave", ["rgba(25,60,130,.32)", "rgba(35,85,165,.32)", "rgba(50,110,190,.32)", "rgba(80,140,210,.32)", "rgba(125,175,230,.36)"]],
+    ["a-filantes", "Étoiles filantes", "linear-gradient(180deg,#030715,#0a1532)", ["rgba(35,70,150,.22)", "rgba(25,45,105,.20)", "rgba(60,90,160,.10)"], "shoot", null]
+  ];
+  (function () {
+    var css = "", i, o, j, st;
+    for (i = 0; i < NW.length; i++) {
+      o = NW[i];
+      css += "#bg.w-" + o[0] + ", .wpS.w-" + o[0] + " { background: " + o[2] + "; }";
+      for (j = 0; j < 3; j++) { css += ".w-" + o[0] + " .h" + (j + 1) + " { background: radial-gradient(closest-side," + o[3][j] + ",rgba(0,0,0,0)); }"; }
+      if (o[4] === "wave") {
+        for (j = 0; j < 5; j++) { css += ".wfx .wvx" + i + "_" + j + " { background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath fill='" + o[5][j] + "' d='M0 60C150 0 350 0 600 60C850 120 1050 120 1200 60V120H0Z'/%3E%3C/svg%3E\"); }"; }
+      }
+      WALLA.push([o[0], o[1]]);
+    }
+    st = document.createElement("style"); st.appendChild(document.createTextNode(css)); document.head.appendChild(st);
+  })();
+  function nwIdx(w) { var i; for (i = 0; i < NW.length; i++) { if (NW[i][0] === w) { return i; } } return -1; }
   var WALL = xGet("wall", "nuit");
   if (WALL === "a-brume") { WALL = "a-neige"; }
   if (WALL === "a-meteo") { WALL = "nuit"; xSet("wall", WALL); }
@@ -3259,6 +3284,14 @@ html #nowFx.nt .nf-flake, html #nowFx.nt .nf-drop { opacity: 0.7; }
     } else if (w === "a-lave") {
       cols = ["rgba(255,90,60,.36)", "rgba(240,60,140,.33)", "rgba(255,150,40,.33)", "rgba(200,60,200,.28)", "rgba(255,70,90,.33)", "rgba(255,170,70,.28)"];
       for (i = 0; i < 6; i++) { sz = 170 + (i * 53) % 130; d = 4.5 + i * 0.9; h += '<u class="lav" style="left:' + (i * 17 - 4) + '%;top:' + (still ? 5 + (i * 37) % 60 : 72 + (i * 11) % 22) + '%;' + box(sz * (still ? 0.8 : 1)) + 'background:radial-gradient(closest-side,' + cols[i] + ' 55%,rgba(0,0,0,0));' + an(d, i * 1.3) + '"></u>'; }
+    } else if (nwIdx(w) >= 0) {
+      var ni = nwIdx(w), nk = NW[ni][4], np = NW[ni][5], bk = "rgba(0,0,0,0)", ps, pr, sdur;
+      if (nk === "wave") {
+        for (i = 0; i < 5; i++) { h += '<u class="wv wvh' + (i + 1) + ' wvx' + ni + "_" + i + '" style="' + (still ? "width:200%;" : "-webkit-animation-direction:" + (i % 2 ? "reverse" : "normal") + ";animation-direction:" + (i % 2 ? "reverse" : "normal") + ";") + an(10 - i * 1.3, i * 2) + '"></u>'; }
+      } else if (nk === "shoot") {
+        h = '<u class="str st1"></u><u class="st2w"><u class="str st2"></u></u>';
+        for (i = 0; i < 9; i++) { d = rnd(4.5, 8); h += '<u class="sh2" style="left:' + rnd(-5, 70).toFixed(0) + '%;top:' + rnd(2, 62).toFixed(0) + '%;' + (still ? "opacity:1;" + tf("rotate(24deg) translate3d(" + rnd(0, 300).toFixed(0) + "px,0,0)") : "") + an(d, rnd(0, d)) + '"></u>'; }
+      }
     }
     return h;
   }
@@ -3731,6 +3764,7 @@ html #nowFx.nt .nf-flake, html #nowFx.nt .nf-drop { opacity: 0.7; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["15/11/2026", [
+      ["4.82", "2 nouveaux fonds animés", "Deux fonds animés ajoutés dans Autre > Fonds d’écran : « Vagues vives » (cinq couches de vagues bleu marine qui roulent en sens opposés) et « Étoiles filantes » (ciel marine, étoiles qui scintillent et étoiles filantes régulières). Ils s’arrêtent pendant la veille."],
       ["4.81", "Testeur d’ambiances : le logo suit la scène (test)", "Quand tu choisis une scène dans « Tester » (page Météo), l’icône et le texte de la météo (page Météo et accueil) changent aussi avec la scène, pas seulement le fond animé."],
       ["4.80", "Météo de nuit + curseur Bonne nuit corrigé (test)", "Le curseur « Bonne nuit » de la barre du haut se remet à zéro dès qu’on quitte la veille (il restait activé jusqu’à 9 s). L’animation météo passe en version nuit quand le soleil est couché : nuit couverte, pluie, orage, neige et brouillard de nuit (fond bleu nuit, nuages sombres, étoiles dans les trouées). Cinq boutons de plus dans le testeur d’ambiances de la page Météo."],
       ["4.79", "Pop-up Bonjour : nouvelle page 1, swipe, agenda dynamique (test)", "Page 1 : blocs resserrés, bloc « Météo du jour » visuel (grande icône, température, min/max, pluie) à la place de la ligne sous l’heure, « Mails de la nuit » à la place de « À la une », flèche tout en bas, ligne « Aperçu » retirée. On change de page en glissant le doigt (gauche/droite) ou avec les flèches. Page 2 : l’agenda du jour s’adapte (journée libre, lignes plus ou moins grandes selon le nombre de rendez-vous, passés masqués quand il y en a beaucoup, prochain rendez-vous en jaune avec « dans X »). « Pendant ton absence » inchangé."],
