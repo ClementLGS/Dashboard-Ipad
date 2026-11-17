@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:11900 TDBA:211-->
+<!--TDBV:12000 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -47,6 +47,8 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
 #nowFx.k-snow { background: linear-gradient(180deg, rgba(150,180,225,.15), rgba(150,180,225,.02)); }
 #nowFx.k-fog { background: linear-gradient(180deg, rgba(170,180,195,.14), rgba(170,180,195,.04)); }
 #nowFx.k-moon, #nowFx.k-partlyNight { background: linear-gradient(180deg, rgba(60,80,170,.22), rgba(60,80,170,.02)); }
+html #nowFx.nt { background: linear-gradient(180deg, rgba(34,46,105,.40), rgba(20,26,62,.06)); }
+html #nowFx.nt .nf-flake, html #nowFx.nt .nf-drop { opacity: 0.7; }
 @keyframes nfSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 @keyframes nfBreath { from { opacity: 0.55; transform: scale(0.94); } to { opacity: 1; transform: scale(1.06); } }
 @keyframes nfDrift { from { transform: translate3d(0,0,0); } to { transform: translate3d(1000px,0,0); } }
@@ -1948,7 +1950,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("11900", 10) || 0, UI_NAME = "4.79 iPad (beta)".charAt(0) === "_" ? "?" : "4.79 iPad (beta)";
+  var UI_CODE = parseInt("12000", 10) || 0, UI_NAME = "4.80 iPad (beta)".charAt(0) === "_" ? "?" : "4.80 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2275,6 +2277,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
       swW += d * 0.35; $("sw").style.width = Math.round(swW) + "px"; swAn = setTimeout(step, 16);
     })();
   }
+  function swReset() { clearTimeout(swTm); clearTimeout(swAn); swDrag = false; swBusy = false; swOpen = false; swW = 36; $("sw").style.width = "36px"; swSet(0); }
   function swShut() { clearTimeout(swTm); if (!swOpen) { return; } swOpen = false; swSet(0); swWidth(36); }
   function swArm() { clearTimeout(swTm); swTm = setTimeout(function () { if (!swDrag && !swBusy) { swShut(); } }, 5000); }
   function swBack() {
@@ -2409,7 +2412,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   function sleepOff() {
     var i;
     if (!SLEEP) { return; }
-    SLEEP = 0; ecoSleep(false); $("bg").style.display = ""; clearTimeout(slTm);
+    SLEEP = 0; swReset(); ecoSleep(false); $("bg").style.display = ""; clearTimeout(slTm);
     try { if (window.Native && window.Native.setSleep) { window.Native.setSleep(false); } } catch (e) { }
     $("slp").style.display = "none"; $("app").style.display = ""; $("bg").style.display = "";
     for (i = 0; i < IVS.length; i++) { IVS[i].id = _si.call(window, IVS[i].f, IVS[i].ms); }
@@ -2652,8 +2655,10 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   var NFK = "", NFOVR = "";
   function nowFx(k) {
     if (NFK === k) { return; } NFK = k;
-    var h = "", i, r = function (a, b) { return a + Math.random() * (b - a); }, e = $("nowFx");
+    var h = "", i, r = function (a, b) { return a + Math.random() * (b - a); }, e = $("nowFx"), nt = /N$/.test(k), kb;
+    if (nt) { k = k.slice(0, -1); } kb = k;
     function cld(n, c, op) {
+      if (nt) { c = "#7f89a8"; op = op * 0.6; }
       for (i = 0; i < n; i++) { var w = r(150, 240), d = r(60, 110); h += '<i class="nf-cld" style="top:' + r(2, 46).toFixed(0) + '%;width:' + w.toFixed(0) + 'px;height:' + w.toFixed(0) + 'px;opacity:' + op + ';animation-duration:' + d.toFixed(0) + 's;animation-delay:-' + r(0, d).toFixed(0) + 's"><svg viewBox="0 0 48 48"><path fill="' + c + '" d="' + CLOUD + '"/></svg></i>'; }
     }
     function drops(n, w, len, d0, d1, cl) { w = w || 2; len = len || 22; d0 = d0 || 0.75; d1 = d1 || 1.25; for (i = 0; i < n; i++) { h += '<i class="nf-drop' + (cl ? " " + cl : "") + '" style="left:' + r(-6, 108).toFixed(1) + '%;width:' + w + 'px;height:' + len + 'px;animation-duration:' + r(d0, d1).toFixed(2) + 's;animation-delay:-' + r(0, d1).toFixed(2) + 's"></i>'; } }
@@ -2684,6 +2689,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
       h += '<i class="nf-core"></i>';
       for (i = 0; i < 9; i++) { h += '<i class="nf-mote" style="left:' + r(8, 92).toFixed(0) + '%;top:' + r(55, 100).toFixed(0) + '%;animation-duration:' + r(10, 18).toFixed(0) + 's;animation-delay:-' + r(0, 16).toFixed(0) + 's"></i>'; }
     }
+    if (nt && (k === "cloud" || k === "fog")) { h += '<i class="nf-glow m"></i>'; stars(k === "cloud" ? 7 : 4); }
     if (k === "sunOld") { sunnyOld(22, 0.9); }
     else     if (k === "sun") { sunny(22, 0.9); }
     else if (k === "partly") { sunny(14, 0.7); cld(3, "#ffffff", 0.16); }
@@ -2696,11 +2702,12 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
     else if (k === "fog") { for (i = 0; i < 5; i++) { h += '<i class="nf-fog" style="top:' + (i * 20) + '%;animation-duration:' + r(18, 30).toFixed(0) + 's;animation-delay:-' + r(0, 20).toFixed(0) + 's"></i>'; } }
     else if (k === "moon") { h += '<i class="nf-glow m"></i>'; stars(16); }
     else if (k === "partlyNight") { h += '<i class="nf-glow m"></i>'; stars(12); cld(2, "#cfd6e6", 0.10); }
-    e.className = "k-" + (k === "rain" ? "rain1" : k); e.innerHTML = h;
+    e.className = "k-" + (k === "rain" ? "rain1" : k) + (nt ? " nt" : ""); e.innerHTML = h;
   }
   function wmo(code, day, mm) {
     var q = wmo0(code, day);
     if (q.k === "rain") { q.lv = rainLv(Number(code), mm); q.fx = "rain" + q.lv; if (q.lv === 0 && Number(code) >= 61) { q.t = "Pluie fine"; } else if (q.lv === 2 && Number(code) >= 80) { q.t = "Forte averse"; } }
+    if (day === 0 && /^(cloud|rain|storm|snow|fog)$/.test(q.k)) { q.fx = (q.fx || q.k) + "N"; }
     return q;
   }
   function rainLv(n, mm) {
@@ -3721,6 +3728,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["15/11/2026", [
+      ["4.80", "Météo de nuit + curseur Bonne nuit corrigé (test)", "Le curseur « Bonne nuit » de la barre du haut se remet à zéro dès qu’on quitte la veille (il restait activé jusqu’à 9 s). L’animation météo passe en version nuit quand le soleil est couché : nuit couverte, pluie, orage, neige et brouillard de nuit (fond bleu nuit, nuages sombres, étoiles dans les trouées). Cinq boutons de plus dans le testeur d’ambiances de la page Météo."],
       ["4.79", "Pop-up Bonjour : nouvelle page 1, swipe, agenda dynamique (test)", "Page 1 : blocs resserrés, bloc « Météo du jour » visuel (grande icône, température, min/max, pluie) à la place de la ligne sous l’heure, « Mails de la nuit » à la place de « À la une », flèche tout en bas, ligne « Aperçu » retirée. On change de page en glissant le doigt (gauche/droite) ou avec les flèches. Page 2 : l’agenda du jour s’adapte (journée libre, lignes plus ou moins grandes selon le nombre de rendez-vous, passés masqués quand il y en a beaucoup, prochain rendez-vous en jaune avec « dans X »). « Pendant ton absence » inchangé."],
       ["4.78", "Veille Bonne nuit : même format, version tamisée (test)", "La veille « Bonne nuit » reprend la disposition de la veille automatique (heure, date, bandeau d’infos, prochain rendez-vous) en tons chauds très sombres, sans bleu. Le message pour quitter passe en haut. Un toucher quitte la veille."],
       ["4.77", "Veille automatique : espacements (test)", "Heure et date relevées de 60 px, bandeau d’infos relevé de 20 px, prochain rendez-vous abaissé de 10 px."],
@@ -3941,7 +3949,7 @@ html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
   /* testeur d'ambiances météo (versions TEST seulement, jamais dans main) : petit bouton « Tester » dans la page Météo (jamais ailleurs) */
   (function () {
     var box = document.createElement("div"), tag = document.createElement("div"), btn = document.createElement("button"), open = false,
-      L = [["", "Auto (météo réelle)"], ["sun", "Soleil"], ["sunOld", "Soleil (ancien)"], ["partly", "Éclaircies"], ["cloud", "Nuageux"], ["rain0", "Bruine"], ["rain1", "Pluie"], ["rain2", "Forte pluie"], ["storm", "Orage"], ["snow", "Neige"], ["fog", "Brouillard"], ["moon", "Nuit"], ["partlyNight", "Nuit nuageuse"]], i, h = '<h4>Ambiances météo : touche pour comparer</h4>', names = {};
+      L = [["", "Auto (météo réelle)"], ["sun", "Soleil"], ["sunOld", "Soleil (ancien)"], ["partly", "Éclaircies"], ["cloud", "Nuageux"], ["rain0", "Bruine"], ["rain1", "Pluie"], ["rain2", "Forte pluie"], ["storm", "Orage"], ["snow", "Neige"], ["fog", "Brouillard"], ["moon", "Nuit"], ["partlyNight", "Nuit nuageuse"], ["cloudN", "Nuit couverte"], ["rain1N", "Pluie de nuit"], ["stormN", "Orage de nuit"], ["snowN", "Neige de nuit"], ["fogN", "Brouillard de nuit"]], i, h = '<h4>Ambiances météo : touche pour comparer</h4>', names = {};
     box.id = "fxTest"; tag.id = "fxTag";
     for (i = 0; i < L.length; i++) { h += '<button type="button" data-k="' + L[i][0] + '">' + L[i][1] + '</button>'; names[L[i][0]] = L[i][1]; }
     box.innerHTML = h; document.body.appendChild(tag);
