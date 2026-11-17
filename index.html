@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:12600 TDBA:211-->
+<!--TDBV:12700 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -953,7 +953,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
 
    <section class="page" id="p-app">
     <div class="ttl"><span class="fx" style="-webkit-align-items:center;align-items:center"><button type="button" class="bk" id="agBack" style="display:none" aria-label="Retour à la bibliothèque">&lsaquo; Autre</button><h2 id="appT">Autre</h2></span><span class="note" id="libNote">Bibliothèque de modules</span></div>
-    <div id="libV" class="lib"><div class="libH">Infos</div><div class="mod"><button type="button" class="mi on" data-mod="agenda"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Agenda</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="meteo7"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .4-8A6 6 0 0 0 6 11a3.500 3.500 0 0 0 1 7z"/></svg><span>Météo</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="conso"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg><span>Consommation</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="stab"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2" transform="rotate(12 12 12)"/><path d="M3 20h4M17 4h4"/></svg><span>Stabilité</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="feedback"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12.500h5"/></svg><span>Feedback</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="histo"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.500"/><path d="M12 7.500V12l3 2"/></svg><span>Historique</span></span></button></div><div class="libH">Écran et réglages</div><div class="mod"><button type="button" class="mi on" data-mod="affichage"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span>Affichage</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="fonds"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="M3.5 17l5-4.5 4 3.5 3-2.5 5 4.5"/></svg><span>Fonds</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="veille"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.500 4a8 8 0 1 0 10.500 10.500z"/></svg><span>Veille</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="reglages"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.400 15a1.650 1.650 0 0 0 .330 1.820l.060.060a2 2 0 1 1-2.830 2.830l-.060-.060a1.650 1.650 0 0 0-1.820-.330 1.650 1.650 0 0 0-1 1.510V21a2 2 0 0 1-4 0v-.090A1.650 1.650 0 0 0 9 19.400a1.650 1.650 0 0 0-1.820.330l-.060.060a2 2 0 1 1-2.830-2.830l.060-.060A1.650 1.650 0 0 0 4.680 15a1.650 1.650 0 0 0-1.510-1H3a2 2 0 0 1 0-4h.090A1.650 1.650 0 0 0 4.600 9a1.650 1.650 0 0 0-.330-1.820l-.060-.060a2 2 0 1 1 2.830-2.830l.060.060A1.650 1.650 0 0 0 9 4.680a1.650 1.650 0 0 0 1-1.510V3a2 2 0 0 1 4 0v.090a1.650 1.650 0 0 0 1 1.510 1.650 1.650 0 0 0 1.820-.330l.060-.060a2 2 0 1 1 2.830 2.830l-.060.060A1.650 1.650 0 0 0 19.400 9a1.650 1.650 0 0 0 1.510 1H21a2 2 0 0 1 0 4h-.090a1.650 1.650 0 0 0-1.510 1z"/></svg><span>Réglages</span></span></button></div><div class="libH">À venir</div><div class="mod"><button type="button" class="mi on" data-mod="idees"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.500 10.900c.700.600 1 1.300 1 2.100h5c0-.800.300-1.500 1-2.100A6 6 0 0 0 12 3z"/></svg><span>Idées</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="bugs"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="8" height="11" rx="4"/><path d="M9.500 6.500 8 4M14.500 6.500 16 4M8 12H4M16 12h4M8.500 16 5 18M15.500 16l3.500 2M12 8v11"/></svg><span>Bugs</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="volets"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16M5 8h14M5 12h14M5 16h14M12 16v4"/></svg><span>Volets</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="mails"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.500 7l8.500 6 8.500-6"/></svg><span>Mails</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="air"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h11a2.500 2.500 0 1 0-2.500-2.500M3 15h14a2.500 2.500 0 1 1-2.500 2.500M3 12h7"/></svg><span>Air</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="trajet"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16l1.500-5h11L19 16M5 16v3h2v-1.500h10V19h2v-3M5 16h14"/><circle cx="8" cy="13.500" r=".5"/><circle cx="16" cy="13.500" r=".5"/></svg><span>Trajet</span></span></button></div></div>
+    <div id="libV" class="lib"><div class="libH">Infos</div><div class="mod"><button type="button" class="mi on" data-mod="agenda"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Agenda</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="meteo7"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .4-8A6 6 0 0 0 6 11a3.500 3.500 0 0 0 1 7z"/></svg><span>Météo</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="conso"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg><span>Consommation</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="stab"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2" transform="rotate(12 12 12)"/><path d="M3 20h4M17 4h4"/></svg><span>Stabilité</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="batt"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="17" height="10" rx="2"/><path d="M22 11v2M6 10v4M10 10v4"/></svg><span>Batterie</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="feedback"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12.500h5"/></svg><span>Feedback</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="histo"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.500"/><path d="M12 7.500V12l3 2"/></svg><span>Historique</span></span></button></div><div class="libH">Écran et réglages</div><div class="mod"><button type="button" class="mi on" data-mod="affichage"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span>Affichage</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="fonds"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="M3.5 17l5-4.5 4 3.5 3-2.5 5 4.5"/></svg><span>Fonds</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="veille"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.500 4a8 8 0 1 0 10.500 10.500z"/></svg><span>Veille</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="reglages"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.400 15a1.650 1.650 0 0 0 .330 1.820l.060.060a2 2 0 1 1-2.830 2.830l-.060-.060a1.650 1.650 0 0 0-1.820-.330 1.650 1.650 0 0 0-1 1.510V21a2 2 0 0 1-4 0v-.090A1.650 1.650 0 0 0 9 19.400a1.650 1.650 0 0 0-1.820.330l-.060.060a2 2 0 1 1-2.830-2.830l.060-.060A1.650 1.650 0 0 0 4.680 15a1.650 1.650 0 0 0-1.510-1H3a2 2 0 0 1 0-4h.090A1.650 1.650 0 0 0 4.600 9a1.650 1.650 0 0 0-.330-1.820l-.060-.060a2 2 0 1 1 2.830-2.830l.060.060A1.650 1.650 0 0 0 9 4.680a1.650 1.650 0 0 0 1-1.510V3a2 2 0 0 1 4 0v.090a1.650 1.650 0 0 0 1 1.510 1.650 1.650 0 0 0 1.820-.330l.060-.060a2 2 0 1 1 2.830 2.830l-.060.060A1.650 1.650 0 0 0 19.400 9a1.650 1.650 0 0 0 1.510 1H21a2 2 0 0 1 0 4h-.090a1.650 1.650 0 0 0-1.510 1z"/></svg><span>Réglages</span></span></button></div><div class="libH">À venir</div><div class="mod"><button type="button" class="mi on" data-mod="idees"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.500 10.900c.700.600 1 1.300 1 2.100h5c0-.800.300-1.500 1-2.100A6 6 0 0 0 12 3z"/></svg><span>Idées</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="bugs"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="8" height="11" rx="4"/><path d="M9.500 6.500 8 4M14.500 6.500 16 4M8 12H4M16 12h4M8.500 16 5 18M15.500 16l3.500 2M12 8v11"/></svg><span>Bugs</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="volets"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16M5 8h14M5 12h14M5 16h14M12 16v4"/></svg><span>Volets</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="mails"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.500 7l8.500 6 8.500-6"/></svg><span>Mails</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="air"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h11a2.500 2.500 0 1 0-2.500-2.500M3 15h14a2.500 2.500 0 1 1-2.500 2.500M3 12h7"/></svg><span>Air</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="trajet"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16l1.500-5h11L19 16M5 16v3h2v-1.500h10V19h2v-3M5 16h14"/><circle cx="8" cy="13.500" r=".5"/><circle cx="16" cy="13.500" r=".5"/></svg><span>Trajet</span></span></button></div></div>
     <div class="note" id="libMsg" style="margin-top:8px;min-height:18px">Les modules grisés (« À venir ») sont des emplacements libres : dis-moi lesquels créer.</div>
     <div id="wxV" style="display:none;-webkit-flex:1;flex:1;min-height:0;-webkit-flex-direction:column;flex-direction:column">
      <div class="tile agT"><p class="msg" id="w7Msg">Chargement de la météo de la semaine…</p>
@@ -1894,6 +1894,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   var DEMOI = {
     agenda: "Agenda — tes prochains rendez-vous sur 7 jours, repris de ton Google Agenda. Le prochain s'affiche aussi sur l'accueil, avec le temps restant.",
     wx7: "Météo de la semaine — les prévisions jour par jour : température, pluie, vent. Pour savoir comment s'habiller ou quand sortir le linge.",
+    batt: "Batterie — suit le niveau de la batterie de la tablette dans le temps et calcule combien elle consomme par heure, allumée ou en veille, et l'autonomie restante.",
     stab: "Stabilité — mesure l'inclinaison de la tablette avec son capteur de mouvement, pour voir si les aimants la retiennent bien ou si elle glisse ou penche avec le temps.",
     conso: "Consommation — mesure ce que l'appli demande à la tablette, pour trouver ce qui la fait chauffer ou ramer.",
     affichage: "Affichage — réglages de fluidité et d'énergie : mode léger, animations, test de fluidité et réglage de la synchro des lumières.",
@@ -1957,6 +1958,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
           if (k === "meteo7") { appView("wx7"); loadW7(); return; }
           if (k === "conso") { xOpen("conso"); return; }
           if (k === "stab") { xOpen("stab"); return; }
+          if (k === "batt") { xOpen("batt"); return; }
           if (k === "veille") { if (DEMO) { $("libMsg").textContent = DEMOI.veille; } sleepOn(); return; }
           if (DEMO && DEMOI[k]) { $("libMsg").textContent = DEMOI[k]; if (k === "veille") { sleepOn(); } return; }
           $("libMsg").textContent = "« " + b.getElementsByTagName("span")[0].textContent + " » : emplacement libre, module pas encore créé.";
@@ -1982,7 +1984,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("12600", 10) || 0, UI_NAME = "4.86 iPad (beta)".charAt(0) === "_" ? "?" : "4.86 iPad (beta)";
+  var UI_CODE = parseInt("12700", 10) || 0, UI_NAME = "4.87 iPad (beta)".charAt(0) === "_" ? "?" : "4.87 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2267,6 +2269,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   };
 
   /* ---------------- batterie de la tablette ---------------- */
+  var BTH = xGet("batH", []);
   function batDraw() {
     var r = "", a, p, ch, e = $("bat");
     try { if (window.Native && window.Native.battery) { r = window.Native.battery(); } } catch (x) { r = ""; }
@@ -2278,6 +2281,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     $("batF").setAttribute("width", String(Math.max(0, Math.min(18, p * 18 / 100))));
     $("batT").textContent = p + " %";
     BP = p; BC = ch;
+    batLog(p, ch);
   }
   function bleWatch() {
     var a;
@@ -3421,7 +3425,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     for (i = 0; i < tn.length; i++) { k = tn[i].parentNode.clientWidth / 1024; if (k > 0) { tn[i].style.height = Math.ceil(tn[i].parentNode.clientHeight / k) + "px"; tn[i].style.webkitTransform = tn[i].style.transform = "scale(" + k.toFixed(4) + ")"; } }
   }
   var xMod = "affichage";
-  var XNAME = { affichage: "Affichage", fonds: "Fonds d'écran", conso: "Consommation", stab: "Stabilité", idees: "Idées", bugs: "Bugs", feedback: "Feedback", histo: "Historique des mises à jour" };
+  var XNAME = { affichage: "Affichage", fonds: "Fonds d'écran", conso: "Consommation", stab: "Stabilité", batt: "Batterie", idees: "Idées", bugs: "Bugs", feedback: "Feedback", histo: "Historique des mises à jour" };
   var consoTm = 0;
   function pfFmt(ms) { return ms < 1000 ? (ms < 10 ? ms.toFixed(1) : Math.round(ms)) + " ms" : (ms / 1000).toFixed(1) + " s"; }
   function consoDraw() {
@@ -3447,7 +3451,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     $("xB").scrollTop = s1; $("xV").scrollTop = s2;
     if (!consoTm) { consoTm = setInterval(function () { if (xMod !== "conso" || $("xV").style.display === "none") { clearInterval(consoTm); consoTm = 0; return; } consoDraw(); }, 2000); }
   }
-  function xDraw() { demoSync(); if (xMod === "histo") { histoDraw(); } else if (xMod === "feedback") { fbDraw(); } else if (xMod === "idees") { ideesDraw(); } else if (xMod === "bugs") { bugsDraw(); } else if (xMod === "fonds") { wallDraw(); } else if (xMod === "conso") { consoDraw(); } else if (xMod === "stab") { stabDraw(); } else { dispDraw(); } }
+  function xDraw() { demoSync(); if (xMod === "histo") { histoDraw(); } else if (xMod === "feedback") { fbDraw(); } else if (xMod === "idees") { ideesDraw(); } else if (xMod === "bugs") { bugsDraw(); } else if (xMod === "fonds") { wallDraw(); } else if (xMod === "conso") { consoDraw(); } else if (xMod === "stab") { stabDraw(); } else if (xMod === "batt") { battDraw(); } else { dispDraw(); } }
   function xOpen(m) { xMod = m || "affichage"; appView("x"); xDraw(); }
   $("xB").onclick = function (ev) {
     var t = ev.target, a, v;
@@ -3462,6 +3466,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     else if (a === "perf") { PERF = PERF ? 0 : 1; xSet("perf", PERF); perfApply(); dispDraw(); }
     else if (a === "lab") { labRun(); }
     else if (a === "synm" || a === "synp") { xSet("sync", Math.max(-1000, Math.min(1000, xGet("sync", 0) + (a === "synp" ? 50 : -50)))); dispDraw(); }
+    else if (a === "batRaz") { BTH = []; xSet("batH", BTH); batLog(BP, BC); battDraw(); }
     else if (a === "stabOn") { stabToggle(); }
     else if (a === "stabCal") { stabCal(); }
     else if (a === "stabRaz") { stabRaz(); }
@@ -3872,6 +3877,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["15/11/2026", [
+      ["4.87", "Module Batterie : consommation (test)", "Nouveau module « Batterie » dans Autre : le niveau est enregistré à chaque changement, avec la charge et la veille. Il calcule les % par heure allumée, en veille et en charge, l’autonomie restante (ou le temps avant charge complète) et trace la courbe des dernières 24 h."],
       ["4.86", "Module Stabilité : inclinaison de la tablette (test)", "Nouveau module « Stabilité » dans Autre : le capteur de mouvement de l’iPad mesure l’angle de la tablette (rotation dans le plan, bascule hors du mur), un point toutes les 5 minutes, une courbe de dérive depuis le calibrage, les secousses détectées et un état Stable / Léger mouvement / La tablette bouge. Pour vérifier la tenue des aimants."],
       ["4.85", "Phrase du jour retirée", "Page 2 du pop-up Bonjour : la phrase du jour est retirée pour le moment, l'espace sous l'agenda reste libre."],
       ["4.84", "Phrase du jour, blocs adaptatifs, météo transparente", "Page 2 du pop-up Bonjour : les blocs prennent la taille de leur contenu et une petite phrase du jour (écrite chaque matin par Claude, à partir de l’agenda, de la météo et du contexte) occupe la place restante sous l’agenda quand il y en a. Avec le fond « Météo dynamique », l’encadré météo de la page Météo devient transparent."],
@@ -4092,6 +4098,79 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     if (!stbTm) { stbTm = setInterval(function () { if (xMod !== "stab" || $("xV").style.display === "none") { clearInterval(stbTm); stbTm = 0; return; } stabDraw(); }, 2000); }
   }
   if (STB.on) { try { stbStart(); } catch (e) { } }
+
+
+  /* ---------------- Batterie : journal du niveau (une ligne à chaque changement) et calcul de la consommation ---------------- */
+  function batLog(p, ch) {
+    var l = BTH.length ? BTH[BTH.length - 1] : null, v = (typeof SLEEP !== "undefined" && SLEEP) ? 1 : 0, c = ch ? 1 : 0;
+    if (l && l[1] === p && l[2] === c && l[3] === v) { return; }
+    BTH.push([Date.now(), p, c, v]); if (BTH.length > 1500) { BTH.shift(); }
+    xSet("batH", BTH);
+  }
+  /* débit moyen en % par heure sur les intervalles entre deux relevés, filtrés par charge (0/1) et, si v est 0 ou 1, par mode veille ; fenêtre en heures */
+  function batRate(chg, v, win) {
+    var i, a, b, dt, dp, T = 0, P = 0, lim = Date.now() - win * 3600000;
+    for (i = 0; i + 1 < BTH.length; i++) {
+      a = BTH[i]; b = BTH[i + 1];
+      if (b[0] < lim || a[2] !== chg || b[2] !== chg || (v !== null && a[3] !== v)) { continue; }
+      dt = (b[0] - a[0]) / 3600000; dp = chg ? b[1] - a[1] : a[1] - b[1];
+      if (dt <= 0 || dp < 0 || dt > 6) { continue; }
+      T += dt; P += dp;
+    }
+    return { t: T, p: P, r: T > 0 ? P / T : 0 };
+  }
+  function batFmtH(h) { var m = Math.round(h * 60); return m < 60 ? m + " min" : (m < 1440 ? Math.floor(m / 60) + " h " + pad(m % 60) : Math.floor(m / 1440) + " j " + Math.floor((m % 1440) / 60) + " h"); }
+  function batChart() {
+    var W = 640, H = 170, n = BTH.length, t1 = Date.now(), t0 = Math.max(BTH[0][0], t1 - 24 * 3600000), i, a, b, x1, x2, y, seg = "", cl, k;
+    function X(t) { return 10 + (t - t0) / Math.max(1, t1 - t0) * (W - 20); }
+    function Y(p) { return H - 14 - p / 100 * (H - 30); }
+    for (i = 0; i < n; i++) {
+      a = BTH[i]; b = i + 1 < n ? BTH[i + 1] : [t1, a[1], a[2], a[3]];
+      if (b[0] < t0) { continue; }
+      x1 = X(Math.max(a[0], t0)); x2 = X(b[0]); cl = a[2] ? "#5fd38d" : (a[3] ? "#8d95a3" : "#6ea8fe");
+      seg += '<line x1="' + x1.toFixed(1) + '" y1="' + Y(a[1]).toFixed(1) + '" x2="' + x2.toFixed(1) + '" y2="' + Y(a[1]).toFixed(1) + '" stroke="' + cl + '" stroke-width="3"/>';
+      if (i + 1 < n) { seg += '<line x1="' + x2.toFixed(1) + '" y1="' + Y(a[1]).toFixed(1) + '" x2="' + x2.toFixed(1) + '" y2="' + Y(b[1]).toFixed(1) + '" stroke="#4a5160" stroke-width="1.5"/>'; }
+    }
+    k = '<line x1="10" y1="' + Y(50).toFixed(0) + '" x2="' + (W - 10) + '" y2="' + Y(50).toFixed(0) + '" stroke="#2c323b" stroke-dasharray="4 4"/>';
+    return '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;max-width:640px;background:#1b1f26;border-radius:6px">' + k + seg
+      + '<text x="14" y="14" fill="#8d95a3" font-size="13">100 %</text><text x="14" y="' + (H - 2) + '" fill="#8d95a3" font-size="13">0 %</text></svg>'
+      + '<p class="note" style="margin-top:6px"><span style="color:#6ea8fe">■</span> allumée sur batterie &nbsp; <span style="color:#8d95a3">■</span> en veille sur batterie &nbsp; <span style="color:#5fd38d">■</span> en charge · dernières 24 h</p>';
+  }
+  function battDraw() {
+    var h = "", r, rd, ra, rs, rc, i, e, nowP = BP, nowC = BC, big;
+    if (nowP === undefined || nowP === null || isNaN(nowP)) {
+      h = '<p class="note">Le niveau de la batterie n\'est pas disponible dans cet environnement.</p>';
+    } else {
+      big = '<div style="font-size:42px;font-weight:bold">' + nowP + ' %' + (nowC ? ' <span style="font-size:22px;color:#5fd38d">en charge</span>' : '') + '</div>';
+      h += big;
+      r = batRate(0, null, 24); rd = r; ra = batRate(0, 0, 24); rs = batRate(0, 1, 24); rc = batRate(1, null, 24);
+      if (!nowC && rd.t >= 0.25 && rd.p >= 2) {
+        h += '<div style="font-size:24px;font-weight:bold;margin:6px 0">≈ ' + batFmtH(nowP / rd.r) + ' d\'autonomie</div>';
+        h += '<p class="note">Au rythme moyen des dernières 24 h sur batterie : ' + rd.r.toFixed(1) + ' % par heure (mesuré sur ' + batFmtH(rd.t) + ').</p>';
+      } else if (nowC && rc.t >= 0.25 && rc.p >= 2) {
+        h += '<div style="font-size:24px;font-weight:bold;margin:6px 0">Pleine dans ≈ ' + batFmtH(Math.max(0, 100 - nowP) / rc.r) + '</div>';
+        h += '<p class="note">Charge : +' + rc.r.toFixed(1) + ' % par heure en moyenne.</p>';
+      } else {
+        h += '<p class="note" style="margin:6px 0">Pas encore assez de mesures. Débranche la tablette quelques heures : le calcul de consommation se fait seulement sur batterie.</p>';
+      }
+      h += '<div style="display:flex;gap:22px;margin:12px 0;flex-wrap:wrap">';
+      h += '<div><div class="note">Allumée (sur batterie)</div><div style="font-size:26px;font-weight:bold">' + (ra.t >= 0.25 && ra.p >= 2 ? ra.r.toFixed(1) + ' %/h' : '—') + '</div></div>';
+      h += '<div><div class="note">En veille (sur batterie)</div><div style="font-size:26px;font-weight:bold">' + (rs.t >= 0.25 && rs.p >= 2 ? rs.r.toFixed(1) + ' %/h' : '—') + '</div></div>';
+      h += '<div><div class="note">En charge</div><div style="font-size:26px;font-weight:bold">' + (rc.t >= 0.25 && rc.p >= 2 ? '+' + rc.r.toFixed(1) + ' %/h' : '—') + '</div></div></div>';
+      if (BTH.length >= 2) { h += batChart(); } else { h += '<p class="note">La courbe apparaît après quelques changements de niveau.</p>'; }
+      h += '<div class="note" style="margin-top:14px;font-size:16px;color:#eceff3"><b>Derniers relevés</b></div>';
+      for (i = BTH.length - 1; i >= Math.max(0, BTH.length - 8); i--) {
+        e = BTH[i];
+        h += '<div class="fbI"><span class="tg" style="color:#8fb4e8">' + stbFmtT(e[0]) + '</span><span class="tx">' + e[1] + ' %' + (e[2] ? ' · en charge' : ' · sur batterie') + (e[3] ? ' · veille' : '') + '</span></div>';
+      }
+      h += '<p class="note" style="margin-top:14px">Un relevé est enregistré à chaque changement de niveau ou de mode. Le débit est calculé entre deux relevés consécutifs ; il est précis à un point de pourcentage près. Tu veux comparer deux réglages (mode léger, fond animé…) : efface les mesures, change le réglage, laisse la tablette débranchée quelques heures et compare les % par heure.</p>';
+    }
+    h += '<div class="xrow2" style="margin-top:8px"><button type="button" class="xbtn sm" data-x="batRaz">Effacer les mesures</button></div>';
+    var s1 = $("xB").scrollTop, s2 = $("xV").scrollTop;
+    $("xB").innerHTML = h; $("xB").scrollTop = s1; $("xV").scrollTop = s2;
+    if (!battTm) { battTm = setInterval(function () { if (xMod !== "batt" || $("xV").style.display === "none") { clearInterval(battTm); battTm = 0; return; } battDraw(); }, 5000); }
+  }
+  var battTm = 0;
 
   /* ---------------- Feedback : remarques dictées (micro du clavier) ou tapées, gardées sur la tablette et jointes au diagnostic ---------------- */
   var FB = xGet("fb", []), fbMsg = "";
