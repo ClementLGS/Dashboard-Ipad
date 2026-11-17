@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:12500 TDBA:211-->
+<!--TDBV:12600 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -953,7 +953,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
 
    <section class="page" id="p-app">
     <div class="ttl"><span class="fx" style="-webkit-align-items:center;align-items:center"><button type="button" class="bk" id="agBack" style="display:none" aria-label="Retour à la bibliothèque">&lsaquo; Autre</button><h2 id="appT">Autre</h2></span><span class="note" id="libNote">Bibliothèque de modules</span></div>
-    <div id="libV" class="lib"><div class="libH">Infos</div><div class="mod"><button type="button" class="mi on" data-mod="agenda"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Agenda</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="meteo7"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .4-8A6 6 0 0 0 6 11a3.500 3.500 0 0 0 1 7z"/></svg><span>Météo</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="conso"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg><span>Consommation</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="feedback"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12.500h5"/></svg><span>Feedback</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="histo"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.500"/><path d="M12 7.500V12l3 2"/></svg><span>Historique</span></span></button></div><div class="libH">Écran et réglages</div><div class="mod"><button type="button" class="mi on" data-mod="affichage"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span>Affichage</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="fonds"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="M3.5 17l5-4.5 4 3.5 3-2.5 5 4.5"/></svg><span>Fonds</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="veille"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.500 4a8 8 0 1 0 10.500 10.500z"/></svg><span>Veille</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="reglages"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.400 15a1.650 1.650 0 0 0 .330 1.820l.060.060a2 2 0 1 1-2.830 2.830l-.060-.060a1.650 1.650 0 0 0-1.820-.330 1.650 1.650 0 0 0-1 1.510V21a2 2 0 0 1-4 0v-.090A1.650 1.650 0 0 0 9 19.400a1.650 1.650 0 0 0-1.820.330l-.060.060a2 2 0 1 1-2.830-2.830l.060-.060A1.650 1.650 0 0 0 4.680 15a1.650 1.650 0 0 0-1.510-1H3a2 2 0 0 1 0-4h.090A1.650 1.650 0 0 0 4.600 9a1.650 1.650 0 0 0-.330-1.820l-.060-.060a2 2 0 1 1 2.830-2.830l.060.060A1.650 1.650 0 0 0 9 4.680a1.650 1.650 0 0 0 1-1.510V3a2 2 0 0 1 4 0v.090a1.650 1.650 0 0 0 1 1.510 1.650 1.650 0 0 0 1.820-.330l.060-.060a2 2 0 1 1 2.830 2.830l-.060.060A1.650 1.650 0 0 0 19.400 9a1.650 1.650 0 0 0 1.510 1H21a2 2 0 0 1 0 4h-.090a1.650 1.650 0 0 0-1.510 1z"/></svg><span>Réglages</span></span></button></div><div class="libH">À venir</div><div class="mod"><button type="button" class="mi on" data-mod="idees"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.500 10.900c.700.600 1 1.300 1 2.100h5c0-.800.300-1.500 1-2.100A6 6 0 0 0 12 3z"/></svg><span>Idées</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="bugs"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="8" height="11" rx="4"/><path d="M9.500 6.500 8 4M14.500 6.500 16 4M8 12H4M16 12h4M8.500 16 5 18M15.500 16l3.500 2M12 8v11"/></svg><span>Bugs</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="volets"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16M5 8h14M5 12h14M5 16h14M12 16v4"/></svg><span>Volets</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="mails"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.500 7l8.500 6 8.500-6"/></svg><span>Mails</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="air"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h11a2.500 2.500 0 1 0-2.500-2.500M3 15h14a2.500 2.500 0 1 1-2.500 2.500M3 12h7"/></svg><span>Air</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="trajet"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16l1.500-5h11L19 16M5 16v3h2v-1.500h10V19h2v-3M5 16h14"/><circle cx="8" cy="13.500" r=".5"/><circle cx="16" cy="13.500" r=".5"/></svg><span>Trajet</span></span></button></div></div>
+    <div id="libV" class="lib"><div class="libH">Infos</div><div class="mod"><button type="button" class="mi on" data-mod="agenda"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Agenda</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="meteo7"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .4-8A6 6 0 0 0 6 11a3.500 3.500 0 0 0 1 7z"/></svg><span>Météo</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="conso"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg><span>Consommation</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="stab"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2" transform="rotate(12 12 12)"/><path d="M3 20h4M17 4h4"/></svg><span>Stabilité</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="feedback"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12.500h5"/></svg><span>Feedback</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="histo"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.500"/><path d="M12 7.500V12l3 2"/></svg><span>Historique</span></span></button></div><div class="libH">Écran et réglages</div><div class="mod"><button type="button" class="mi on" data-mod="affichage"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span>Affichage</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="fonds"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="M3.5 17l5-4.5 4 3.5 3-2.5 5 4.5"/></svg><span>Fonds</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="veille"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.500 4a8 8 0 1 0 10.500 10.500z"/></svg><span>Veille</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="reglages"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.400 15a1.650 1.650 0 0 0 .330 1.820l.060.060a2 2 0 1 1-2.830 2.830l-.060-.060a1.650 1.650 0 0 0-1.820-.330 1.650 1.650 0 0 0-1 1.510V21a2 2 0 0 1-4 0v-.090A1.650 1.650 0 0 0 9 19.400a1.650 1.650 0 0 0-1.820.330l-.060.060a2 2 0 1 1-2.830-2.830l.060-.060A1.650 1.650 0 0 0 4.680 15a1.650 1.650 0 0 0-1.510-1H3a2 2 0 0 1 0-4h.090A1.650 1.650 0 0 0 4.600 9a1.650 1.650 0 0 0-.330-1.820l-.060-.060a2 2 0 1 1 2.830-2.830l.060.060A1.650 1.650 0 0 0 9 4.680a1.650 1.650 0 0 0 1-1.510V3a2 2 0 0 1 4 0v.090a1.650 1.650 0 0 0 1 1.510 1.650 1.650 0 0 0 1.820-.330l.060-.060a2 2 0 1 1 2.830 2.830l-.060.060A1.650 1.650 0 0 0 19.400 9a1.650 1.650 0 0 0 1.510 1H21a2 2 0 0 1 0 4h-.090a1.650 1.650 0 0 0-1.510 1z"/></svg><span>Réglages</span></span></button></div><div class="libH">À venir</div><div class="mod"><button type="button" class="mi on" data-mod="idees"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.500 10.900c.700.600 1 1.300 1 2.100h5c0-.800.300-1.500 1-2.100A6 6 0 0 0 12 3z"/></svg><span>Idées</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="bugs"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="8" height="11" rx="4"/><path d="M9.500 6.500 8 4M14.500 6.500 16 4M8 12H4M16 12h4M8.500 16 5 18M15.500 16l3.500 2M12 8v11"/></svg><span>Bugs</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="volets"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16M5 8h14M5 12h14M5 16h14M12 16v4"/></svg><span>Volets</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="mails"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.500 7l8.500 6 8.500-6"/></svg><span>Mails</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="air"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h11a2.500 2.500 0 1 0-2.500-2.500M3 15h14a2.500 2.500 0 1 1-2.500 2.500M3 12h7"/></svg><span>Air</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="trajet"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16l1.500-5h11L19 16M5 16v3h2v-1.500h10V19h2v-3M5 16h14"/><circle cx="8" cy="13.500" r=".5"/><circle cx="16" cy="13.500" r=".5"/></svg><span>Trajet</span></span></button></div></div>
     <div class="note" id="libMsg" style="margin-top:8px;min-height:18px">Les modules grisés (« À venir ») sont des emplacements libres : dis-moi lesquels créer.</div>
     <div id="wxV" style="display:none;-webkit-flex:1;flex:1;min-height:0;-webkit-flex-direction:column;flex-direction:column">
      <div class="tile agT"><p class="msg" id="w7Msg">Chargement de la météo de la semaine…</p>
@@ -1894,6 +1894,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   var DEMOI = {
     agenda: "Agenda — tes prochains rendez-vous sur 7 jours, repris de ton Google Agenda. Le prochain s'affiche aussi sur l'accueil, avec le temps restant.",
     wx7: "Météo de la semaine — les prévisions jour par jour : température, pluie, vent. Pour savoir comment s'habiller ou quand sortir le linge.",
+    stab: "Stabilité — mesure l'inclinaison de la tablette avec son capteur de mouvement, pour voir si les aimants la retiennent bien ou si elle glisse ou penche avec le temps.",
     conso: "Consommation — mesure ce que l'appli demande à la tablette, pour trouver ce qui la fait chauffer ou ramer.",
     affichage: "Affichage — réglages de fluidité et d'énergie : mode léger, animations, test de fluidité et réglage de la synchro des lumières.",
     fonds: "Fonds d'écran — choisis un fond fixe ou animé. Tout l'écran prend ses couleurs, les menus se fondent dedans.",
@@ -1955,6 +1956,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
           if (k === "affichage" || k === "fonds" || k === "idees" || k === "bugs" || k === "feedback" || k === "histo") { xOpen(k); return; }
           if (k === "meteo7") { appView("wx7"); loadW7(); return; }
           if (k === "conso") { xOpen("conso"); return; }
+          if (k === "stab") { xOpen("stab"); return; }
           if (k === "veille") { if (DEMO) { $("libMsg").textContent = DEMOI.veille; } sleepOn(); return; }
           if (DEMO && DEMOI[k]) { $("libMsg").textContent = DEMOI[k]; if (k === "veille") { sleepOn(); } return; }
           $("libMsg").textContent = "« " + b.getElementsByTagName("span")[0].textContent + " » : emplacement libre, module pas encore créé.";
@@ -1980,7 +1982,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("12500", 10) || 0, UI_NAME = "4.85 iPad (beta)".charAt(0) === "_" ? "?" : "4.85 iPad (beta)";
+  var UI_CODE = parseInt("12600", 10) || 0, UI_NAME = "4.86 iPad (beta)".charAt(0) === "_" ? "?" : "4.86 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -3419,7 +3421,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     for (i = 0; i < tn.length; i++) { k = tn[i].parentNode.clientWidth / 1024; if (k > 0) { tn[i].style.height = Math.ceil(tn[i].parentNode.clientHeight / k) + "px"; tn[i].style.webkitTransform = tn[i].style.transform = "scale(" + k.toFixed(4) + ")"; } }
   }
   var xMod = "affichage";
-  var XNAME = { affichage: "Affichage", fonds: "Fonds d'écran", conso: "Consommation", idees: "Idées", bugs: "Bugs", feedback: "Feedback", histo: "Historique des mises à jour" };
+  var XNAME = { affichage: "Affichage", fonds: "Fonds d'écran", conso: "Consommation", stab: "Stabilité", idees: "Idées", bugs: "Bugs", feedback: "Feedback", histo: "Historique des mises à jour" };
   var consoTm = 0;
   function pfFmt(ms) { return ms < 1000 ? (ms < 10 ? ms.toFixed(1) : Math.round(ms)) + " ms" : (ms / 1000).toFixed(1) + " s"; }
   function consoDraw() {
@@ -3445,7 +3447,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     $("xB").scrollTop = s1; $("xV").scrollTop = s2;
     if (!consoTm) { consoTm = setInterval(function () { if (xMod !== "conso" || $("xV").style.display === "none") { clearInterval(consoTm); consoTm = 0; return; } consoDraw(); }, 2000); }
   }
-  function xDraw() { demoSync(); if (xMod === "histo") { histoDraw(); } else if (xMod === "feedback") { fbDraw(); } else if (xMod === "idees") { ideesDraw(); } else if (xMod === "bugs") { bugsDraw(); } else if (xMod === "fonds") { wallDraw(); } else if (xMod === "conso") { consoDraw(); } else { dispDraw(); } }
+  function xDraw() { demoSync(); if (xMod === "histo") { histoDraw(); } else if (xMod === "feedback") { fbDraw(); } else if (xMod === "idees") { ideesDraw(); } else if (xMod === "bugs") { bugsDraw(); } else if (xMod === "fonds") { wallDraw(); } else if (xMod === "conso") { consoDraw(); } else if (xMod === "stab") { stabDraw(); } else { dispDraw(); } }
   function xOpen(m) { xMod = m || "affichage"; appView("x"); xDraw(); }
   $("xB").onclick = function (ev) {
     var t = ev.target, a, v;
@@ -3460,6 +3462,9 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     else if (a === "perf") { PERF = PERF ? 0 : 1; xSet("perf", PERF); perfApply(); dispDraw(); }
     else if (a === "lab") { labRun(); }
     else if (a === "synm" || a === "synp") { xSet("sync", Math.max(-1000, Math.min(1000, xGet("sync", 0) + (a === "synp" ? 50 : -50)))); dispDraw(); }
+    else if (a === "stabOn") { stabToggle(); }
+    else if (a === "stabCal") { stabCal(); }
+    else if (a === "stabRaz") { stabRaz(); }
     else if (a === "consoZ") { PF = {}; PWAIT = {}; PZ = pfNow(); consoDraw(); }
     else if (a === "wall") {
       var ws = $("xB").querySelectorAll(".wpi"), wi;
@@ -3867,6 +3872,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["15/11/2026", [
+      ["4.86", "Module Stabilité : inclinaison de la tablette (test)", "Nouveau module « Stabilité » dans Autre : le capteur de mouvement de l’iPad mesure l’angle de la tablette (rotation dans le plan, bascule hors du mur), un point toutes les 5 minutes, une courbe de dérive depuis le calibrage, les secousses détectées et un état Stable / Léger mouvement / La tablette bouge. Pour vérifier la tenue des aimants."],
       ["4.85", "Phrase du jour retirée", "Page 2 du pop-up Bonjour : la phrase du jour est retirée pour le moment, l'espace sous l'agenda reste libre."],
       ["4.84", "Phrase du jour, blocs adaptatifs, météo transparente", "Page 2 du pop-up Bonjour : les blocs prennent la taille de leur contenu et une petite phrase du jour (écrite chaque matin par Claude, à partir de l’agenda, de la météo et du contexte) occupe la place restante sous l’agenda quand il y en a. Avec le fond « Météo dynamique », l’encadré météo de la page Météo devient transparent."],
       ["4.83", "Pop-up Bonjour automatique + fond Météo dynamique", "Le pop-up Bonjour s’ouvre tout seul une fois par jour, au premier réveil de la veille entre 5 h et 13 h (le jour change à 5 h) ; si la tablette est restée allumée, le premier toucher après 30 min sans toucher l’ouvre aussi. Bouton de test « Réarmer le pop-up du matin » dans Affichage. Nouveau fond animé « Météo dynamique » (Autre > Fonds d’écran) : il reproduit en plein écran la météo de dehors, de jour comme de nuit (soleil, nuages, pluie, orage, neige, brouillard, lune)."],
@@ -3984,6 +3990,108 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     }
     $("xB").innerHTML = h;
   }
+
+
+  /* ---------------- Stabilité : inclinaison de la tablette (capteur de mouvement) pour juger la tenue des aimants ---------------- */
+  var STB = xGet("stab", { on: 0, cal: null }), STH = xGet("stabH", []), STS = xGet("stabS", []);
+  var stbA = null, stbRaw = null, stbN = 0, stbLast = 0, stbMsg = "", stbTm = 0, stbSamp = 0, stbPrevG = 0, stbBound = 0;
+  /* roll = angle dans le plan de l'écran (un coin qui s'affaisse), lean = angle hors du mur (le haut qui bascule) ; en degrés */
+  function stbAng(x, y, z) {
+    var n = Math.sqrt(x * x + y * y + z * z) || 1;
+    return { roll: Math.atan2(x, y) * 180 / Math.PI, lean: Math.asin(Math.max(-1, Math.min(1, z / n))) * 180 / Math.PI, g: n };
+  }
+  function stbDelta(a, b) { var d = a - b; while (d > 180) { d -= 360; } while (d < -180) { d += 360; } return d; }
+  function stbOnMotion(e) {
+    var g = e.accelerationIncludingGravity, now, r, f = 0.08, dg;
+    if (!g || typeof g.x !== "number" || typeof g.y !== "number" || typeof g.z !== "number" || isNaN(g.x + g.y + g.z)) { return; }
+    now = Date.now(); stbN++; stbLast = now;
+    r = stbAng(g.x, g.y, g.z); stbRaw = r;
+    if (!stbA) { stbA = { roll: r.roll, lean: r.lean, g: r.g }; }
+    else { stbA.roll += stbDelta(r.roll, stbA.roll) * f; stbA.lean += (r.lean - stbA.lean) * f; stbA.g += (r.g - stbA.g) * f; }
+    /* choc : l'accélération s'écarte nettement de 1 g (9,81 m/s²) */
+    dg = Math.abs(r.g - 9.81);
+    if (dg > 1.5 && now - stbPrevG > 2000) {
+      stbPrevG = now; STS.push([now, Math.round(dg / 9.81 * 100) / 100]); if (STS.length > 40) { STS.shift(); } xSet("stabS", STS);
+    }
+  }
+  function stbStart() {
+    if (stbBound) { return; }
+    window.addEventListener("devicemotion", stbOnMotion, false); stbBound = 1;
+    if (!stbSamp) { stbSamp = setInterval(stbSample, 300000); setTimeout(stbSample, 4000); }
+  }
+  function stbStop() { if (!stbBound) { return; } window.removeEventListener("devicemotion", stbOnMotion, false); stbBound = 0; clearInterval(stbSamp); stbSamp = 0; stbA = null; stbRaw = null; }
+  function stbSample() {
+    if (!stbA || !STB.cal) { return; }
+    STH.push([Date.now(), Math.round(stbA.roll * 100) / 100, Math.round(stbA.lean * 100) / 100]);
+    if (STH.length > 600) { STH.shift(); }
+    xSet("stabH", STH);
+  }
+  function stabToggle() {
+    var D = window.DeviceMotionEvent;
+    if (STB.on) { STB.on = 0; xSet("stab", STB); stbStop(); stbMsg = ""; stabDraw(); return; }
+    if (D && typeof D.requestPermission === "function") {
+      D.requestPermission().then(function (r) {
+        if (r === "granted") { STB.on = 1; xSet("stab", STB); stbStart(); stbMsg = ""; } else { stbMsg = "Accès au capteur refusé (Réglages de l'iPad)."; }
+        stabDraw();
+      }, function () { stbMsg = "Le capteur n'a pas pu être activé."; stabDraw(); });
+    } else if (D) { STB.on = 1; xSet("stab", STB); stbStart(); stbMsg = ""; stabDraw(); }
+    else { stbMsg = "Pas de capteur de mouvement disponible."; stabDraw(); }
+  }
+  function stabCal() {
+    if (!stbA) { stbMsg = "Active d'abord la mesure."; stabDraw(); return; }
+    STB.cal = { t: Date.now(), roll: stbA.roll, lean: stbA.lean }; xSet("stab", STB);
+    STH = []; STS = []; xSet("stabH", STH); xSet("stabS", STS); stbSample(); stbMsg = ""; stabDraw();
+  }
+  function stabRaz() { STH = []; STS = []; STB.cal = null; xSet("stab", STB); xSet("stabH", STH); xSet("stabS", STS); stabDraw(); }
+  function stbFmtT(t) { var d = new Date(t); return pad(d.getDate()) + "/" + pad(d.getMonth() + 1) + " " + pad(d.getHours()) + ":" + pad(d.getMinutes()); }
+  function stbChart() {
+    var W = 640, H = 170, i, t0, t1, mx = 1, p1 = "", p2 = "", x, d1, d2, c = STB.cal, n = STH.length;
+    if (n < 2) { return '<p class="note">La courbe apparaît après quelques mesures (un point toutes les 5 minutes).</p>'; }
+    t0 = STH[0][0]; t1 = STH[n - 1][0];
+    for (i = 0; i < n; i++) { mx = Math.max(mx, Math.abs(stbDelta(STH[i][1], c.roll)), Math.abs(STH[i][2] - c.lean)); }
+    mx = Math.ceil(mx);
+    for (i = 0; i < n; i++) {
+      x = 10 + (STH[i][0] - t0) / Math.max(1, t1 - t0) * (W - 20);
+      d1 = stbDelta(STH[i][1], c.roll); d2 = STH[i][2] - c.lean;
+      p1 += (i ? " " : "") + x.toFixed(1) + "," + (H / 2 - d1 / mx * (H / 2 - 12)).toFixed(1);
+      p2 += (i ? " " : "") + x.toFixed(1) + "," + (H / 2 - d2 / mx * (H / 2 - 12)).toFixed(1);
+    }
+    return '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;max-width:640px;background:#1b1f26;border-radius:6px"><line x1="10" y1="' + H / 2 + '" x2="' + (W - 10) + '" y2="' + H / 2 + '" stroke="#4a5160" stroke-dasharray="4 4"/>'
+      + '<polyline points="' + p1 + '" fill="none" stroke="#6ea8fe" stroke-width="2.5"/><polyline points="' + p2 + '" fill="none" stroke="#ff9f43" stroke-width="2.5"/>'
+      + '<text x="14" y="16" fill="#8d95a3" font-size="13">+' + mx + '°</text><text x="14" y="' + (H - 6) + '" fill="#8d95a3" font-size="13">-' + mx + '°</text></svg>'
+      + '<p class="note" style="margin-top:6px"><span style="color:#6ea8fe">■</span> rotation dans le plan (un coin qui s\'affaisse) &nbsp; <span style="color:#ff9f43">■</span> bascule hors du mur · du ' + stbFmtT(t0) + ' au ' + stbFmtT(t1) + '</p>';
+  }
+  function stabDraw() {
+    var h = "", c = STB.cal, d1, d2, big, st, col, i, live = STB.on && stbA && Date.now() - stbLast < 3000;
+    h += '<div class="xrow2" style="margin-bottom:10px"><button type="button" class="xbtn" data-x="stabOn">' + (STB.on ? "Mesure active · couper" : "Activer la mesure") + '</button>'
+      + '<button type="button" class="xbtn sm" data-x="stabCal">Calibrer : la tablette est bien en place</button></div>';
+    if (stbMsg) { h += '<p class="note" style="color:#ff9f43">' + esc(stbMsg) + '</p>'; }
+    if (!STB.on) {
+      h += '<p class="note">Mesure l\'angle de la tablette grâce à son accéléromètre. Fixe-la au mur, active la mesure, appuie sur « Calibrer », puis laisse tourner : si les aimants lâchent peu à peu, l\'angle change et la courbe dérive. Garde la mesure active en permanence seulement le temps du test, elle consomme un peu de batterie.</p>';
+    } else if (!live) {
+      h += '<p class="note">En attente du capteur… Si rien n\'apparaît, le capteur n\'est pas accessible depuis cette appli.</p>';
+    } else {
+      h += '<div style="display:flex;gap:22px;margin:6px 0 12px;flex-wrap:wrap">';
+      h += '<div><div class="note">Rotation dans le plan</div><div style="font-size:34px;font-weight:bold">' + stbA.roll.toFixed(1) + '°</div></div>';
+      h += '<div><div class="note">Bascule hors du mur</div><div style="font-size:34px;font-weight:bold">' + stbA.lean.toFixed(1) + '°</div></div></div>';
+      if (c) {
+        d1 = stbDelta(stbA.roll, c.roll); d2 = stbA.lean - c.lean; big = Math.max(Math.abs(d1), Math.abs(d2));
+        if (big < 0.7) { st = "Stable"; col = "#5fd38d"; } else if (big < 2.5) { st = "Léger mouvement"; col = "#ffd166"; } else { st = "La tablette bouge"; col = "#ff6b6b"; }
+        h += '<div style="font-size:26px;font-weight:bold;color:' + col + ';margin-bottom:4px">' + st + '</div>';
+        h += '<p class="note" style="margin-bottom:12px">Écart depuis le calibrage (' + stbFmtT(c.t) + ') : rotation ' + (d1 >= 0 ? "+" : "") + d1.toFixed(1) + '°, bascule ' + (d2 >= 0 ? "+" : "") + d2.toFixed(1) + '°.</p>';
+        h += stbChart();
+      } else { h += '<p class="note">Appuie sur « Calibrer » quand la tablette est bien en place : les écarts seront mesurés à partir de là.</p>'; }
+      h += '<div class="note" style="margin-top:14px;font-size:16px;color:#eceff3"><b>Chocs détectés</b></div>';
+      if (!STS.length) { h += '<p class="note">Aucun choc depuis le calibrage.</p>'; }
+      for (i = STS.length - 1; i >= Math.max(0, STS.length - 8); i--) { h += '<div class="fbI"><span class="tg" style="color:#8fb4e8">' + stbFmtT(STS[i][0]) + '</span><span class="tx">secousse de ' + STS[i][1].toFixed(2) + ' g</span></div>'; }
+    }
+    h += '<p class="note" style="margin-top:14px">Limite : le capteur mesure l\'angle et les secousses, pas la position. Une tablette qui glisse tout droit vers le bas sans pivoter ne change presque pas d\'angle : elle se verrait seulement par une secousse au moment du glissement. Un coin qui s\'affaisse ou une tablette qui bascule, eux, se voient bien.</p>';
+    h += '<div class="xrow2" style="margin-top:8px"><button type="button" class="xbtn sm" data-x="stabRaz">Effacer les mesures</button></div>';
+    var s1 = $("xB").scrollTop, s2 = $("xV").scrollTop;
+    $("xB").innerHTML = h; $("xB").scrollTop = s1; $("xV").scrollTop = s2;
+    if (!stbTm) { stbTm = setInterval(function () { if (xMod !== "stab" || $("xV").style.display === "none") { clearInterval(stbTm); stbTm = 0; return; } stabDraw(); }, 2000); }
+  }
+  if (STB.on) { try { stbStart(); } catch (e) { } }
 
   /* ---------------- Feedback : remarques dictées (micro du clavier) ou tapées, gardées sur la tablette et jointes au diagnostic ---------------- */
   var FB = xGet("fb", []), fbMsg = "";
