@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:12400 TDBA:211-->
+<!--TDBV:12500 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -1980,7 +1980,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("12400", 10) || 0, UI_NAME = "4.84 iPad (beta)".charAt(0) === "_" ? "?" : "4.84 iPad (beta)";
+  var UI_CODE = parseInt("12500", 10) || 0, UI_NAME = "4.85 iPad (beta)".charAt(0) === "_" ? "?" : "4.85 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2575,8 +2575,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     if (kind === "abs") { return '<div class="bjemp"></div>'; }
     a = bjAgDyn(day);
     h = bjWx(false);
-    phraseSync();
-    return '<div class="bj2"><div class="bjcol"><div class="bjk"><h4>' + BJ_IC.cal + 'Agenda du jour</h4>' + a + '</div><div class="bjq" id="bjQ"><h5>Pour aujourd\'hui</h5><span>' + esc(phraseText(day, t)) + '</span></div></div><div class="bjk"><h4>' + BJ_IC.wx + 'Météo du jour</h4>' + h + '</div></div>';
+    return '<div class="bj2"><div class="bjcol"><div class="bjk"><h4>' + BJ_IC.cal + 'Agenda du jour</h4>' + a + '</div></div><div class="bjk"><h4>' + BJ_IC.wx + 'Météo du jour</h4>' + h + '</div></div>';
   }
   /* petite phrase du jour : écrite chaque matin (phrase.json, à côté de version.json) ; sinon une phrase calculée à partir de l'agenda et de la météo */
   var PHR = xGet("phr", null), phTry = 0;
@@ -2870,7 +2869,6 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     $("wxNote").textContent = (w.stale ? "Données anciennes · " : "") + "mise à jour à " + pad(u.getHours()) + ":" + pad(u.getMinutes());
   }
   function loadWeather() {
-    try { phraseSync(); } catch (e) { }
     call("GET", "/api/meteo", null, function (err, w) {
       if (err) {
         if (!wxOk) {
@@ -3869,6 +3867,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["15/11/2026", [
+      ["4.85", "Phrase du jour retirée", "Page 2 du pop-up Bonjour : la phrase du jour est retirée pour le moment, l'espace sous l'agenda reste libre."],
       ["4.84", "Phrase du jour, blocs adaptatifs, météo transparente", "Page 2 du pop-up Bonjour : les blocs prennent la taille de leur contenu et une petite phrase du jour (écrite chaque matin par Claude, à partir de l’agenda, de la météo et du contexte) occupe la place restante sous l’agenda quand il y en a. Avec le fond « Météo dynamique », l’encadré météo de la page Météo devient transparent."],
       ["4.83", "Pop-up Bonjour automatique + fond Météo dynamique", "Le pop-up Bonjour s’ouvre tout seul une fois par jour, au premier réveil de la veille entre 5 h et 13 h (le jour change à 5 h) ; si la tablette est restée allumée, le premier toucher après 30 min sans toucher l’ouvre aussi. Bouton de test « Réarmer le pop-up du matin » dans Affichage. Nouveau fond animé « Météo dynamique » (Autre > Fonds d’écran) : il reproduit en plein écran la météo de dehors, de jour comme de nuit (soleil, nuages, pluie, orage, neige, brouillard, lune)."],
       ["4.82", "2 nouveaux fonds animés", "Deux fonds animés ajoutés dans Autre > Fonds d’écran : « Vagues vives » (cinq couches de vagues bleu marine qui roulent en sens opposés) et « Étoiles filantes » (ciel marine, étoiles qui scintillent et étoiles filantes régulières). Ils s’arrêtent pendant la veille."],
