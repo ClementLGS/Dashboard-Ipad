@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:12300 TDBA:211-->
+<!--TDBV:12400 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -35,6 +35,8 @@ button:focus { outline: none; }
 .wNow { position: relative; }
 /* page Météo : les deux animations tournent ; l'encadré de gauche passe devant le fond animé, plus opaque */
 html.wxp .tile.wNow { background: rgba(14,17,22,0.93); }
+html.wxw .tile.wNow, html.wxw.perf .tile.wNow, html.wxw.wxp .tile.wNow { background: transparent; }
+html.wxw #nowFx { display: none; }
 #nowFx { position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; border-radius: 20px; pointer-events: none; }
 #nowFx i { position: absolute; display: block; }
 #nowFx.k-sun, #nowFx.k-sunOld { background: linear-gradient(180deg, rgba(70,170,230,.34), rgba(20,90,160,.22) 55%, rgba(8,40,90,.30)); }
@@ -806,9 +808,14 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
 .bjbar .bjar { margin-left: 16px; }
 .bjp2 .bjbar { margin-top: 24px; }
 .bjp2 { -webkit-justify-content: flex-start; justify-content: flex-start; }
-.bj2 { display: -webkit-flex; display: flex; -webkit-flex: 1; flex: 1; min-height: 0; }
-.bj2 .bjk { -webkit-flex: 1 1 0; flex: 1 1 0; min-width: 0; margin: 0; padding: 24px 28px; overflow: hidden; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; }
-.bj2 .bjk + .bjk { margin-left: 22px; }
+.bj2 { display: -webkit-flex; display: flex; -webkit-flex: 1; flex: 1; min-height: 0; -webkit-align-items: flex-start; align-items: flex-start; }
+.bj2 .bjk { -webkit-flex: 1 1 0; flex: 1 1 0; max-height: 100%; min-width: 0; margin: 0; padding: 24px 28px; overflow: hidden; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; }
+.bj2 .bjcol { -webkit-flex: 1 1 0; flex: 1 1 0; min-width: 0; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; }
+.bj2 .bjcol .bjk { -webkit-flex: none; flex: none; }
+.bj2 .bjcol + .bjk { margin-left: 22px; }
+.bjq { margin-top: 24px; padding: 2px 6px 2px 20px; border-left: 3px solid rgba(255,255,255,0.28); }
+.bjq h5 { margin: 0 0 8px; font-size: 16px; font-weight: normal; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+.bjq span { display: block; font-size: 27px; line-height: 1.38; color: rgba(255,255,255,0.86); }
 .bj2 .bjk h4 { font-size: 22px; margin-bottom: 14px; }
 .bj2 .bjk h4 svg { width: 30px; height: 30px; }
 .bj2 .bjr { font-size: 29px; padding: 9px 0; }
@@ -1973,7 +1980,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("12300", 10) || 0, UI_NAME = "4.83 iPad (beta)".charAt(0) === "_" ? "?" : "4.83 iPad (beta)";
+  var UI_CODE = parseInt("12400", 10) || 0, UI_NAME = "4.84 iPad (beta)".charAt(0) === "_" ? "?" : "4.84 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2568,7 +2575,48 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     if (kind === "abs") { return '<div class="bjemp"></div>'; }
     a = bjAgDyn(day);
     h = bjWx(false);
-    return '<div class="bj2"><div class="bjk"><h4>' + BJ_IC.cal + 'Agenda du jour</h4>' + a + '</div><div class="bjk"><h4>' + BJ_IC.wx + 'Météo du jour</h4>' + h + '</div></div>';
+    phraseSync();
+    return '<div class="bj2"><div class="bjcol"><div class="bjk"><h4>' + BJ_IC.cal + 'Agenda du jour</h4>' + a + '</div><div class="bjq" id="bjQ"><h5>Pour aujourd\'hui</h5><span>' + esc(phraseText(day, t)) + '</span></div></div><div class="bjk"><h4>' + BJ_IC.wx + 'Météo du jour</h4>' + h + '</div></div>';
+  }
+  /* petite phrase du jour : écrite chaque matin (phrase.json, à côté de version.json) ; sinon une phrase calculée à partir de l'agenda et de la météo */
+  var PHR = xGet("phr", null), phTry = 0;
+  function phToday() { var d = new Date(); return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  function phraseText(day, t) {
+    var n = day && day.evs ? day.evs.length : 0, L, k;
+    if (PHR && PHR.d === phToday() && PHR.t) { return PHR.t; }
+    if (t && t.rain >= 60) { return "Il va pleuvoir : prends un parapluie avant de sortir."; }
+    if (t && t.hi <= 4) { return "Journée froide : couvre-toi bien."; }
+    if (t && t.hi >= 28) { return "Il va faire chaud : pense à boire régulièrement."; }
+    if (n === 0) { return "Rien de prévu : profites-en pour souffler un peu."; }
+    if (n >= 6) { return "Grosse journée : avance une étape à la fois."; }
+    L = ["Une chose après l'autre, et la journée se fera toute seule.", "Commence par le plus important, le reste suivra.", "Prends le temps de bien démarrer la journée.", "Garde un moment pour toi aujourd'hui.", "Petit à petit, tout avance."];
+    k = new Date().getDate() % L.length;
+    return L[k];
+  }
+  function phraseSync() {
+    var c, base, now = Date.now();
+    if ((PHR && PHR.d === phToday()) || now - phTry < 600000) { return; }
+    phTry = now;
+    try { c = window.LOCAL.cfg(); base = String(c.updurl || "").replace(/\/+$/, ""); } catch (e) { return; }
+    if (!base) { return; }
+    resolveBase(base, function (b) {
+      window.LOCAL.getText(b + "/phrase.json?t=" + now, 15000, function (err, tx) {
+        var j, q;
+        if (err) { return; }
+        try { j = JSON.parse(tx); } catch (e) { return; }
+        if (j && j.date === phToday() && j.text) {
+          PHR = { d: j.date, t: String(j.text).replace(/\s+/g, " ").slice(0, 200) }; xSet("phr", PHR);
+          q = $("bjQ"); if (q && q.lastChild) { q.lastChild.textContent = PHR.t; }
+        }
+      });
+    });
+  }
+  /* la phrase ne s'affiche que s'il reste de la place sous l'agenda */
+  function bjFit() {
+    var q = $("bjQ"), c = q && q.parentNode, b = c && c.parentNode;
+    if (!q || !c || !b) { return; }
+    q.style.display = "";
+    if (c.offsetHeight > b.clientHeight + 1) { q.style.display = "none"; }
   }
   function bjWrap(kind) {
     var inner = bjV5(kind).replace('<div class="bjc">', '');
@@ -2596,11 +2644,11 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
       pop.addEventListener("mousedown", function (e) { dn(e.clientX, e.clientY); });
       pop.addEventListener("mouseup", function (e) { up(e.clientX, e.clientY); });
     })();
-    window.bjShow = function (kind, th) { bjDraw(kind, th); $("app").style.visibility = "hidden"; $("bg").style.display = "none"; pop.style.display = "-webkit-flex"; pop.style.display = "flex"; };
+    window.bjShow = function (kind, th) { bjDraw(kind, th); $("app").style.visibility = "hidden"; $("bg").style.display = "none"; pop.style.display = "-webkit-flex"; pop.style.display = "flex"; bjFit(); };
     /* pop-up du matin : une fois par jour (le jour change à 5 h), au premier réveil entre 5 h et 13 h */
     var BJF = 0, bjLT = Date.now();
     function bjKey(d) { var t = new Date(d.getTime() - 5 * 3600000); return t.getFullYear() + "-" + pad(t.getMonth() + 1) + "-" + pad(t.getDate()); }
-    function bjRefresh() { if (pop.style.display !== "none" && pop.firstChild && pop.firstChild.className === "bjc" && !pop.className.match(/abs/)) { bjDraw("matin", 1); } }
+    function bjRefresh() { if (pop.style.display !== "none" && pop.firstChild && pop.firstChild.className === "bjc" && !pop.className.match(/abs/)) { bjDraw("matin", 1); bjFit(); } }
     window.bjWake = function () {
       var d = new Date(), h = d.getHours(), k = bjKey(d);
       if (xGet("bjDay", "") === k) { return false; }
@@ -2822,6 +2870,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     $("wxNote").textContent = (w.stale ? "Données anciennes · " : "") + "mise à jour à " + pad(u.getHours()) + ":" + pad(u.getMinutes());
   }
   function loadWeather() {
+    try { phraseSync(); } catch (e) { }
     call("GET", "/api/meteo", null, function (err, w) {
       if (err) {
         if (!wxOk) {
@@ -3346,7 +3395,12 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   function wxKind() { var n, m; if (!wxLast) { return "partly"; } n = wxLast.now; m = nfOvr(wmo(n.code, n.day, n.mm)); return NFOVR || m.fx || m.k; }
   function wxWallSync() { var k = wxKind(); if (k === WXK) { return; } WXK = k; wallDraw.cache = null; if (WALL === "a-meteo") { wallFx(); } }
   function wallFx() { $("bgA").innerHTML = /^a-/.test(WALL) ? wallScene(WALL, false) : ""; }
-  function wallApply() { $("bg").className = "w-" + WALL; wallFx(); }
+  /* fond « Météo dynamique » : classe wxw sur <html> (l'encadré météo de la page Météo devient transparent, le fond montre déjà la scène) */
+  function wallApply() {
+    var r = document.documentElement, c = r.className.replace(/\bwxw\b/g, "").replace(/\s+/g, " ").replace(/^\s+|\s+$/g, "");
+    r.className = WALL === "a-meteo" ? (c ? c + " wxw" : "wxw") : c;
+    $("bg").className = "w-" + WALL; wallFx();
+  }
   wallApply();
   function wallDraw() {
     var h = "", tn, k, i;
@@ -3815,6 +3869,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["15/11/2026", [
+      ["4.84", "Phrase du jour, blocs adaptatifs, météo transparente", "Page 2 du pop-up Bonjour : les blocs prennent la taille de leur contenu et une petite phrase du jour (écrite chaque matin par Claude, à partir de l’agenda, de la météo et du contexte) occupe la place restante sous l’agenda quand il y en a. Avec le fond « Météo dynamique », l’encadré météo de la page Météo devient transparent."],
       ["4.83", "Pop-up Bonjour automatique + fond Météo dynamique", "Le pop-up Bonjour s’ouvre tout seul une fois par jour, au premier réveil de la veille entre 5 h et 13 h (le jour change à 5 h) ; si la tablette est restée allumée, le premier toucher après 30 min sans toucher l’ouvre aussi. Bouton de test « Réarmer le pop-up du matin » dans Affichage. Nouveau fond animé « Météo dynamique » (Autre > Fonds d’écran) : il reproduit en plein écran la météo de dehors, de jour comme de nuit (soleil, nuages, pluie, orage, neige, brouillard, lune)."],
       ["4.82", "2 nouveaux fonds animés", "Deux fonds animés ajoutés dans Autre > Fonds d’écran : « Vagues vives » (cinq couches de vagues bleu marine qui roulent en sens opposés) et « Étoiles filantes » (ciel marine, étoiles qui scintillent et étoiles filantes régulières). Ils s’arrêtent pendant la veille."],
       ["4.81", "Testeur d’ambiances : le logo suit la scène (test)", "Quand tu choisis une scène dans « Tester » (page Météo), l’icône et le texte de la météo (page Météo et accueil) changent aussi avec la scène, pas seulement le fond animé."],
