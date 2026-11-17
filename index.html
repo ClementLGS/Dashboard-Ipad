@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:12000 TDBA:211-->
+<!--TDBV:12100 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -1950,7 +1950,7 @@ html #nowFx.nt .nf-flake, html #nowFx.nt .nf-drop { opacity: 0.7; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("12000", 10) || 0, UI_NAME = "4.80 iPad (beta)".charAt(0) === "_" ? "?" : "4.80 iPad (beta)";
+  var UI_CODE = parseInt("12100", 10) || 0, UI_NAME = "4.81 iPad (beta)".charAt(0) === "_" ? "?" : "4.81 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2653,6 +2653,9 @@ html #nowFx.nt .nf-flake, html #nowFx.nt .nf-drop { opacity: 0.7; }
   };
   /* ---------------- ambiance animée de l'encadré « météo actuelle » ---------------- */
   var NFK = "", NFOVR = "";
+  /* testeur d'ambiances : quand une scène est forcée, l'icône et le texte de la météo suivent la scène */
+  var NFM = { sun: ["sun", "Ensoleillé"], sunOld: ["sun", "Ensoleillé"], partly: ["partly", "Éclaircies"], cloud: ["cloud", "Couvert"], rain0: ["rain", "Bruine"], rain1: ["rain", "Pluie"], rain2: ["rain", "Forte pluie"], storm: ["storm", "Orage"], snow: ["snow", "Neige"], fog: ["fog", "Brouillard"], moon: ["moon", "Ciel dégagé"], partlyNight: ["partlyNight", "Éclaircies"], cloudN: ["cloud", "Couvert"], rain1N: ["rain", "Pluie"], stormN: ["storm", "Orage"], snowN: ["snow", "Neige"], fogN: ["fog", "Brouillard"] };
+  function nfOvr(m) { var o = NFOVR && NFM[NFOVR]; if (!o) { return m; } return { k: o[0], t: o[1], fx: m.fx, lv: m.lv }; }
   function nowFx(k) {
     if (NFK === k) { return; } NFK = k;
     var h = "", i, r = function (a, b) { return a + Math.random() * (b - a); }, e = $("nowFx"), nt = /N$/.test(k), kb;
@@ -2734,7 +2737,7 @@ html #nowFx.nt .nf-flake, html #nowFx.nt .nf-drop { opacity: 0.7; }
   /* ---------------- météo ---------------- */
   var wxOk = false;
   function drawWeather(w) {
-    var n = w.now, m = wmo(n.code, n.day, n.mm), t = w.days[0], i;
+    var n = w.now, m = nfOvr(wmo(n.code, n.day, n.mm)), t = w.days[0], i;
     wxLast = w; if (window.wDayDraw) { window.wDayDraw(); }
     $("nowIco").innerHTML = wic(m.k);
     $("nowT").textContent = rnd(n.temp) + "°";
@@ -3728,6 +3731,7 @@ html #nowFx.nt .nf-flake, html #nowFx.nt .nf-drop { opacity: 0.7; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["15/11/2026", [
+      ["4.81", "Testeur d’ambiances : le logo suit la scène (test)", "Quand tu choisis une scène dans « Tester » (page Météo), l’icône et le texte de la météo (page Météo et accueil) changent aussi avec la scène, pas seulement le fond animé."],
       ["4.80", "Météo de nuit + curseur Bonne nuit corrigé (test)", "Le curseur « Bonne nuit » de la barre du haut se remet à zéro dès qu’on quitte la veille (il restait activé jusqu’à 9 s). L’animation météo passe en version nuit quand le soleil est couché : nuit couverte, pluie, orage, neige et brouillard de nuit (fond bleu nuit, nuages sombres, étoiles dans les trouées). Cinq boutons de plus dans le testeur d’ambiances de la page Météo."],
       ["4.79", "Pop-up Bonjour : nouvelle page 1, swipe, agenda dynamique (test)", "Page 1 : blocs resserrés, bloc « Météo du jour » visuel (grande icône, température, min/max, pluie) à la place de la ligne sous l’heure, « Mails de la nuit » à la place de « À la une », flèche tout en bas, ligne « Aperçu » retirée. On change de page en glissant le doigt (gauche/droite) ou avec les flèches. Page 2 : l’agenda du jour s’adapte (journée libre, lignes plus ou moins grandes selon le nombre de rendez-vous, passés masqués quand il y en a beaucoup, prochain rendez-vous en jaune avec « dans X »). « Pendant ton absence » inchangé."],
       ["4.78", "Veille Bonne nuit : même format, version tamisée (test)", "La veille « Bonne nuit » reprend la disposition de la veille automatique (heure, date, bandeau d’infos, prochain rendez-vous) en tons chauds très sombres, sans bleu. Le message pour quitter passe en haut. Un toucher quitte la veille."],
