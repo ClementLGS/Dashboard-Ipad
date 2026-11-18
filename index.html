@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:13100 TDBA:211-->
+<!--TDBV:13200 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -2329,7 +2329,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["mailurl", "Lien du script Mails (Apps Script)", "password"], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("13100", 10) || 0, UI_NAME = "4.91 iPad (beta)".charAt(0) === "_" ? "?" : "4.91 iPad (beta)";
+  var UI_CODE = parseInt("13200", 10) || 0, UI_NAME = "4.92 iPad (beta)".charAt(0) === "_" ? "?" : "4.92 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -4231,6 +4231,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["15/11/2026", [
+      ["4.92", "Batterie sans éclair", "Le bloc Batterie de l’accueil n’affiche plus l’éclair en charge : le pourcentage et « en charge » suffisent."],
       ["4.91", "Batterie et Stabilité séparées, blocs supprimables", "Accueil : « Ma tablette » devient deux blocs, Batterie (anneau vert/jaune/rouge, autonomie calculée sur la dernière heure, icône d’économie d’énergie après mise à jour de l’appli) et Stabilité. Appui long puis croix rouge pour supprimer un bloc (Accueil et Autre), avec Restaurer."],
       ["4.90", "Tailles réglables", "Appui long sur un encadré de l'accueil ou une tuile d'Autre, puis relâche : un cadre et une poignée apparaissent dans le coin. Fais glisser la poignée pour agrandir ou réduire, les autres encadrés se replacent. OK pour terminer. Les tuiles d'Autre retrouvent leur taille d'origine par défaut."],
       ["4.89", "Accueil remanié", "Les modules d'Autre sont plus petits (6 par ligne). Tu peux maintenant tout réarranger : maintiens ton doigt sur un élément du menu, de l'accueil, des bulles de lumières ou d'Autre, puis glisse-le. Bouton « Ordre d'origine » dans Autre pour tout remettre."],
@@ -4493,7 +4494,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
       if (BC && rc) { sub += " · pleine dans ≈ " + batFmtH(Math.max(0, 100 - nowP) / rc.r); }
       if (BLP) { lp = '<span class="hTlp" title="Mode économie d\'énergie"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="17" height="10" rx="2.5" fill="#ffd60a"/><path d="M22 11v2" stroke="#ffd60a" stroke-width="2" stroke-linecap="round"/><path d="M7.500 12h6" stroke="#14171c" stroke-width="2.2" stroke-linecap="round"/></svg></span>'; }
       h1 = '<div class="hTrow"><div class="hTring"><svg class="rg" viewBox="0 0 122 122"><circle cx="61" cy="61" r="50" fill="none" stroke="#232830" stroke-width="11"/><circle cx="61" cy="61" r="50" fill="none" stroke="' + rcol + '" stroke-width="11" stroke-linecap="round" stroke-dasharray="' + (circ * pct / 100).toFixed(1) + " " + circ.toFixed(1) + '" transform="rotate(-90 61 61)"/></svg>'
-        + '<div class="ct"><b>' + (BC ? "⚡ " : "") + nowP + ' %</b><small>' + (BC ? "en charge" : "sur batterie") + '</small></div>' + lp + '</div>'
+        + '<div class="ct"><b>' + nowP + ' %</b><small>' + (BC ? "en charge" : "sur batterie") + '</small></div>' + lp + '</div>'
         + '<div class="hTcol"><div class="hTl">Autonomie restante</div><div class="hTv">' + (a ? "≈ " + batFmtH(a) : "—") + '</div><div class="hTx">' + sub + '</div></div></div>'
         + '<div class="hTspark">' + tabSpark(rcol) + '</div>';
     }
