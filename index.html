@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:12800 TDBA:211-->
+<!--TDBV:12900 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -327,11 +327,11 @@ html #nowFx.nt .nf-flake, html #nowFx.nt .nf-drop { opacity: 0.7; }
 .ev.past { opacity: 0.45; }
 .agN { color: #8f98a5; font-size: 15px; }
 .lib { -webkit-flex: 1; flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap; -webkit-align-content: flex-start; align-content: flex-start; margin: 0 -5px; }
-.libH { width: 100%; padding: 12px 6px 2px; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: #8f98a5; }
-.mod { width: 25%; height: 26%; min-height: 96px; max-height: 150px; padding: 5px; box-sizing: border-box; display: -webkit-flex; display: flex; }
-.mi { -webkit-flex: 1; flex: 1; min-width: 0; width: 100%; height: 100%; padding: 0; border-radius: 18px; border: 2px dashed #2f353e; background: transparent; color: #5b636f; display: block; font-size: 16px; font-weight: bold; }
+.libH { width: 100%; padding: 8px 6px 0; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: #8f98a5; }
+.mod { width: 16.6667%; height: 84px; min-height: 0; max-height: none; padding: 4px; box-sizing: border-box; display: -webkit-flex; display: flex; }
+.mi { -webkit-flex: 1; flex: 1; min-width: 0; width: 100%; height: 100%; padding: 0; border-radius: 14px; border: 2px dashed #2f353e; background: transparent; color: #5b636f; display: block; font-size: 13px; font-weight: bold; }
 .mi *, .mi svg * { pointer-events: none; }
-.mi svg { width: 38px; height: 38px; margin-bottom: 8px; display: block; }
+.mi svg { width: 26px; height: 26px; margin-bottom: 5px; display: block; }
 .mi.on { border-style: solid; border-color: transparent; background: #1a1e24; color: #d8dde6; }
 .mi.on:active { background: #262b33; }
 .bk { height: 40px; padding: 0 16px; margin-right: 14px; border-radius: 20px; background: #232830; border: 1px solid #2f353e; font-size: 16px; font-weight: bold; }
@@ -887,6 +887,15 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
 .fbI .tx { -webkit-flex: 1; flex: 1; min-width: 0; font-size: 16px; word-wrap: break-word; -webkit-user-select: text; user-select: text; }
 .fbI .tx small { display: block; font-size: 12px; color: #8f98a5; margin-top: 2px; }
 .fbI .rm, #xB .rm { -webkit-flex: none; flex: none; width: 40px; height: 40px; margin-left: 8px; border-radius: 20px; border: 0; background: rgba(255,255,255,0.08); color: #b9c2d0; font-size: 20px; padding: 0; }
+
+/* réarrangement par appui long */
+.nb, .mod, .hb, .hNext, .hClim, .hCast, .ltab { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+.rdo-hold { opacity: 0.25; }
+.rdo-ghost { position: fixed; z-index: 9999; margin: 0; pointer-events: none; opacity: 0.94; -webkit-transform: scale(1.05); transform: scale(1.05); -webkit-box-shadow: 0 12px 30px rgba(0,0,0,0.6); box-shadow: 0 12px 30px rgba(0,0,0,0.6); }
+#p-home > .hNext:last-child { margin-bottom: 0; }
+@media (min-aspect-ratio: 1/1) { .hRow > .tile { margin-right: 0; } .hRow > .tile + .tile { margin-left: 14px; } }
+.rdo-ghost.mod { -webkit-transform: none; transform: none; -webkit-box-shadow: none; box-shadow: none; }
+.rdo-ghost.mod .mi { -webkit-transform: scale(1.06); transform: scale(1.06); -webkit-box-shadow: 0 12px 30px rgba(0,0,0,0.6); box-shadow: 0 12px 30px rgba(0,0,0,0.6); background: #2b3038; }
 </style></head><body><div id="bg"><b class="h1"></b><b class="h2"></b><b class="h3"></b><div id="bgA" class="wfx"></div><i class="al" style="left:150px;top:-120px;width:900px;height:700px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(143,163,189,0.37) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(143,163,189,0.37) 0%,rgba(0,0,0,0) 68%)"></i><i class="bl" style="left:700px;top:250px;width:900px;height:700px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(111,127,149,0.34) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(111,127,149,0.34) 0%,rgba(0,0,0,0) 68%)"></i><i class="al" style="left:-200px;top:350px;width:700px;height:600px;border-radius:50%;background:-webkit-radial-gradient(center,rgba(160,173,191,0.24) 0%,rgba(0,0,0,0) 68%);background:radial-gradient(circle at center,rgba(160,173,191,0.24) 0%,rgba(0,0,0,0) 68%)"></i></div>
 <div id="app">
  <div id="nav">
@@ -952,9 +961,9 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
    </section>
 
    <section class="page" id="p-app">
-    <div class="ttl"><span class="fx" style="-webkit-align-items:center;align-items:center"><button type="button" class="bk" id="agBack" style="display:none" aria-label="Retour à la bibliothèque">&lsaquo; Autre</button><h2 id="appT">Autre</h2></span><span class="note" id="libNote">Bibliothèque de modules</span></div>
+    <div class="ttl"><span class="fx" style="-webkit-align-items:center;align-items:center"><button type="button" class="bk" id="agBack" style="display:none" aria-label="Retour à la bibliothèque">&lsaquo; Autre</button><h2 id="appT">Autre</h2></span><span class="fx" style="-webkit-align-items:center;align-items:center"><button type="button" class="xbtn sm" id="rdoReset" style="margin-right:14px">Ordre d'origine</button><span class="note" id="libNote">Bibliothèque de modules</span></span></div>
     <div id="libV" class="lib"><div class="libH">Infos</div><div class="mod"><button type="button" class="mi on" data-mod="agenda"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Agenda</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="meteo7"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .4-8A6 6 0 0 0 6 11a3.500 3.500 0 0 0 1 7z"/></svg><span>Météo</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="conso"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg><span>Consommation</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="stab"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2" transform="rotate(12 12 12)"/><path d="M3 20h4M17 4h4"/></svg><span>Stabilité</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="batt"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="17" height="10" rx="2"/><path d="M22 11v2M6 10v4M10 10v4"/></svg><span>Batterie</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="feedback"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12.500h5"/></svg><span>Feedback</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="histo"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.500"/><path d="M12 7.500V12l3 2"/></svg><span>Historique</span></span></button></div><div class="libH">Écran et réglages</div><div class="mod"><button type="button" class="mi on" data-mod="affichage"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span>Affichage</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="fonds"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="M3.5 17l5-4.5 4 3.5 3-2.5 5 4.5"/></svg><span>Fonds</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="veille"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.500 4a8 8 0 1 0 10.500 10.500z"/></svg><span>Veille</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="reglages"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.400 15a1.650 1.650 0 0 0 .330 1.820l.060.060a2 2 0 1 1-2.830 2.830l-.060-.060a1.650 1.650 0 0 0-1.820-.330 1.650 1.650 0 0 0-1 1.510V21a2 2 0 0 1-4 0v-.090A1.650 1.650 0 0 0 9 19.400a1.650 1.650 0 0 0-1.820.330l-.060.060a2 2 0 1 1-2.830-2.830l.060-.060A1.650 1.650 0 0 0 4.680 15a1.650 1.650 0 0 0-1.510-1H3a2 2 0 0 1 0-4h.090A1.650 1.650 0 0 0 4.600 9a1.650 1.650 0 0 0-.330-1.820l-.060-.060a2 2 0 1 1 2.830-2.830l.060.060A1.650 1.650 0 0 0 9 4.680a1.650 1.650 0 0 0 1-1.510V3a2 2 0 0 1 4 0v.090a1.650 1.650 0 0 0 1 1.510 1.650 1.650 0 0 0 1.820-.330l.060-.060a2 2 0 1 1 2.830 2.830l-.060.060A1.650 1.650 0 0 0 19.400 9a1.650 1.650 0 0 0 1.510 1H21a2 2 0 0 1 0 4h-.090a1.650 1.650 0 0 0-1.510 1z"/></svg><span>Réglages</span></span></button></div><div class="libH">À venir</div><div class="mod"><button type="button" class="mi on" data-mod="idees"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.500 10.900c.700.600 1 1.300 1 2.100h5c0-.800.300-1.500 1-2.100A6 6 0 0 0 12 3z"/></svg><span>Idées</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="bugs"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="8" height="11" rx="4"/><path d="M9.500 6.500 8 4M14.500 6.500 16 4M8 12H4M16 12h4M8.500 16 5 18M15.500 16l3.500 2M12 8v11"/></svg><span>Bugs</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="volets"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16M5 8h14M5 12h14M5 16h14M12 16v4"/></svg><span>Volets</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="mails"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.500 7l8.500 6 8.500-6"/></svg><span>Mails</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="sante"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.600A4 4 0 0 1 19 10c0 5.600-7 10-7 10z"/><path d="M5 12.500h3l1.500-2.500 2 4 1.500-2.500H19"/></svg><span>Santé</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="air"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h11a2.500 2.500 0 1 0-2.500-2.500M3 15h14a2.500 2.500 0 1 1-2.500 2.500M3 12h7"/></svg><span>Air</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="trajet"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16l1.500-5h11L19 16M5 16v3h2v-1.500h10V19h2v-3M5 16h14"/><circle cx="8" cy="13.500" r=".5"/><circle cx="16" cy="13.500" r=".5"/></svg><span>Trajet</span></span></button></div></div>
-    <div class="note" id="libMsg" style="margin-top:8px;min-height:18px">Les modules grisés (« À venir ») sont des emplacements libres : dis-moi lesquels créer.</div>
+    <div class="note" id="libMsg" style="margin-top:8px;min-height:18px">Les modules grisés (« À venir ») sont des emplacements libres : dis-moi lesquels créer. Maintiens ton doigt sur une tuile pour la déplacer.</div>
     <div id="wxV" style="display:none;-webkit-flex:1;flex:1;min-height:0;-webkit-flex-direction:column;flex-direction:column">
      <div class="tile agT"><p class="msg" id="w7Msg">Chargement de la météo de la semaine…</p>
       <div id="w7Box" style="display:none;-webkit-flex:1;flex:1;min-height:0;-webkit-flex-direction:column;flex-direction:column">
@@ -1884,7 +1893,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     if ($("simErr")) { $("simErr").style.display = lib ? "block" : "none"; }
     $("agBack").style.display = lib ? "none" : "block";
     $("appT").textContent = ag ? "Agenda" : (wx ? "Météo de la semaine" : (st ? "Réglages" : (x ? XNAME[xMod] : "Autre")));
-    $("libNote").style.display = lib ? "block" : "none";
+    $("libNote").style.display = lib ? "block" : "none"; $("rdoReset").style.display = lib ? "block" : "none";
     if (wx && W7) { drawW7(); }
     if (st) { drawSet(); }
     cView = v; demoSync();
@@ -1970,6 +1979,156 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     }
     $("agBack").onclick = function () { appView("lib"); };
   })();
+
+  /* ---------------- réarrangement par appui long (menu, accueil, lumières, Autre) ---------------- */
+  (function () {
+    var HOLD = 450, MOVE = 12, lastDrop = 0, lastTouch = 0, st = null, tm = null, sx = 0, sy = 0, cand = null, SETS, snap = {};
+    function hasC(e, c) { return !!e && typeof e.className === "string" && (" " + e.className + " ").indexOf(" " + c + " ") >= 0; }
+    function lightId(e) { var L = LUM && LUM.lights[parseInt(e.getAttribute("data-l"), 10)]; return L ? L.id : ""; }
+    function modId(e) { var b = e.getElementsByTagName("button")[0]; return b ? b.getAttribute("data-mod") : ""; }
+    SETS = [
+      { key: "nav", box: function (p) { return p.id === "nav"; }, item: function (e) { return hasC(e, "nb"); }, id: function (e) { return e.getAttribute("data-p"); }, axis: "y" },
+      { key: "homeTop", box: function (p) { return p.id === "p-home"; }, item: function (e) { return hasC(e, "hNext") || hasC(e, "hRow"); }, id: function (e) { return hasC(e, "hNext") ? "next" : "row"; }, axis: "y" },
+      { key: "homeRow", box: function (p) { return hasC(p, "hRow"); }, item: function (e) { return hasC(e, "hClim") || hasC(e, "hCast"); }, id: function (e) { return hasC(e, "hClim") ? "clim" : "cast"; }, axis: "g" },
+      { key: "lum", box: function (p) { return p.id === "hLum"; }, item: function (e) { return hasC(e, "hb"); }, id: lightId, axis: "x", dyn: 1 },
+      { key: "lum", box: function (p) { return hasC(p, "ltabs"); }, item: function (e) { return hasC(e, "ltab"); }, id: lightId, axis: "x", dyn: 1 },
+      { key: "lib", box: function (p) { return p.id === "libV"; }, item: function (e) { return hasC(e, "mod"); }, tgt: function (e) { return hasC(e, "mod") || hasC(e, "libH"); }, id: modId, axis: "x", lib: 1 }
+    ];
+    function kids(box) { return [].slice.call(box.children); }
+    function ids(set, box) {
+      var k = kids(box), r = [], i;
+      for (i = 0; i < k.length; i++) { if (set.item(k[i])) { r.push(set.id(k[i])); } }
+      return r;
+    }
+    function libSave(box) {
+      var k = kids(box), o = {}, cur = null, i;
+      for (i = 0; i < k.length; i++) {
+        if (hasC(k[i], "libH")) { cur = k[i].textContent; o[cur] = []; } else if (hasC(k[i], "mod") && cur !== null) { o[cur].push(modId(k[i])); }
+      }
+      xSet("ord_lib", o);
+    }
+    function libApply() {
+      var box = $("libV"), saved = xGet("ord_lib", null), k = kids(box), secs = [], cur = null, by = {}, placed = {}, i, j, id, l;
+      if (!saved || !box) { return; }
+      for (i = 0; i < k.length; i++) {
+        if (hasC(k[i], "libH")) { cur = { h: k[i], orig: [], list: [] }; secs.push(cur); } else if (hasC(k[i], "mod") && cur) { cur.orig.push(k[i]); by[modId(k[i])] = k[i]; }
+      }
+      for (i = 0; i < secs.length; i++) {
+        l = saved[secs[i].h.textContent] || [];
+        for (j = 0; j < l.length; j++) { if (by[l[j]] && !placed[l[j]]) { secs[i].list.push(by[l[j]]); placed[l[j]] = 1; } }
+      }
+      for (i = 0; i < secs.length; i++) {
+        for (j = 0; j < secs[i].orig.length; j++) { id = modId(secs[i].orig[j]); if (!placed[id]) { secs[i].list.push(secs[i].orig[j]); placed[id] = 1; } }
+      }
+      for (i = 0; i < secs.length; i++) {
+        box.appendChild(secs[i].h);
+        for (j = 0; j < secs[i].list.length; j++) { box.appendChild(secs[i].list[j]); }
+      }
+    }
+    function apply(set) {
+      var box = null, o, i, j, k;
+      if (set.lib) { libApply(); return; }
+      if (set.dyn) { return; }
+      box = set.key === "nav" ? $("nav") : (set.key === "homeTop" ? $("p-home") : q1(".hRow"));
+      if (!box) { return; }
+      o = xGet("ord_" + set.key, []);
+      k = kids(box);
+      for (i = 0; i < o.length; i++) { for (j = 0; j < k.length; j++) { if (set.item(k[j]) && set.id(k[j]) === o[i]) { box.appendChild(k[j]); } } }
+    }
+    function q1(s) { return document.querySelector(s); }
+    function boxOf(set) { return set.key === "nav" ? $("nav") : (set.key === "homeTop" ? $("p-home") : (set.key === "homeRow" ? q1(".hRow") : (set.lib ? $("libV") : null))); }
+    function takeSnap() {
+      var i, b;
+      for (i = 0; i < SETS.length; i++) { b = boxOf(SETS[i]); if (b && !snap[SETS[i].key]) { snap[SETS[i].key] = kids(b); } }
+    }
+    function reset() {
+      var i, b, j;
+      xSet("ord_nav", []); xSet("ord_homeTop", []); xSet("ord_homeRow", []); xSet("ord_lum", []); xSet("ord_lib", null);
+      for (i in snap) { if (snap.hasOwnProperty(i)) { b = null; for (j = 0; j < SETS.length; j++) { if (SETS[j].key === i && boxOf(SETS[j])) { b = boxOf(SETS[j]); } } if (b) { for (j = 0; j < snap[i].length; j++) { b.appendChild(snap[i][j]); } } } }
+      try { drawLum(); } catch (e) { }
+    }
+    function find(t) {
+      var e = t, i, set;
+      while (e && e !== document.body) {
+        if (e.nodeType === 1 && e.parentNode) {
+          for (i = 0; i < SETS.length; i++) { set = SETS[i]; if (set.box(e.parentNode) && set.item(e)) { return { set: set, el: e, box: e.parentNode }; } }
+        }
+        e = e.parentNode;
+      }
+      return null;
+    }
+    function ghostPos(x, y) { st.g.style.left = (x - st.dx) + "px"; st.g.style.top = (y - st.dy) + "px"; }
+    function begin(c, x, y) {
+      var r = c.el.getBoundingClientRect(), g = c.el.cloneNode(true);
+      g.className = c.el.className + " rdo-ghost"; g.removeAttribute("id");
+      g.style.width = r.width + "px"; g.style.height = r.height + "px"; g.style.left = r.left + "px"; g.style.top = r.top + "px";
+      document.body.appendChild(g);
+      c.el.className += " rdo-hold";
+      st = { set: c.set, el: c.el, box: c.box, g: g, dx: x - r.left, dy: y - r.top };
+      try { if (navigator.vibrate) { navigator.vibrate(15); } } catch (e) { }
+    }
+    function target(x, y) {
+      var e = document.elementFromPoint(x, y), set = st.set;
+      while (e && e !== st.box) {
+        if (e.parentNode === st.box && (set.tgt ? set.tgt(e) : set.item(e))) { return e; }
+        e = e.parentNode;
+      }
+      return null;
+    }
+    function horiz(set, t) {
+      var k, a = null, b = null, i;
+      if (set.axis !== "g") { return set.axis === "x"; }
+      k = kids(st.box).filter(function (e) { return set.item(e); });
+      for (i = 0; i < k.length; i++) { if (!a) { a = k[i]; } else if (!b) { b = k[i]; } }
+      return !(a && b) || Math.abs(a.getBoundingClientRect().top - b.getBoundingClientRect().top) < 8;
+    }
+    function drag(x, y) {
+      var t, r, after;
+      ghostPos(x, y);
+      t = target(x, y);
+      if (!t || t === st.el) { return; }
+      r = t.getBoundingClientRect();
+      if (hasC(t, "libH")) { st.box.insertBefore(st.el, t.nextSibling); return; }
+      after = horiz(st.set, t) ? x > r.left + r.width / 2 : y > r.top + r.height / 2;
+      st.box.insertBefore(st.el, after ? t.nextSibling : t);
+    }
+    function finish() {
+      var s = st, i;
+      st = null;
+      if (!s) { return; }
+      if (s.g.parentNode) { s.g.parentNode.removeChild(s.g); }
+      s.el.className = s.el.className.replace(" rdo-hold", "");
+      lastDrop = new Date().getTime();
+      if (s.el.parentNode !== s.box) { return; }
+      if (s.set.lib) { libSave(s.box); } else { xSet("ord_" + s.set.key, ids(s.set, s.box)); }
+      if (s.set.dyn) { try { drawLum(); } catch (e) { } }
+    }
+    function down(t, x, y) {
+      cand = find(t); if (!cand) { return; }
+      sx = x; sy = y;
+      clearTimeout(tm);
+      tm = setTimeout(function () { if (cand) { begin(cand, sx, sy); cand = null; } }, HOLD);
+    }
+    function moveEv(x, y, ev) {
+      if (st) { if (ev.cancelable) { ev.preventDefault(); } drag(x, y); return; }
+      if (cand && (Math.abs(x - sx) > MOVE || Math.abs(y - sy) > MOVE)) { clearTimeout(tm); cand = null; }
+    }
+    function up() { clearTimeout(tm); cand = null; finish(); }
+    document.addEventListener("touchstart", function (e) { lastTouch = new Date().getTime(); if (e.touches.length === 1) { down(e.target, e.touches[0].clientX, e.touches[0].clientY); } else { up(); } }, true);
+    document.addEventListener("touchmove", function (e) { if (e.touches.length) { moveEv(e.touches[0].clientX, e.touches[0].clientY, e); } }, { passive: false, capture: true });
+    document.addEventListener("touchend", function () { lastTouch = new Date().getTime(); up(); }, true);
+    document.addEventListener("touchcancel", function () { up(); }, true);
+    document.addEventListener("mousedown", function (e) { if (new Date().getTime() - lastTouch > 800 && e.button === 0) { down(e.target, e.clientX, e.clientY); } }, true);
+    document.addEventListener("mousemove", function (e) { if (new Date().getTime() - lastTouch > 800) { moveEv(e.clientX, e.clientY, e); } }, true);
+    document.addEventListener("mouseup", function () { if (new Date().getTime() - lastTouch > 800) { up(); } }, true);
+    document.addEventListener("click", function (e) { if (st || new Date().getTime() - lastDrop < 450) { e.stopPropagation(); e.preventDefault(); } }, true);
+    document.addEventListener("contextmenu", function (e) { if (st || cand) { e.preventDefault(); } }, true);
+    $("rdoReset").onclick = reset;
+    takeSnap();
+    var seen = {}, i;
+    for (i = 0; i < SETS.length; i++) { if (!seen[SETS[i].key]) { seen[SETS[i].key] = 1; apply(SETS[i]); } }
+    window.rdoReset = reset;
+  })();
   $("w7C").onclick = function (ev) {
     var t = ev.target;
     while (t && t !== this && !(t.getAttribute && t.getAttribute("data-h") !== null && t.getAttribute("data-h") !== "")) { t = t.parentNode; }
@@ -1987,7 +2146,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["mailurl", "Lien du script Mails (Apps Script)", "password"], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("12800", 10) || 0, UI_NAME = "4.88 iPad (beta)".charAt(0) === "_" ? "?" : "4.88 iPad (beta)";
+  var UI_CODE = parseInt("12900", 10) || 0, UI_NAME = "4.89 iPad (beta)".charAt(0) === "_" ? "?" : "4.89 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2116,13 +2275,19 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   var LSEL = 0;
   var SVGB = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.500 10.900c.6.500 1 1.200 1 2.100h5c0-.900.400-1.600 1-2.100A6 6 0 0 0 12 3z"/></svg>';
   var SVGP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v5M15 3v5M6.500 8h11v3.500a5.500 5.500 0 0 1-11 0zM12 17v4"/></svg>';
+  function lumIdx() {
+    var n = LUM ? LUM.lights.length : 0, o = xGet("ord_lum", []), r = [], i, j;
+    for (j = 0; j < o.length; j++) { for (i = 0; i < n; i++) { if (LUM.lights[i].id === o[j] && r.indexOf(i) < 0) { r.push(i); } } }
+    for (i = 0; i < n; i++) { if (r.indexOf(i) < 0) { r.push(i); } }
+    return r;
+  }
   function drawHome() {
     var h = "", i, L, on, rgb, st, e = $("hLum");
     if (!e) { return; }
     homeAny = false;
     if (!LUM) { homeHtml = ""; e.innerHTML = '<p class="msg' + (lumBad ? " bad" : "") + '">' + esc(lumBad ? lumTxt : "Chargement…") + "</p>"; return; }
-    for (i = 0; i < LUM.lights.length; i++) {
-      L = LUM.lights[i];
+    for (var kk = 0, idx = lumIdx(); kk < idx.length; kk++) {
+      i = idx[kk]; L = LUM.lights[i];
       on = L.on && !(L.kind === "switch" && L.error);
       if (on) { homeAny = true; }
       rgb = L.kind === "switch" || !(L.known || L.assumed) ? [216, 221, 230] : L.color;
@@ -2150,7 +2315,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     if (!LUM) { lumHtml = ""; $("lumL").innerHTML = '<p class="msg" id="lumMsg">' + esc(lumTxt || "Chargement des lumières…") + "</p>"; return; }
     if (LSEL >= LUM.lights.length) { LSEL = 0; }
     h += '<div class="ltabs">';
-    for (i = 0; i < LUM.lights.length; i++) { h += '<button type="button" class="ltab' + (i === LSEL ? " sel" : "") + '" data-l="' + i + '" data-a="tab">' + esc(LUM.lights[i].name) + "</button>"; }
+    for (var k2 = 0, idx2 = lumIdx(); k2 < idx2.length; k2++) { i = idx2[k2]; h += '<button type="button" class="ltab' + (i === LSEL ? " sel" : "") + '" data-l="' + i + '" data-a="tab">' + esc(LUM.lights[i].name) + "</button>"; }
     h += '</div><div class="lbody">';
     L = LUM.lights[LSEL];
     if (L) {
@@ -3883,6 +4048,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["15/11/2026", [
+      ["4.89", "Accueil remanié", "Les modules d'Autre sont plus petits (6 par ligne). Tu peux maintenant tout réarranger : maintiens ton doigt sur un élément du menu, de l'accueil, des bulles de lumières ou d'Autre, puis glisse-le. Bouton « Ordre d'origine » dans Autre pour tout remettre."],
       ["4.88", "Mails reliés et onglet Santé (test)", "Mails : le tableau de bord lit tes mails non lus importants (expéditeur, objet, heure) grâce à un petit script Google à installer, et les affiche dans Autre > Mails et dans le pop-up Bonjour. Santé : nouvel emplacement dans Autre, grisé et marqué « Pas encore disponible »."],
       ["4.87", "Module Batterie : consommation (test)", "Nouveau module « Batterie » dans Autre : le niveau est enregistré à chaque changement, avec la charge et la veille. Il calcule les % par heure allumée, en veille et en charge, l’autonomie restante (ou le temps avant charge complète) et trace la courbe des dernières 24 h."],
       ["4.86", "Module Stabilité : inclinaison de la tablette (test)", "Nouveau module « Stabilité » dans Autre : le capteur de mouvement de l’iPad mesure l’angle de la tablette (rotation dans le plan, bascule hors du mur), un point toutes les 5 minutes, une courbe de dérive depuis le calibrage, les secousses détectées et un état Stable / Léger mouvement / La tablette bouge. Pour vérifier la tenue des aimants."],
