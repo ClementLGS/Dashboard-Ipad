@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:13000 TDBA:211-->
+<!--TDBV:13100 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -902,8 +902,25 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   .hRow { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-template-rows: repeat(5, minmax(0, 1fr)); grid-auto-rows: 110px; grid-auto-flow: row dense; gap: 14px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .hRow > .tile { margin: 0; width: auto; height: auto; min-width: 0; }
   .hRow > .hNext { grid-column: span 6; grid-row: span 1; }
-  .hRow > .hClim, .hRow > .hCast { grid-column: span 3; grid-row: span 4; }
-  .hRow > .z0 .note, .hRow > .z0 .go, .hRow > .z0 .hnS, .hRow > .z0 .hnW { display: none; }
+  .hRow > .hClim, .hRow > .hCast { grid-column: span 3; grid-row: span 2; }
+  .hRow > .hT { grid-column: span 3; grid-row: span 2; }
+  .hRow > .z0 .note, .hRow > .z0 .hnS, .hRow > .z0 .hnW { display: none; }
+  .hClim.z0 .go { display: none; }
+  .hClim.z1 { padding: 12px 18px; display: grid; grid-template-columns: 1fr 176px; grid-template-rows: auto 1fr auto; -webkit-align-items: center; align-items: center; -webkit-justify-content: stretch; justify-content: stretch; column-gap: 14px; text-align: left; }
+  .hClim.z1 > .pill { grid-column: 1; grid-row: 1; justify-self: start; }
+  .hClim.z1 > .t { grid-column: 1; grid-row: 2; font-size: 62px; margin: 2px 0; justify-self: start; }
+  .hClim.z1 > #hMode { grid-column: 1; grid-row: 3; margin: 0; justify-self: start; }
+  .hClim.z1 > #hRoom { display: none; }
+  .hClim.z1 > .pw { grid-column: 2; grid-row: 1 / span 2; width: 100%; height: 48px; padding: 0 10px; margin: 0; align-self: end; }
+  .hClim.z1 > .go { grid-column: 2; grid-row: 3; width: 100%; height: 44px; margin: 10px 0 0; padding: 0 10px; align-self: start; }
+  .hCast.z1 { padding: 10px 16px; }
+  .hCast.z1 .hl { display: grid; grid-template-columns: 1fr 150px; grid-template-rows: auto 1fr; -webkit-align-items: center; align-items: center; width: 100%; }
+  .hCast.z1 .hl h3 { grid-column: 1 / -1; margin: 0 0 4px; text-align: center; }
+  .hCast.z1 #hLum { grid-column: 1; grid-row: 2; margin: 0; }
+  .hCast.z1 .hb { width: 78px; height: 78px; border-radius: 39px; margin: 0 6px; font-size: 12px; }
+  .hCast.z1 .hb svg { width: 28px; height: 28px; margin-bottom: 2px; } .hCast.z1 .hb small { display: none; }
+  .hCast.z1 .hl .fx { grid-column: 2; grid-row: 2; -webkit-flex-direction: column; flex-direction: column; }
+  .hCast.z1 .hl .fx .go { width: 100%; height: 42px; margin: 4px 0 !important; padding: 0 8px; font-size: 14px; }
   .hClim.z0 { padding: 10px 12px; } .hClim.z0 .t { font-size: 54px; margin: 4px 0 8px; } .hClim.z0 .t small { font-size: 20px; } .hClim.z0 .pw { height: 42px; padding: 0 16px; font-size: 15px; }
   .hCast.z0 { padding: 10px 8px; } .hCast.z0 .hl h3 { margin-bottom: 8px; } .hCast.z0 .hlr { margin-bottom: 0; } .hCast.z0 .hb { width: 84px; height: 84px; border-radius: 42px; margin: 0 5px 6px; font-size: 12px; } .hCast.z0 .hb svg { width: 30px; height: 30px; margin-bottom: 2px; } .hCast.z0 .hb small { display: none; } .hCast.z0 .hl .fx { display: none; }
   .hNext.z0 { padding: 0 12px; } .hNext.z0 .hnTi { font-size: 17px; }
@@ -911,10 +928,53 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   .hClim.z2 .t { font-size: 110px; } .hCast.z2 .hb { width: 180px; height: 180px; border-radius: 90px; }
 }
 /* mode réglage de taille : cadre + poignée dans le coin (comme « Personnaliser » sur iOS) */
+/* blocs « Batterie » et « Stabilité » (accueil) */
+.hT { padding: 14px 18px; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; text-align: left; }
+.hTh { -webkit-flex: none; flex: none; font-size: 12px; font-weight: bold; letter-spacing: 0.08em; text-transform: uppercase; color: #8f98a5; margin-bottom: 4px; }
+.hTc { -webkit-flex: 1; flex: 1; min-height: 0; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-justify-content: center; justify-content: center; }
+.hTrow { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; }
+.hTring { -webkit-flex: none; flex: none; position: relative; width: 96px; height: 96px; margin-right: 18px; }
+.hTring svg.rg { display: block; width: 100%; height: 100%; }
+.hTring .ct { position: absolute; left: 0; top: 0; right: 0; bottom: 0; display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; }
+.hTring b { font-size: 24px; line-height: 1; } .hTring small { font-size: 10px; color: #8f98a5; margin-top: 3px; }
+.hTlp { position: absolute; right: -8px; top: -6px; width: 32px; height: 32px; border-radius: 16px; background: #14171c; border: 2px solid #ffd60a; display: block; }
+.hTlp svg { display: block; width: 20px; height: 20px; margin: 4px; }
+.hTcol { -webkit-flex: 1; flex: 1; min-width: 0; }
+.hTl { font-size: 13px; color: #8f98a5; }
+.hTv { font-size: 34px; font-weight: bold; color: #eceff3; line-height: 1.1; }
+.hTx { font-size: 12px; color: #8f98a5; margin-top: 3px; }
+.hTspark { margin-top: 6px; } .hTspark svg { display: block; width: 100%; height: 40px; }
+.hTcap { display: -webkit-flex; display: flex; -webkit-justify-content: space-between; justify-content: space-between; font-size: 11px; color: #5b636f; }
+.hTi { -webkit-flex: none; flex: none; width: 84px; height: 84px; border-radius: 42px; border: 2px solid #2f353e; margin-right: 18px; display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; }
+.hTi i { display: block; width: 24px; height: 40px; border-radius: 7px; border: 3px solid currentColor; }
+.hTst { font-size: 26px; font-weight: bold; line-height: 1.15; }
+.hTlevel { position: relative; height: 12px; border-radius: 6px; margin: 14px 0 4px; background: -webkit-linear-gradient(left, #7a2b2b 18.75%, #7a6a2b 18.75%, #7a6a2b 41.25%, #1f6b3c 41.25%, #1f6b3c 58.75%, #7a6a2b 58.75%, #7a6a2b 81.25%, #7a2b2b 81.25%); background: linear-gradient(90deg, #7a2b2b 18.75%, #7a6a2b 18.75%, #7a6a2b 41.25%, #1f6b3c 41.25%, #1f6b3c 58.75%, #7a6a2b 58.75%, #7a6a2b 81.25%, #7a2b2b 81.25%); }
+.hTlevel i { position: absolute; top: -4px; width: 6px; height: 20px; margin-left: -3px; border-radius: 3px; background: #eceff3; -webkit-box-shadow: 0 0 8px rgba(0,0,0,0.7); box-shadow: 0 0 8px rgba(0,0,0,0.7); }
+/* petit : une ligne, sans courbe ni règle */
+.hT.z0 { padding: 10px 12px; }
+.hT.z0 .hTspark, .hT.z0 .hTlevel, .hT.z0 .hTcap, .hT.z0 .hTx, .hT.z0 .hTl { display: none; }
+.hT.z0 .hTring { width: 56px; height: 56px; margin-right: 10px; } .hT.z0 .hTring b { font-size: 14px; } .hT.z0 .hTring small { display: none; }
+.hT.z0 .hTlp { width: 24px; height: 24px; border-radius: 12px; right: -6px; top: -6px; } .hT.z0 .hTlp svg { width: 14px; height: 14px; margin: 3px; }
+.hT.z0 .hTv { font-size: 20px; } .hT.z0 .hTi { width: 56px; height: 56px; margin-right: 10px; } .hT.z0 .hTi i { width: 16px; height: 28px; } .hT.z0 .hTst { font-size: 18px; }
+/* grand */
+.hT.z2 { padding: 20px 24px; } .hT.z2 .hTh { font-size: 14px; margin-bottom: 8px; }
+.hT.z2 .hTring { width: 170px; height: 170px; margin-right: 28px; } .hT.z2 .hTring b { font-size: 40px; } .hT.z2 .hTring small { font-size: 13px; }
+.hT.z2 .hTlp { width: 44px; height: 44px; border-radius: 22px; right: -4px; top: -4px; } .hT.z2 .hTlp svg { width: 28px; height: 28px; margin: 6px; }
+.hT.z2 .hTl { font-size: 16px; } .hT.z2 .hTv { font-size: 52px; } .hT.z2 .hTx { font-size: 15px; }
+.hT.z2 .hTspark svg { height: 80px; } .hT.z2 .hTcap { font-size: 13px; }
+.hT.z2 .hTi { width: 150px; height: 150px; border-radius: 75px; margin-right: 28px; } .hT.z2 .hTi i { width: 40px; height: 70px; border-width: 4px; } .hT.z2 .hTst { font-size: 40px; }
+.hT.z2 .hTlevel { height: 16px; margin: 22px 0 6px; } .hT.z2 .hTlevel i { height: 28px; top: -6px; width: 8px; margin-left: -4px; }
 .rdo-edit { position: relative; }
 .rdo-edit.tile, .rdo-edit .mi { border: 2px solid #d8dde6 !important; }
 .rdo-h { position: absolute; right: 10px; bottom: 10px; width: 40px; height: 40px; border-radius: 20px; background: #d8dde6; color: #14171c; display: block; z-index: 5; -webkit-box-shadow: 0 4px 12px rgba(0,0,0,0.5); box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
 .rdo-h, .rdo-h * { pointer-events: auto !important; }
+.rdo-x { position: absolute; right: 10px; top: 10px; width: 40px; height: 40px; border-radius: 20px; background: #ff453a; color: #fff; display: block; z-index: 5; -webkit-box-shadow: 0 4px 12px rgba(0,0,0,0.5); box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+.rdo-x, .rdo-x * { pointer-events: auto !important; }
+.rdo-x svg { width: 20px; height: 20px; margin: 10px; display: block; }
+.rdo-gone { display: none !important; }
+.rdoEmpty { grid-column: 1 / -1; text-align: center; padding: 60px 0; }
+.rdoEmpty p { color: #8f98a5; margin: 0 0 14px; }
+#rdoRs { position: fixed; z-index: 9998; left: 50%; bottom: 18px; height: 46px; padding: 0 22px; margin-left: 52px; border-radius: 23px; border: 0; background: #2b3038; color: #e8ebf0; font-size: 16px; font-weight: bold; -webkit-box-shadow: 0 8px 22px rgba(0,0,0,0.55); box-shadow: 0 8px 22px rgba(0,0,0,0.55); }
 .rdo-h svg { width: 22px; height: 22px; margin: 9px; display: block; }
 #rdoOk { position: fixed; z-index: 9998; left: 50%; bottom: 18px; height: 46px; padding: 0 26px; margin-left: -70px; border-radius: 23px; border: 0; background: #d8dde6; color: #14171c; font-size: 16px; font-weight: bold; -webkit-box-shadow: 0 8px 22px rgba(0,0,0,0.55); box-shadow: 0 8px 22px rgba(0,0,0,0.55); }
 .rdo-ghost.mod { -webkit-transform: none; transform: none; -webkit-box-shadow: none; box-shadow: none; }
@@ -954,7 +1014,9 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
       <button type="button" class="pw" id="pw2" aria-label="Allumer ou éteindre la clim de la chambre"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3v9M6.3 6.8a8 8 0 1 0 11.4 0"/></svg><span id="pw2t">Marche / arrêt</span></span></button>
       <button type="button" class="go" data-p="clim">Régler la clim</button>
      </div>
+     <div class="tile hT hBat" id="hBat"><div class="hTh">Batterie</div><div class="hTc" id="hBc"></div></div>
      <div class="tile hCast"><div class="hl"><h3>Lumières</h3><div id="hLum" class="hlr"><p class="msg">Chargement…</p></div><div class="fx" style="-webkit-justify-content:center;justify-content:center"><button type="button" class="go" data-p="lum" style="margin-right:10px">Régler</button><button type="button" class="go" id="hAllOff">Tout éteindre</button></div></div><div style="display:none"><p class="msg" id="castMsg1"></p><div class="fl" id="fl1"></div></div></div>
+     <div class="tile hT hStab" id="hStab"><div class="hTh">Stabilité</div><div class="hTc" id="hSc"></div></div>
     </div>
    </section>
 
@@ -984,7 +1046,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
    </section>
 
    <section class="page" id="p-app">
-    <div class="ttl"><span class="fx" style="-webkit-align-items:center;align-items:center"><button type="button" class="bk" id="agBack" style="display:none" aria-label="Retour à la bibliothèque">&lsaquo; Autre</button><h2 id="appT">Autre</h2></span><span class="fx" style="-webkit-align-items:center;align-items:center"><button type="button" class="xbtn sm" id="rdoReset" style="margin-right:14px">Ordre d'origine</button><span class="note" id="libNote">Bibliothèque de modules</span></span></div>
+    <div class="ttl"><span class="fx" style="-webkit-align-items:center;align-items:center"><button type="button" class="bk" id="agBack" style="display:none" aria-label="Retour à la bibliothèque">&lsaquo; Autre</button><h2 id="appT">Autre</h2></span><span class="fx" style="-webkit-align-items:center;align-items:center"><button type="button" class="xbtn sm" id="rdoReset" style="margin-right:14px">Tout remettre d'origine</button><span class="note" id="libNote">Bibliothèque de modules</span></span></div>
     <div id="libV" class="lib"><div class="libH">Infos</div><div class="mod"><button type="button" class="mi on" data-mod="agenda"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>Agenda</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="meteo7"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18h10a4 4 0 0 0 .4-8A6 6 0 0 0 6 11a3.500 3.500 0 0 0 1 7z"/></svg><span>Météo</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="conso"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg><span>Consommation</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="stab"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="2" transform="rotate(12 12 12)"/><path d="M3 20h4M17 4h4"/></svg><span>Stabilité</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="batt"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="17" height="10" rx="2"/><path d="M22 11v2M6 10v4M10 10v4"/></svg><span>Batterie</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="feedback"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12.500h5"/></svg><span>Feedback</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="histo"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.500"/><path d="M12 7.500V12l3 2"/></svg><span>Historique</span></span></button></div><div class="libH">Écran et réglages</div><div class="mod"><button type="button" class="mi on" data-mod="affichage"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span>Affichage</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="fonds"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="M3.5 17l5-4.5 4 3.5 3-2.5 5 4.5"/></svg><span>Fonds</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="veille"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.500 4a8 8 0 1 0 10.500 10.500z"/></svg><span>Veille</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="reglages"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.400 15a1.650 1.650 0 0 0 .330 1.820l.060.060a2 2 0 1 1-2.830 2.830l-.060-.060a1.650 1.650 0 0 0-1.820-.330 1.650 1.650 0 0 0-1 1.510V21a2 2 0 0 1-4 0v-.090A1.650 1.650 0 0 0 9 19.400a1.650 1.650 0 0 0-1.820.330l-.060.060a2 2 0 1 1-2.830-2.830l.060-.060A1.650 1.650 0 0 0 4.680 15a1.650 1.650 0 0 0-1.510-1H3a2 2 0 0 1 0-4h.090A1.650 1.650 0 0 0 4.600 9a1.650 1.650 0 0 0-.330-1.820l-.060-.060a2 2 0 1 1 2.830-2.830l.060.060A1.650 1.650 0 0 0 9 4.680a1.650 1.650 0 0 0 1-1.510V3a2 2 0 0 1 4 0v.090a1.650 1.650 0 0 0 1 1.510 1.650 1.650 0 0 0 1.820-.330l.060-.060a2 2 0 1 1 2.830 2.830l-.060.060A1.650 1.650 0 0 0 19.400 9a1.650 1.650 0 0 0 1.510 1H21a2 2 0 0 1 0 4h-.090a1.650 1.650 0 0 0-1.510 1z"/></svg><span>Réglages</span></span></button></div><div class="libH">À venir</div><div class="mod"><button type="button" class="mi on" data-mod="idees"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.500 10.900c.700.600 1 1.300 1 2.100h5c0-.800.300-1.500 1-2.100A6 6 0 0 0 12 3z"/></svg><span>Idées</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="bugs"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="8" height="11" rx="4"/><path d="M9.500 6.500 8 4M14.500 6.500 16 4M8 12H4M16 12h4M8.500 16 5 18M15.500 16l3.500 2M12 8v11"/></svg><span>Bugs</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="volets"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16M5 8h14M5 12h14M5 16h14M12 16v4"/></svg><span>Volets</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="mails"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.500 7l8.500 6 8.500-6"/></svg><span>Mails</span></span></button></div><div class="mod"><button type="button" class="mi on" data-mod="sante"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.600A4 4 0 0 1 19 10c0 5.600-7 10-7 10z"/><path d="M5 12.500h3l1.500-2.500 2 4 1.500-2.500H19"/></svg><span>Santé</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="air"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h11a2.500 2.500 0 1 0-2.500-2.500M3 15h14a2.500 2.500 0 1 1-2.500 2.500M3 12h7"/></svg><span>Air</span></span></button></div><div class="mod"><button type="button" class="mi" data-mod="trajet"><span class="bw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16l1.500-5h11L19 16M5 16v3h2v-1.500h10V19h2v-3M5 16h14"/><circle cx="8" cy="13.500" r=".5"/><circle cx="16" cy="13.500" r=".5"/></svg><span>Trajet</span></span></button></div></div>
     <div class="note" id="libMsg" style="margin-top:8px;min-height:18px">Les modules grisés (« À venir ») sont des emplacements libres : dis-moi lesquels créer. Maintiens ton doigt sur une tuile pour la déplacer.</div>
     <div id="wxV" style="display:none;-webkit-flex:1;flex:1;min-height:0;-webkit-flex-direction:column;flex-direction:column">
@@ -1685,7 +1747,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     E12: "Bluetooth indisponible : cette tablette n'a pas le Bluetooth basse consommation (ou bleak absent en mode PC)."
   };
   /* journal d'événements (Wi-Fi, Bluetooth, batterie, services, veille…) : informatif, ne déclenche pas d'erreur */
-  var EV = [], PA = {}, BP = null, BC = false, BA = null;
+  var EV = [], PA = {}, BP = null, BC = false, BA = null, BLP = false;
   function evLog(k, m) { EV.push({ t: Date.now(), k: k, m: m }); if (EV.length > 120) { EV.shift(); } }
   function evAct() {
     var k, cur, m, nm;
@@ -2009,30 +2071,33 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     function hasC(e, c) { return !!e && typeof e.className === "string" && (" " + e.className + " ").indexOf(" " + c + " ") >= 0; }
     function lightId(e) { var L = LUM && LUM.lights[parseInt(e.getAttribute("data-l"), 10)]; return L ? L.id : ""; }
     function modId(e) { var b = e.getElementsByTagName("button")[0]; return b ? b.getAttribute("data-mod") : ""; }
-    function homeId(e) { return hasC(e, "hNext") ? "next" : (hasC(e, "hClim") ? "clim" : "cast"); }
+    function homeId(e) { return hasC(e, "hNext") ? "next" : (hasC(e, "hClim") ? "clim" : (hasC(e, "hBat") ? "bat" : (hasC(e, "hStab") ? "stab" : "cast"))); }
     SETS = [
       { key: "nav", box: function (p) { return p.id === "nav"; }, item: function (e) { return hasC(e, "nb"); }, id: function (e) { return e.getAttribute("data-p"); }, axis: "y" },
-      { key: "homeRow", box: function (p) { return hasC(p, "hRow"); }, item: function (e) { return hasC(e, "hNext") || hasC(e, "hClim") || hasC(e, "hCast"); }, id: homeId, axis: "g", grid: { gap: 14, def: { next: [6, 1], clim: [3, 4], cast: [3, 4] }, min: { next: [2, 1], clim: [2, 2], cast: [2, 2] }, max: [6, 5] } },
+      { key: "home3", box: function (p) { return hasC(p, "hRow"); }, item: function (e) { return hasC(e, "hNext") || hasC(e, "hClim") || hasC(e, "hCast") || hasC(e, "hBat") || hasC(e, "hStab"); }, id: homeId, axis: "g", grid: { gap: 14, def: { next: [6, 1], clim: [3, 2], cast: [3, 2], bat: [3, 2], stab: [3, 2] }, min: { next: [2, 1], clim: [2, 2], cast: [2, 2], bat: [2, 1], stab: [2, 1] }, max: [6, 5] } },
       { key: "lum", box: function (p) { return p.id === "hLum"; }, item: function (e) { return hasC(e, "hb"); }, id: lightId, axis: "x", dyn: 1 },
       { key: "lum", box: function (p) { return hasC(p, "ltabs"); }, item: function (e) { return hasC(e, "ltab"); }, id: lightId, axis: "x", dyn: 1 },
       { key: "lib", box: function (p) { return p.id === "libV"; }, item: function (e) { return hasC(e, "mod"); }, tgt: function (e) { return hasC(e, "mod") || hasC(e, "libH"); }, id: modId, axis: "g", lib: 1, grid: { gap: 0, def: {}, dflt: [1, 1], min: {}, mdflt: [1, 1], max: [4, 3] } }
     ];
     function q1(s) { return document.querySelector(s); }
     function kids(box) { return [].slice.call(box.children); }
-    function boxOf(set) { return set.key === "nav" ? $("nav") : (set.key === "homeRow" ? q1(".hRow") : (set.lib ? $("libV") : null)); }
+    function boxOf(set) { return set.key === "nav" ? $("nav") : (set.key === "home3" ? q1(".hRow") : (set.lib ? $("libV") : null)); }
     function ids(set, box) {
       var k = kids(box), r = [], i;
       for (i = 0; i < k.length; i++) { if (set.item(k[i])) { r.push(set.id(k[i])); } }
       return r;
     }
     /* tailles : poignée dans le coin, la taille suit le doigt et s'aligne sur la grille */
-    var edit = null, rs = null, okBtn = null;
+    var edit = null, rs = null, okBtn = null, rsBtn = null;
     function gdef(g, id) { return g.def[id] || g.dflt; }
     function gmin(g, id) { return g.min[id] || g.mdflt; }
     function zcls(set, id, c, r) {
       if (set.lib) { return (c >= 2 && r >= 2) ? "z2" : ((c >= 2 || r >= 2) ? "z1" : ""); }
       if (id === "next") { return r >= 2 ? "z2" : (c <= 3 ? "z0" : ""); }
-      return (r <= 2 || c <= 2) ? "z0" : ((c >= 5 && r >= 4) ? "z2" : "");
+      if (id === "bat" || id === "stab") { return (c >= 3 && r >= 3) ? "z2" : ((c <= 2 || r <= 1) ? "z0" : ""); }
+      if (c >= 5 && r >= 4) { return "z2"; }
+      if (r <= 2 && c >= 3) { return "z1"; }
+      return (r <= 2 || c <= 2) ? "z0" : "";
     }
     function spanApply(set, el, c, r) {
       var g = set.grid, id = set.id(el), d = gdef(g, id), z = zcls(set, id, c, r), cl = el.className.replace(/ ?\bz[012]\b/g, "");
@@ -2054,20 +2119,58 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
       if (edit) {
         edit.el.className = edit.el.className.replace(" rdo-edit", "");
         if (edit.h && edit.h.parentNode) { edit.h.parentNode.removeChild(edit.h); }
+        if (edit.x && edit.x.parentNode) { edit.x.parentNode.removeChild(edit.x); }
       }
       edit = null; rs = null;
       if (okBtn && okBtn.parentNode) { okBtn.parentNode.removeChild(okBtn); }
-      okBtn = null;
+      if (rsBtn && rsBtn.parentNode) { rsBtn.parentNode.removeChild(rsBtn); }
+      okBtn = null; rsBtn = null;
+    }
+    function hidGet(set) { var v = xGet("hid_" + set.key, []); return v && v.length !== undefined ? v : []; }
+    function hidApply(set) {
+      var box = boxOf(set), h = hidGet(set), k, i, gone, vis = 0, em, b;
+      if (!box) { return; }
+      k = kids(box);
+      for (i = 0; i < k.length; i++) {
+        if (!set.item(k[i])) { continue; }
+        gone = h.indexOf(set.id(k[i])) >= 0;
+        k[i].className = k[i].className.replace(" rdo-gone", "") + (gone ? " rdo-gone" : "");
+        if (!gone) { vis++; }
+      }
+      em = box.querySelector(".rdoEmpty");
+      if (em && (vis || !h.length)) { box.removeChild(em); em = null; }
+      if (!vis && h.length && !em && !set.lib) {
+        em = document.createElement("div"); em.className = "rdoEmpty"; em.innerHTML = "<p>Tous les blocs sont supprimés.</p>";
+        b = document.createElement("button"); b.type = "button"; b.className = "xbtn"; b.textContent = "Restaurer les blocs";
+        b.onclick = function () { xSet("hid_" + set.key, []); hidApply(set); };
+        em.appendChild(b); box.appendChild(em);
+      }
+    }
+    function hideEl(set, el) {
+      var id = set.id(el), h = hidGet(set);
+      if (h.indexOf(id) < 0) { h.push(id); }
+      xSet("hid_" + set.key, h);
+      editClose(); hidApply(set); lastDrop = new Date().getTime();
     }
     function editOpen(set, el) {
-      var h = document.createElement("span");
+      var h = document.createElement("span"), x;
       editClose();
       h.className = "rdo-h"; h.setAttribute("aria-label", "Changer la taille");
       h.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 5h5v5M10 19H5v-5M19 5l-6 6M5 19l6-6"/></svg>';
       el.appendChild(h); el.className += " rdo-edit";
-      edit = { set: set, el: el, h: h };
+      edit = { set: set, el: el, h: h, x: null };
+      if (!(set.lib && modId(el) === "reglages")) {
+        x = document.createElement("span"); x.className = "rdo-x"; x.setAttribute("aria-label", "Supprimer ce bloc");
+        x.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+        x.onclick = function (ev) { if (ev && ev.stopPropagation) { ev.stopPropagation(); } hideEl(set, el); };
+        el.appendChild(x); edit.x = x;
+      }
       okBtn = document.createElement("button"); okBtn.type = "button"; okBtn.id = "rdoOk"; okBtn.textContent = "OK";
       okBtn.onclick = editClose; document.body.appendChild(okBtn);
+      if (hidGet(set).length) {
+        rsBtn = document.createElement("button"); rsBtn.type = "button"; rsBtn.id = "rdoRs"; rsBtn.textContent = "Restaurer (" + hidGet(set).length + ")";
+        rsBtn.onclick = function () { xSet("hid_" + set.key, []); hidApply(set); editClose(); lastDrop = new Date().getTime(); }; document.body.appendChild(rsBtn);
+      }
     }
     function resizeTo(x, y) {
       var set = edit.set, el = edit.el, g = set.grid, id = set.id(el), r = el.getBoundingClientRect(), cur = xGet("sz_" + set.key, {})[id] || gdef(g, id),
@@ -2117,9 +2220,9 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     function reset() {
       var i, j, k;
       editClose();
-      xSet("ord_nav", []); xSet("ord_homeRow", []); xSet("ord_lum", []); xSet("ord_lib", null); xSet("sz_homeRow", {}); xSet("sz_lib", {});
+      xSet("ord_nav", []); xSet("ord_home3", []); xSet("ord_lum", []); xSet("ord_lib", null); xSet("sz_home3", {}); xSet("sz_lib", {}); xSet("hid_home3", []); xSet("hid_lib", []);
       for (i in snap) { if (snap.hasOwnProperty(i)) { for (j = 0; j < snap[i].list.length; j++) { snap[i].box.appendChild(snap[i].list[j]); } } }
-      for (i = 0; i < SETS.length; i++) { if (SETS[i].grid) { szApply(SETS[i]); } }
+      for (i = 0; i < SETS.length; i++) { if (SETS[i].grid) { szApply(SETS[i]); hidApply(SETS[i]); } }
       try { drawLum(); } catch (e) { }
     }
     function find(t) {
@@ -2181,6 +2284,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     }
     function down(t, x, y) {
       if (edit && t && t.closest && t.closest(".rdo-h")) { rs = { x: x, y: y }; return; }
+      if (edit && t && t.closest && (t.closest(".rdo-x") || t.closest("#rdoRs"))) { return; }
       if (edit && !(t && t.closest && t.closest("#rdoOk"))) { editClose(); lastDrop = new Date().getTime(); }
       cand = find(t); if (!cand) { return; }
       sx = x; sy = y;
@@ -2200,12 +2304,12 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     document.addEventListener("mousedown", function (e) { if (new Date().getTime() - lastTouch > 800 && e.button === 0) { down(e.target, e.clientX, e.clientY); } }, true);
     document.addEventListener("mousemove", function (e) { if (new Date().getTime() - lastTouch > 800) { moveEv(e.clientX, e.clientY, e); } }, true);
     document.addEventListener("mouseup", function () { if (new Date().getTime() - lastTouch > 800) { up(); } }, true);
-    document.addEventListener("click", function (e) { if (st || rs || (new Date().getTime() - lastDrop < 450 && !(e.target && e.target.closest && e.target.closest("#rdoOk")))) { e.stopPropagation(); e.preventDefault(); } }, true);
+    document.addEventListener("click", function (e) { if (st || rs || (new Date().getTime() - lastDrop < 450 && !(e.target && e.target.closest && (e.target.closest("#rdoOk") || e.target.closest("#rdoRs") || e.target.closest(".rdo-x"))))) { e.stopPropagation(); e.preventDefault(); } }, true);
     document.addEventListener("contextmenu", function (e) { if (st || cand) { e.preventDefault(); } }, true);
     $("rdoReset").onclick = reset;
     takeSnap();
     var seen = {}, i;
-    for (i = 0; i < SETS.length; i++) { if (!seen[SETS[i].key]) { seen[SETS[i].key] = 1; apply(SETS[i]); } if (SETS[i].grid) { szApply(SETS[i]); } }
+    for (i = 0; i < SETS.length; i++) { if (!seen[SETS[i].key]) { seen[SETS[i].key] = 1; apply(SETS[i]); } if (SETS[i].grid) { szApply(SETS[i]); hidApply(SETS[i]); } }
     window.rdoReset = reset;
   })();
   $("w7C").onclick = function (ev) {
@@ -2225,7 +2329,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["mailurl", "Lien du script Mails (Apps Script)", "password"], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("13000", 10) || 0, UI_NAME = "4.90 iPad (beta)".charAt(0) === "_" ? "?" : "4.90 iPad (beta)";
+  var UI_CODE = parseInt("13100", 10) || 0, UI_NAME = "4.91 iPad (beta)".charAt(0) === "_" ? "?" : "4.91 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -2527,7 +2631,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     e.className = ch ? "chg" : (p <= 15 ? "low" : (p <= 30 ? "mid" : ""));
     $("batF").setAttribute("width", String(Math.max(0, Math.min(18, p * 18 / 100))));
     $("batT").textContent = p + " %";
-    BP = p; BC = ch;
+    BP = p; BC = ch; BLP = a[2] === "1";
     batLog(p, ch);
   }
   function bleWatch() {
@@ -4127,6 +4231,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["15/11/2026", [
+      ["4.91", "Batterie et Stabilité séparées, blocs supprimables", "Accueil : « Ma tablette » devient deux blocs, Batterie (anneau vert/jaune/rouge, autonomie calculée sur la dernière heure, icône d’économie d’énergie après mise à jour de l’appli) et Stabilité. Appui long puis croix rouge pour supprimer un bloc (Accueil et Autre), avec Restaurer."],
       ["4.90", "Tailles réglables", "Appui long sur un encadré de l'accueil ou une tuile d'Autre, puis relâche : un cadre et une poignée apparaissent dans le coin. Fais glisser la poignée pour agrandir ou réduire, les autres encadrés se replacent. OK pour terminer. Les tuiles d'Autre retrouvent leur taille d'origine par défaut."],
       ["4.89", "Accueil remanié", "Les modules d'Autre sont plus petits (6 par ligne). Tu peux maintenant tout réarranger : maintiens ton doigt sur un élément du menu, de l'accueil, des bulles de lumières ou d'Autre, puis glisse-le. Bouton « Ordre d'origine » dans Autre pour tout remettre."],
       ["4.88", "Mails reliés et onglet Santé (test)", "Mails : le tableau de bord lit tes mails non lus importants (expéditeur, objet, heure) grâce à un petit script Google à installer, et les affiche dans Autre > Mails et dans le pop-up Bonjour. Santé : nouvel emplacement dans Autre, grisé et marqué « Pas encore disponible »."],
@@ -4351,6 +4456,64 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     if (!stbTm) { stbTm = setInterval(function () { if (xMod !== "stab" || $("xV").style.display === "none") { clearInterval(stbTm); stbTm = 0; return; } stabDraw(); }, 2000); }
   }
   if (STB.on) { try { stbStart(); } catch (e) { } }
+
+  /* ---------------- accueil : bloc « Ma tablette » (batterie, autonomie restante, stabilité) ---------------- */
+  var tabHtml = ["", ""];
+  /* rythme de décharge : dernière heure ; si trop peu de relevés (écran en veille, niveau qui ne bouge pas), repli sur 24 h */
+  function tabRate(chg) {
+    var r = batRate(chg, null, 1);
+    if (r.t >= 0.15 && r.p >= 1 && r.r > 0) { return { r: r.r, w: 1 }; }
+    r = batRate(chg, null, 24);
+    if (r.t >= 0.25 && r.p >= 2 && r.r > 0) { return { r: r.r, w: 24 }; }
+    return null;
+  }
+  function tabCol(p) { return p > 50 ? "#5fd38d" : (p > 20 ? "#ffd166" : "#ff6b6b"); }
+  function tabSpark(col) {
+    var n = BTH.length, t1 = Date.now(), t0 = t1 - 24 * 3600000, i, a, y, x, d = "", pts = [], W = 380, H = 52;
+    function X(t) { return Math.max(0, (t - t0) / (t1 - t0) * W); }
+    function Y(p) { return H - 4 - p / 100 * (H - 10); }
+    for (i = 0; i < n; i++) { a = BTH[i]; if (a[0] >= t0) { if (!pts.length && i > 0) { pts.push([t0, BTH[i - 1][1]]); } pts.push([a[0], a[1]]); } }
+    if (!pts.length && n) { pts.push([t0, BTH[n - 1][1]]); }
+    if (pts.length) { pts.push([t1, pts[pts.length - 1][1]]); }
+    if (pts.length < 2) { return '<div class="hTx" style="margin:0">Courbe des dernières 24 h : en construction</div>'; }
+    for (i = 0; i < pts.length; i++) { x = X(pts[i][0]); y = Y(pts[i][1]); d += (i ? "L" : "M") + x.toFixed(1) + "," + y.toFixed(1); }
+    return '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none"><defs><linearGradient id="tsg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="' + col + '" stop-opacity="0.45"/><stop offset="1" stop-color="' + col + '" stop-opacity="0"/></linearGradient></defs><path d="' + d + 'L' + X(pts[pts.length - 1][0]).toFixed(1) + ',' + H + 'L' + X(pts[0][0]).toFixed(1) + ',' + H + 'Z" fill="url(#tsg)"/><path d="' + d + '" fill="none" stroke="' + col + '" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>'
+      + '<div class="hTcap"><span>24 dernières heures</span><span>maintenant</span></div>';
+  }
+  function tabDraw() {
+    var e1 = $("hBc"), e2 = $("hSc"), a, h1, h2, nowP = BP, c, d1, d2, big, st, col, live, rc, ang = 0, pct, rcol, circ = 2 * Math.PI * 50, lv = "", sub, lp = "", rd;
+    if (!e1 || !e2 || typeof STB === "undefined" || !STB) { return; }
+    if (nowP === undefined || nowP === null || isNaN(nowP)) {
+      h1 = '<div class="hTx" style="margin:0">Niveau de batterie indisponible ici</div>';
+    } else {
+      rd = tabRate(0); rc = tabRate(1); pct = Math.max(0, Math.min(100, nowP)); rcol = tabCol(nowP);
+      a = rd ? nowP / rd.r : null;
+      if (a) { sub = BC ? "si débranchée" : "au rythme de la dernière heure"; if (rd.w === 24) { sub = (BC ? "si débranchée" : "estimé sur 24 h") + " · peu de relevés cette heure"; } }
+      else { sub = "mesure en cours : quelques heures sur batterie"; }
+      if (BC && rc) { sub += " · pleine dans ≈ " + batFmtH(Math.max(0, 100 - nowP) / rc.r); }
+      if (BLP) { lp = '<span class="hTlp" title="Mode économie d\'énergie"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="17" height="10" rx="2.5" fill="#ffd60a"/><path d="M22 11v2" stroke="#ffd60a" stroke-width="2" stroke-linecap="round"/><path d="M7.500 12h6" stroke="#14171c" stroke-width="2.2" stroke-linecap="round"/></svg></span>'; }
+      h1 = '<div class="hTrow"><div class="hTring"><svg class="rg" viewBox="0 0 122 122"><circle cx="61" cy="61" r="50" fill="none" stroke="#232830" stroke-width="11"/><circle cx="61" cy="61" r="50" fill="none" stroke="' + rcol + '" stroke-width="11" stroke-linecap="round" stroke-dasharray="' + (circ * pct / 100).toFixed(1) + " " + circ.toFixed(1) + '" transform="rotate(-90 61 61)"/></svg>'
+        + '<div class="ct"><b>' + (BC ? "⚡ " : "") + nowP + ' %</b><small>' + (BC ? "en charge" : "sur batterie") + '</small></div>' + lp + '</div>'
+        + '<div class="hTcol"><div class="hTl">Autonomie restante</div><div class="hTv">' + (a ? "≈ " + batFmtH(a) : "—") + '</div><div class="hTx">' + sub + '</div></div></div>'
+        + '<div class="hTspark">' + tabSpark(rcol) + '</div>';
+    }
+    live = STB.on && stbA && Date.now() - stbLast < 3000; c = STB.cal;
+    if (!STB.on) { st = "Mesure désactivée"; col = "#8f98a5"; sub = "Active-la dans Autre › Stabilité"; }
+    else if (!live) { st = "En attente du capteur"; col = "#8f98a5"; sub = "le capteur de mouvement ne répond pas"; }
+    else if (!c) { st = "À calibrer"; col = "#ffd166"; sub = "Autre › Stabilité › Calibrer"; }
+    else {
+      d1 = stbDelta(stbA.roll, c.roll); d2 = stbA.lean - c.lean; big = Math.max(Math.abs(d1), Math.abs(d2)); ang = Math.max(-25, Math.min(25, d1));
+      if (big < 0.7) { st = "Stable"; col = "#5fd38d"; } else if (big < 2.5) { st = "Léger mouvement"; col = "#ffd166"; } else { st = "La tablette bouge"; col = "#ff6b6b"; }
+      sub = "écart " + (d1 >= 0 ? "+" : "") + d1.toFixed(1) + "° · " + (STS.length ? STS.length + " choc" + (STS.length > 1 ? "s" : "") : "aucun choc");
+      lv = '<div class="hTlevel"><i style="left:' + ((Math.max(-4, Math.min(4, d1)) + 4) / 8 * 100).toFixed(1) + '%"></i></div><div class="hTcap"><span>−4°</span><span>0°</span><span>+4°</span></div>';
+    }
+    h2 = '<div class="hTrow"><div class="hTi" style="color:' + col + '"><i style="-webkit-transform:rotate(' + ang.toFixed(1) + 'deg);transform:rotate(' + ang.toFixed(1) + 'deg)"></i></div><div class="hTcol"><div class="hTst" style="color:' + col + '">' + st + '</div><div class="hTx">' + sub + '</div></div></div>' + lv;
+    if (h1 !== tabHtml[0]) { tabHtml[0] = h1; e1.innerHTML = h1; }
+    if (h2 !== tabHtml[1]) { tabHtml[1] = h2; e2.innerHTML = h2; }
+  }
+  tabDraw(); setInterval(pw("Tablette", tabDraw), 3000);
+  $("hBat").onclick = function () { go("app"); xOpen("batt"); };
+  $("hStab").onclick = function () { go("app"); xOpen("stab"); };
 
 
   /* ---------------- Batterie : journal du niveau (une ligne à chaque changement) et calcul de la consommation ---------------- */

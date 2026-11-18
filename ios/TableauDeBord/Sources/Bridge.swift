@@ -28,6 +28,7 @@ final class Bridge {
         let nc = NotificationCenter.default
         nc.addObserver(forName: UIDevice.batteryLevelDidChangeNotification, object: nil, queue: .main) { [weak self] _ in self?.pushState() }
         nc.addObserver(forName: UIDevice.batteryStateDidChangeNotification, object: nil, queue: .main) { [weak self] _ in self?.pushState() }
+        nc.addObserver(forName: .NSProcessInfoPowerStateDidChange, object: nil, queue: .main) { [weak self] _ in self?.pushState() }
         nc.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
             guard let self = self else { return }
             if self.sleeping { self.applyBrightness(true) }
@@ -50,7 +51,9 @@ final class Bridge {
         if l < 0 { return "" }
         let st = UIDevice.current.batteryState
         let charging = (st == .charging || st == .full) ? 1 : 0
-        return "\(Int((l * 100).rounded()));\(charging)"
+        // 3e champ : mode économie d'énergie de l'iPad (1 = activé)
+        let lowPower = ProcessInfo.processInfo.isLowPowerModeEnabled ? 1 : 0
+        return "\(Int((l * 100).rounded()));\(charging);\(lowPower)"
     }
 
     /// Contenu du fichier le plus récent du dossier de l'appli (app Fichiers / iTunes) dont le nom commence par `base`
