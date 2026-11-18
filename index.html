@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:6400 TDBA:211-->
+<!--TDBV:6500 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -2331,7 +2331,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["mailurl", "Lien du script Mails (Apps Script)", "password"], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("6400", 10) || 0, UI_NAME = "6.4 iPad".charAt(0) === "_" ? "?" : "6.4 iPad";
+  var UI_CODE = parseInt("6500", 10) || 0, UI_NAME = "6.5 iPad".charAt(0) === "_" ? "?" : "6.5 iPad";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -4231,6 +4231,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["15/11/2026", [
+      ["6.5", "Mails : texte plus propre", "Le contenu des mails est nettoyé à l’affichage : plus de liens, de balises d’image, de tableaux ni de titres markdown, et moins de lignes vides."],
       ["6.4", "Mails : lire le contenu", "Module Mails : touche un mail pour lire son début (jusqu’à 1 200 caractères, liens abrégés). Il faut mettre à jour le script mails.gs dans Google et publier une nouvelle version du déploiement."],
       ["6.3", "Bonne nuit plus sombre", "L’écran de la veille Bonne nuit est assombri de 60 % (heure, date, météo et rendez-vous restent lisibles)."],
       ["6.2", "Température de la pièce sur le bloc Clim", "Accueil : la consigne reste en grand, remontée de quelques pixels, et la température de la pièce s’affiche dessous, plus lisible."],
@@ -4633,6 +4634,17 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
       if (window.bjMailHook) { try { window.bjMailHook(); } catch (e2) { } }
     });
   }
+  /* nettoie le texte brut d'un mail : liens, images, tableaux et titres markdown, lignes vides en trop */
+  function mailClean(t) {
+    t = String(t || "").replace(/\r/g, "")
+      .replace(/<?\[lien\]>?/g, "").replace(/<?https?:\/\/[^\s>\])]+>?/g, "")
+      .replace(/\[image:[^\]]*\]/gi, "")
+      .replace(/^[ \t]*[|:\-\s]*[|][|:\-\s]*$/gm, "")
+      .replace(/^[ \t]*#+[ \t]*/gm, "").replace(/^[ \t]*[*\-][ \t]+/gm, "• ")
+      .replace(/\[([^\]]*)\]\(\)/g, "$1").replace(/\(\)/g, "")
+      .replace(/[ \t]+/g, " ").replace(/^ +| +$/gm, "").replace(/\n{3,}/g, "\n\n").replace(/^\s+|\s+$/g, "");
+    return t;
+  }
   function mailsDraw() {
     var h = "", i, m, u = mailUrl();
     if (!u) {
@@ -4645,7 +4657,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
       for (i = 0; i < MAILS.l.length; i++) {
         m = MAILS.l[i];
         h += '<div class="fbI mrow" data-mi="' + i + '" style="cursor:pointer"><span class="tg" style="color:#8fb4e8;min-width:86px">' + esc(m.time || '') + '</span><span class="tx"><b>' + esc(m.from) + '</b><br><span style="opacity:.85">' + esc(m.subject) + '</span>'
-          + (MOPEN === i ? '<div class="mbody">' + (m.body ? esc(m.body) : "Pas de contenu : mets à jour le script « mails.gs » dans Google (nouvelle version du déploiement) pour lire le corps des mails.") + '</div>' : '') + '</span><span class="tg" style="min-width:0;margin:0 0 0 8px;color:#8f98a5">' + (MOPEN === i ? "▲" : "▼") + '</span></div>';
+          + (MOPEN === i ? '<div class="mbody">' + (m.body ? esc(mailClean(m.body)) : "Pas de contenu : mets à jour le script « mails.gs » dans Google (nouvelle version du déploiement) pour lire le corps des mails.") + '</div>' : '') + '</span><span class="tg" style="min-width:0;margin:0 0 0 8px;color:#8f98a5">' + (MOPEN === i ? "▲" : "▼") + '</span></div>';
       }
       h += '<p class="note" style="margin-top:12px">' + (MAILS.t ? 'Lu à ' + stbFmtT(MAILS.t).slice(6) + '. ' : '') + 'Actualisation automatique toutes les 10 minutes. Touche un mail pour lire son début. Promotions, réseaux sociaux et forums sont écartés.</p>';
     }

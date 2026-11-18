@@ -35,7 +35,13 @@ function doGet(e) {
 }
 
 function clean(txt) {
-  return String(txt || "").replace(/https?:\/\/\S+/g, "[lien]").replace(/\r/g, "").replace(/[ \t]+/g, " ").replace(/\n[ ]+/g, "\n").replace(/\n{3,}/g, "\n\n").replace(/^\s+|\s+$/g, "").slice(0, BODY_MAX);
+  var s = String(txt || "").replace(/\r/g, "")
+    .replace(/<?https?:\/\/[^\s>\])]+>?/g, "")
+    .replace(/\[image:[^\]]*\]/gi, "")
+    .replace(/^[ \t]*[|:\-\s]*[|][|:\-\s]*$/gm, "")
+    .replace(/^[ \t]*#+[ \t]*/gm, "")
+    .replace(/[ \t]+/g, " ").replace(/^ +| +$/gm, "").replace(/\n{3,}/g, "\n\n").replace(/^\s+|\s+$/g, "");
+  return s.length > BODY_MAX ? s.slice(0, BODY_MAX) + "…" : s;
 }
 
 function out(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
