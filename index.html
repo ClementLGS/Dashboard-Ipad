@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:6300 TDBA:211-->
+<!--TDBV:6400 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -885,6 +885,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
 .fbI { display: -webkit-flex; display: flex; -webkit-align-items: flex-start; align-items: flex-start; padding: 10px 12px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.10); border-radius: 12px; background: rgba(255,255,255,0.045); }
 .fbI .tg { -webkit-flex: none; flex: none; min-width: 96px; margin-right: 12px; font-size: 12px; font-weight: bold; letter-spacing: 0.06em; text-transform: uppercase; padding-top: 3px; }
 .fbI .tx { -webkit-flex: 1; flex: 1; min-width: 0; font-size: 16px; word-wrap: break-word; -webkit-user-select: text; user-select: text; }
+.mbody { white-space: pre-wrap; margin-top: 10px; padding: 10px 14px; background: #14171c; border-radius: 10px; font-size: 15px; line-height: 1.45; color: #cdd3dc; max-height: 340px; overflow: auto; -webkit-overflow-scrolling: touch; }
 .fbI .tx small { display: block; font-size: 12px; color: #8f98a5; margin-top: 2px; }
 .fbI .rm, #xB .rm { -webkit-flex: none; flex: none; width: 40px; height: 40px; margin-left: 8px; border-radius: 20px; border: 0; background: rgba(255,255,255,0.08); color: #b9c2d0; font-size: 20px; padding: 0; }
 
@@ -1998,7 +1999,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     bugs: "Bugs — la liste de tous les bugs que tu as notés dans Feedback, avec leur état : à corriger ou corrigé.",
     idees: "Idées — l'endroit où l'on garde les envies d'amélioration du tableau de bord : celles de Claude, mises à jour à chaque version test, et les tiennes, notées ou dictées à la voix.",
     volets: "Volets — à venir : ouvrir et fermer les volets de la chambre depuis la tablette.",
-    mails: "Mails — un aperçu de tes mails non lus importants : expéditeur et objet seulement, jamais le contenu.",
+    mails: "Mails — tes mails non lus importants : expéditeur, objet et contenu (touche un mail pour l'ouvrir).",
     sante: "Santé — pas encore disponible : un emplacement réservé aux données de santé.",
     air: "Air — à venir : qualité de l'air et température réelle de la chambre.",
     trajet: "Trajet — à venir : temps de trajet vers Mérignac, avec la circulation du moment.",
@@ -2330,7 +2331,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["mailurl", "Lien du script Mails (Apps Script)", "password"], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("6300", 10) || 0, UI_NAME = "6.3 iPad".charAt(0) === "_" ? "?" : "6.3 iPad";
+  var UI_CODE = parseInt("6400", 10) || 0, UI_NAME = "6.4 iPad".charAt(0) === "_" ? "?" : "6.4 iPad";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -4230,6 +4231,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["15/11/2026", [
+      ["6.4", "Mails : lire le contenu", "Module Mails : touche un mail pour lire son début (jusqu’à 1 200 caractères, liens abrégés). Il faut mettre à jour le script mails.gs dans Google et publier une nouvelle version du déploiement."],
       ["6.3", "Bonne nuit plus sombre", "L’écran de la veille Bonne nuit est assombri de 60 % (heure, date, météo et rendez-vous restent lisibles)."],
       ["6.2", "Température de la pièce sur le bloc Clim", "Accueil : la consigne reste en grand, remontée de quelques pixels, et la température de la pièce s’affiche dessous, plus lisible."],
       ["6.1", "Mails et Santé dans Infos", "Les modules Mails et Santé sont rangés dans la section Infos de la catégorie Autre."],
@@ -4606,7 +4608,13 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
 
 
   /* ---------------- Mails : lus par un petit script Google (Apps Script) qui ne renvoie que l'expéditeur et l'objet ---------------- */
-  var MAILS = xGet("mailsC", { t: 0, n: 0, l: [], err: "" }), mailBusy = 0, mailTry = 0;
+  var MAILS = xGet("mailsC", { t: 0, n: 0, l: [], err: "" }), mailBusy = 0, mailTry = 0, MOPEN = -1;
+  $("xB").addEventListener("click", function (ev) {
+    var t = ev.target, i;
+    while (t && t !== this && !(t.getAttribute && t.getAttribute("data-mi") !== null)) { t = t.parentNode; }
+    if (!t || t === this || xMod !== "mails") { return; }
+    i = parseInt(t.getAttribute("data-mi"), 10); MOPEN = (MOPEN === i ? -1 : i); mailsDraw();
+  });
   function mailUrl() { var c = {}; try { c = window.LOCAL.cfg() || {}; } catch (e) { c = {}; } return String(c.mailurl || "").replace(/^\s+|\s+$/g, ""); }
   function mailLoad(force) {
     var u = mailUrl();
@@ -4629,16 +4637,17 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     var h = "", i, m, u = mailUrl();
     if (!u) {
       h += '<p class="note" style="font-size:15px;color:#eceff3">Les mails ne sont pas encore reliés.</p>';
-      h += '<p class="note">Il faut installer le petit script Google « mails.gs » (fourni avec le tableau de bord), puis coller son lien dans Réglages > « Lien du script Mails ». Le script ne renvoie que l\'expéditeur, l\'objet et l\'heure : jamais le contenu des messages.</p>';
+      h += '<p class="note">Il faut installer le petit script Google « mails.gs » (fourni avec le tableau de bord), puis coller son lien dans Réglages > « Lien du script Mails ». Le script renvoie l\'expéditeur, l\'objet, l\'heure et le début du message.</p>';
     } else {
       h += '<div style="display:flex;align-items:baseline;gap:16px;margin-bottom:8px"><div style="font-size:42px;font-weight:bold">' + (MAILS.t ? MAILS.n : '…') + '</div><div class="note" style="font-size:16px">' + (MAILS.n > 1 ? 'mails non lus importants' : 'mail non lu important') + '</div></div>';
       if (MAILS.err) { h += '<p class="note" style="color:#ff9f43">Dernière lecture impossible : ' + esc(MAILS.err) + '</p>'; }
       if (MAILS.t && !MAILS.l.length) { h += '<p class="note">Aucun mail non lu pour le moment.</p>'; }
       for (i = 0; i < MAILS.l.length; i++) {
         m = MAILS.l[i];
-        h += '<div class="fbI"><span class="tg" style="color:#8fb4e8;min-width:86px">' + esc(m.time || '') + '</span><span class="tx"><b>' + esc(m.from) + '</b><br><span style="opacity:.85">' + esc(m.subject) + '</span></span></div>';
+        h += '<div class="fbI mrow" data-mi="' + i + '" style="cursor:pointer"><span class="tg" style="color:#8fb4e8;min-width:86px">' + esc(m.time || '') + '</span><span class="tx"><b>' + esc(m.from) + '</b><br><span style="opacity:.85">' + esc(m.subject) + '</span>'
+          + (MOPEN === i ? '<div class="mbody">' + (m.body ? esc(m.body) : "Pas de contenu : mets à jour le script « mails.gs » dans Google (nouvelle version du déploiement) pour lire le corps des mails.") + '</div>' : '') + '</span><span class="tg" style="min-width:0;margin:0 0 0 8px;color:#8f98a5">' + (MOPEN === i ? "▲" : "▼") + '</span></div>';
       }
-      h += '<p class="note" style="margin-top:12px">' + (MAILS.t ? 'Lu à ' + stbFmtT(MAILS.t).slice(6) + '. ' : '') + 'Actualisation automatique toutes les 10 minutes. Promotions, réseaux sociaux et forums sont écartés.</p>';
+      h += '<p class="note" style="margin-top:12px">' + (MAILS.t ? 'Lu à ' + stbFmtT(MAILS.t).slice(6) + '. ' : '') + 'Actualisation automatique toutes les 10 minutes. Touche un mail pour lire son début. Promotions, réseaux sociaux et forums sont écartés.</p>';
     }
     h += '<div class="xrow2" style="margin-top:8px">' + (u ? '<button type="button" class="xbtn sm" data-x="mailRef">Actualiser</button>' : '') + '</div>';
     var s1 = $("xB").scrollTop, s2 = $("xV").scrollTop;
