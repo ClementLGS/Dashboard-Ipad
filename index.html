@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:13200 TDBA:211-->
+<!--TDBV:13300 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -2329,7 +2329,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["mailurl", "Lien du script Mails (Apps Script)", "password"], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("13200", 10) || 0, UI_NAME = "4.92 iPad (beta)".charAt(0) === "_" ? "?" : "4.92 iPad (beta)";
+  var UI_CODE = parseInt("13300", 10) || 0, UI_NAME = "4.93 iPad (beta)".charAt(0) === "_" ? "?" : "4.93 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -4231,6 +4231,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["15/11/2026", [
+      ["4.93", "Clim et Lumières cliquables", "Accueil : un appui sur le bloc Clim ouvre la page Clim, un appui sur le bloc Lumières ouvre la page Lumières (les boutons du bloc gardent leur action)."],
       ["4.92", "Batterie sans éclair", "Le bloc Batterie de l’accueil n’affiche plus l’éclair en charge : le pourcentage et « en charge » suffisent."],
       ["4.91", "Batterie et Stabilité séparées, blocs supprimables", "Accueil : « Ma tablette » devient deux blocs, Batterie (anneau vert/jaune/rouge, autonomie calculée sur la dernière heure, icône d’économie d’énergie après mise à jour de l’appli) et Stabilité. Appui long puis croix rouge pour supprimer un bloc (Accueil et Autre), avec Restaurer."],
       ["4.90", "Tailles réglables", "Appui long sur un encadré de l'accueil ou une tuile d'Autre, puis relâche : un cadre et une poignée apparaissent dans le coin. Fais glisser la poignée pour agrandir ou réduire, les autres encadrés se replacent. OK pour terminer. Les tuiles d'Autre retrouvent leur taille d'origine par défaut."],
@@ -4513,6 +4514,17 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
     if (h2 !== tabHtml[1]) { tabHtml[1] = h2; e2.innerHTML = h2; }
   }
   tabDraw(); setInterval(pw("Tablette", tabDraw), 3000);
+  /* appui sur le bloc Clim ou Lumières (hors boutons) : ouvre la page correspondante */
+  function tileGo(sel, page) {
+    var e = document.querySelector(sel);
+    if (!e) { return; }
+    e.addEventListener("click", function (ev) {
+      var t = ev.target;
+      while (t && t !== e) { if (t.tagName === "BUTTON" || (t.className && typeof t.className === "string" && (" " + t.className + " ").indexOf(" hb ") >= 0)) { return; } t = t.parentNode; }
+      go(page);
+    });
+  }
+  tileGo(".hClim", "clim"); tileGo(".hCast", "lum");
   $("hBat").onclick = function () { go("app"); xOpen("batt"); };
   $("hStab").onclick = function () { go("app"); xOpen("stab"); };
 
