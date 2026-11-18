@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f1114">
 <title>Tableau de bord chambre</title>
-<!--TDBV:13400 TDBA:211-->
+<!--TDBV:13500 TDBA:211-->
 <style>
 /* Samsung mini 0.2 bêta (Android 4.4) : flexbox + marges uniquement, pas de grille, de variables CSS ni de "gap". */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -462,7 +462,7 @@ html #nowFx.nt .nf-flake, html #nowFx.nt .nf-drop { opacity: 0.7; }
 #slVer { display: none; position: absolute; left: 28px; bottom: 24px; font-size: 16px; color: #3a3f48; }
 #slp.auto #slVer { display: block; }
 /* écran « Nuit » (Bonne nuit / bouton Veille) : presque noir, juste une grosse heure ambrée très tamisée ; rien d'autre ne s'allume */
-#slp.nuit { -webkit-justify-content: center; justify-content: center; }
+#slp.nuit { -webkit-justify-content: center; justify-content: center; -webkit-filter: brightness(0.4); filter: brightness(0.4); }
 #slp.nuit #slC { font-size: 190px; color: #4f4234; margin-top: 0; }
 #slp.nuit #slD { color: #3a342d; font-size: 26px; margin-top: 12px; }
 #slp.nuit #slR, #slp.nuit #slS { display: none; }
@@ -2330,7 +2330,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   var SETF = [["updurl", "Adresse des mises à jour", ""], ["diagrepo", "Dépôt de diagnostic (propriétaire/nom)", ""], ["diagtok", "Jeton du dépôt de diagnostic", "password"], ["airzone", "Airzone (adresse:port)", ""], ["system", "Système Airzone", ""], ["zone", "Zone de la chambre", ""], ["lat", "Latitude", ""], ["lon", "Longitude", ""],
     ["ical", "Lien iCal Google Agenda", ""], ["mailurl", "Lien du script Mails (Apps Script)", "password"], ["lum", "Lumière LED : adresse Bluetooth", ""], ["lum2", "2e lumière (optionnel)", ""],
     ["tyname", "Nom du relais Tuya", ""], ["tyregion", "Région Tuya (eu, eu-w, us…)", ""], ["tyid", "Tuya Access ID", ""], ["tysecret", "Tuya Access Secret", "password"], ["tydevice", "Tuya Device ID", ""], ["tycode", "Tuya : code (switch_1)", ""]];
-  var UI_CODE = parseInt("13400", 10) || 0, UI_NAME = "4.94 iPad (beta)".charAt(0) === "_" ? "?" : "4.94 iPad (beta)";
+  var UI_CODE = parseInt("13500", 10) || 0, UI_NAME = "4.95 iPad (beta)".charAt(0) === "_" ? "?" : "4.95 iPad (beta)";
   (function () { var e = $("ver"); if (e && UI_NAME !== "?") { e.textContent = e.textContent.replace(/Version [^(]*\(beta\)/, "Version " + UI_NAME); } })();
   /* mises à jour signées : version.json est signé (clé privée de Clément) et contient l'empreinte de l'interface et de l'appli */
   function getSig(base, cb) { window.LOCAL.getText(base + "/version.sig?t=" + Date.now(), 15000, function (e, t) { cb(e ? "" : String(t || "").replace(/\s/g, "")); }); }
@@ -4232,6 +4232,7 @@ html .wxBg.nt .nf-flake, html .wxBg.nt .nf-drop { opacity: 0.7; }
   /* ---------------- Historique des mises à jour : une entrée de plus à chaque version (la plus récente en haut) ---------------- */
   var HIST = [
     ["15/11/2026", [
+      ["4.95", "Bonne nuit plus sombre", "L’écran de la veille Bonne nuit est assombri de 60 % (heure, date, météo et rendez-vous restent lisibles)."],
       ["4.94", "Température de la pièce sur le bloc Clim", "Accueil : la consigne reste en grand, remontée de quelques pixels, et la température de la pièce s’affiche dessous, plus lisible."],
       ["4.93", "Clim et Lumières cliquables", "Accueil : un appui sur le bloc Clim ouvre la page Clim, un appui sur le bloc Lumières ouvre la page Lumières (les boutons du bloc gardent leur action)."],
       ["4.92", "Batterie sans éclair", "Le bloc Batterie de l’accueil n’affiche plus l’éclair en charge : le pourcentage et « en charge » suffisent."],
